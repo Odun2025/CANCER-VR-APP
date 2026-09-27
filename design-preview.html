@@ -7,41 +7,47 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap');
   :root{
-    --deep-teal:#0E4D4A; --compass-blue:#2A7F9E; --sage:#7FB69E;
-    --sand:#F6F1E7; --sunset:#E8A87C; --coral:#E76F51; --ink:#1E2A32;
-    --muted:#5B6B76; --card:#FFFFFF; --line:#E7DDCB;
+    --deep-teal:#0B3D3B; --compass-blue:#1F6B8A; --sage:#7FB69E;
+    --sand:#F6F1E7; --sunset:#E8A87C; --coral:#C64A2E; --ink:#101C22;
+    --muted:#33414B; --card:#FFFFFF; --line:#D9CBB2;
   }
-  *{box-sizing:border-box} body{margin:0;background:#EFE9DB;color:var(--ink);font-family:Inter,system-ui,sans-serif;display:flex;justify-content:center;padding:24px}
+  *{box-sizing:border-box} body{margin:0;background:#EFE9DB;color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-size:16px;line-height:1.6;display:flex;justify-content:center;padding:24px;-webkit-font-smoothing:antialiased}
   .phone{width:390px;background:var(--sand);border-radius:28px;overflow:hidden;box-shadow:0 20px 60px rgba(14,77,74,.25);border:1px solid var(--line)}
   .hero{background:linear-gradient(160deg,var(--deep-teal),var(--compass-blue));color:#fff;padding:28px 22px 22px}
-  .brand{font-family:Nunito;font-weight:800;letter-spacing:.5px;font-size:20px}
-  .tag{font-size:13px;opacity:.9;margin-top:4px}
-  .hero h1{font-family:Nunito;font-size:28px;line-height:1.15;margin:16px 0 8px}
-  .hero p{font-size:14px;line-height:1.5;opacity:.95}
+  .brand{font-family:Nunito,Inter,sans-serif;font-weight:800;letter-spacing:.5px;font-size:21px}
+  .tag{font-size:14px;font-weight:600;opacity:1;margin-top:6px;color:#EAF4F1}
+  .hero h1{font-family:Nunito,Inter,sans-serif;font-weight:800;font-size:30px;line-height:1.2;margin:16px 0 8px;letter-spacing:-.2px}
+  .hero p{font-size:16px;line-height:1.6;opacity:1;color:#F2F8F6}
   .body{padding:18px}
-  .section-title{font-family:Nunito;font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:1px;color:var(--deep-teal);margin:18px 0 10px}
+  .section-title{font-family:Nunito,Inter,sans-serif;font-weight:800;font-size:15px;text-transform:uppercase;letter-spacing:1.2px;color:var(--deep-teal);margin:20px 0 10px}
   .palette{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
   .swatch{border-radius:14px;overflow:hidden;background:#fff;border:1px solid var(--line)}
   .color{height:56px} .label{font-size:11px;padding:8px;font-weight:600}
   .label small{display:block;font-weight:400;color:var(--muted)}
-  .type-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
-  .h-big{font-family:Nunito;font-weight:800;font-size:26px;margin:0}
-  .h-mid{font-family:Nunito;font-weight:700;font-size:18px;margin:8px 0 4px}
-  .p{font-size:14px;color:#33414B;line-height:1.6}
-  .btn{display:block;width:100%;border:0;border-radius:16px;padding:15px;font-family:Nunito;font-weight:800;font-size:16px;margin:10px 0;cursor:pointer}
-  .btn-primary{background:var(--deep-teal);color:#fff}
-  .btn-calm{background:var(--compass-blue);color:#fff}
-  .btn-warm{background:var(--sunset);color:#3A2415}
-  .btn-ghost{background:#fff;color:var(--deep-teal);border:2px solid var(--deep-teal)}
-  .btn-help{background:var(--coral);color:#fff}
-  .chips{display:flex;flex-wrap:wrap;gap:8px}
-  .chip{background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:9px 14px;font-size:13px;font-weight:600}
+  .type-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}
+  .h-big{font-family:Nunito,Inter,sans-serif;font-weight:800;font-size:27px;line-height:1.25;margin:0;color:var(--ink)}
+  .h-mid{font-family:Nunito,Inter,sans-serif;font-weight:800;font-size:19px;line-height:1.35;margin:10px 0 6px;color:var(--ink)}
+  .p{font-size:16px;font-weight:500;color:#1A2B34;line-height:1.65}
+  .btn{display:flex;align-items:center;gap:12px;width:100%;border:0;border-radius:18px;padding:0 18px;min-height:58px;font-family:Nunito,Inter,sans-serif;font-weight:800;font-size:17px;line-height:1.3;margin:12px 0;cursor:pointer;box-shadow:0 4px 14px rgba(16,28,34,.15);transition:transform .08s ease, box-shadow .15s ease;text-align:left}
+  .btn span.icon{font-size:22px;flex:0 0 auto}
+  .btn span.txt{flex:1}
+  .btn span.arrow{opacity:.8;font-weight:800}
+  .btn:active{transform:scale(.99)}
+  .btn:focus-visible{outline:3px solid #0B3D3B;outline-offset:2px}
+  .btn-primary{background:var(--deep-teal);color:#fff;border-bottom:4px solid #072927}
+  .btn-calm{background:var(--compass-blue);color:#fff;border-bottom:4px solid #144A61}
+  .btn-warm{background:#F3C39A;color:#3A2415;border:2px solid #7A4A21;border-bottom-width:4px}
+  .btn-ghost{background:#fff;color:var(--deep-teal);border:3px solid var(--deep-teal)}
+  .btn-help{background:var(--coral);color:#fff;border-bottom:4px solid #7E2E1B}
+  .chips{display:flex;flex-wrap:wrap;gap:10px}
+  .chip{background:#fff;border:2px solid #B9A98D;border-radius:999px;padding:11px 16px;min-height:44px;font-size:15px;font-weight:700;color:var(--ink)}
   .chip.active{background:var(--deep-teal);color:#fff;border-color:var(--deep-teal)}
-  .input,select,textarea{width:100%;border:2px solid var(--line);border-radius:14px;padding:13px 14px;font-size:14px;font-family:Inter;background:#fff;margin:8px 0}
-  .input:focus{outline:none;border-color:var(--compass-blue)}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px}
-  .small{font-size:12px;color:var(--muted)}
-  .footer{padding:14px 18px 20px;font-size:12px;color:var(--muted)}
+  .input,select,textarea{width:100%;border:2px solid #B9A98D;border-radius:14px;padding:14px;font-size:16px;font-weight:500;font-family:Inter,sans-serif;background:#fff;margin:8px 0;color:var(--ink)}
+  .input:focus,select:focus,textarea:focus{outline:3px solid var(--compass-blue);outline-offset:1px;border-color:var(--compass-blue)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
+  .small{font-size:14px;font-weight:500;line-height:1.55;color:var(--muted)}
+  label.small{font-weight:700;color:var(--ink);display:block;margin-top:10px}
+  .footer{padding:14px 18px 20px;font-size:13px;line-height:1.6;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -71,12 +77,12 @@
       <p class="small">Small / muted — #5B6B76 for helpers and disclaimers.</p>
     </div>
 
-    <div class="section-title">3 — Styled Buttons</div>
-    <button class="btn btn-primary">🌿 Take me somewhere peaceful</button>
-    <button class="btn btn-calm">🧘 Help me relax</button>
-    <button class="btn btn-warm">🎧 Distract me</button>
-    <button class="btn btn-ghost">🔬 Help me understand</button>
-    <button class="btn btn-help">❤️ I Need Help</button>
+    <div class="section-title">3 — Styled Buttons (58px, high-contrast)</div>
+    <button class="btn btn-primary"><span class="icon">🌿</span><span class="txt">Take me somewhere peaceful</span><span class="arrow">›</span></button>
+    <button class="btn btn-calm"><span class="icon">🧘</span><span class="txt">Help me relax</span><span class="arrow">›</span></button>
+    <button class="btn btn-warm"><span class="icon">🎧</span><span class="txt">Distract me</span><span class="arrow">›</span></button>
+    <button class="btn btn-ghost"><span class="icon">🔬</span><span class="txt">Help me understand</span><span class="arrow">›</span></button>
+    <button class="btn btn-help"><span class="icon">❤️</span><span class="txt">I Need Help</span><span class="arrow">›</span></button>
 
     <div class="section-title">4 — Sample Inputs (Check-in)</div>
     <div class="card">
