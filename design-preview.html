@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CancerCompass — Visual Preview</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap');
+  :root{
+    --deep-teal:#0E4D4A; --compass-blue:#2A7F9E; --sage:#7FB69E;
+    --sand:#F6F1E7; --sunset:#E8A87C; --coral:#E76F51; --ink:#1E2A32;
+    --muted:#5B6B76; --card:#FFFFFF; --line:#E7DDCB;
+  }
+  *{box-sizing:border-box} body{margin:0;background:#EFE9DB;color:var(--ink);font-family:Inter,system-ui,sans-serif;display:flex;justify-content:center;padding:24px}
+  .phone{width:390px;background:var(--sand);border-radius:28px;overflow:hidden;box-shadow:0 20px 60px rgba(14,77,74,.25);border:1px solid var(--line)}
+  .hero{background:linear-gradient(160deg,var(--deep-teal),var(--compass-blue));color:#fff;padding:28px 22px 22px}
+  .brand{font-family:Nunito;font-weight:800;letter-spacing:.5px;font-size:20px}
+  .tag{font-size:13px;opacity:.9;margin-top:4px}
+  .hero h1{font-family:Nunito;font-size:28px;line-height:1.15;margin:16px 0 8px}
+  .hero p{font-size:14px;line-height:1.5;opacity:.95}
+  .body{padding:18px}
+  .section-title{font-family:Nunito;font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:1px;color:var(--deep-teal);margin:18px 0 10px}
+  .palette{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+  .swatch{border-radius:14px;overflow:hidden;background:#fff;border:1px solid var(--line)}
+  .color{height:56px} .label{font-size:11px;padding:8px;font-weight:600}
+  .label small{display:block;font-weight:400;color:var(--muted)}
+  .type-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
+  .h-big{font-family:Nunito;font-weight:800;font-size:26px;margin:0}
+  .h-mid{font-family:Nunito;font-weight:700;font-size:18px;margin:8px 0 4px}
+  .p{font-size:14px;color:#33414B;line-height:1.6}
+  .btn{display:block;width:100%;border:0;border-radius:16px;padding:15px;font-family:Nunito;font-weight:800;font-size:16px;margin:10px 0;cursor:pointer}
+  .btn-primary{background:var(--deep-teal);color:#fff}
+  .btn-calm{background:var(--compass-blue);color:#fff}
+  .btn-warm{background:var(--sunset);color:#3A2415}
+  .btn-ghost{background:#fff;color:var(--deep-teal);border:2px solid var(--deep-teal)}
+  .btn-help{background:var(--coral);color:#fff}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:9px 14px;font-size:13px;font-weight:600}
+  .chip.active{background:var(--deep-teal);color:#fff;border-color:var(--deep-teal)}
+  .input,select,textarea{width:100%;border:2px solid var(--line);border-radius:14px;padding:13px 14px;font-size:14px;font-family:Inter;background:#fff;margin:8px 0}
+  .input:focus{outline:none;border-color:var(--compass-blue)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px}
+  .small{font-size:12px;color:var(--muted)}
+  .footer{padding:14px 18px 20px;font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="hero">
+    <div class="brand">🧭 CancerCompass</div>
+    <div class="tag">Escape. Understand. Relax. Connect. Keep Going.</div>
+    <h1>What do you need right now?</h1>
+    <p>Compassionate, simple, hopeful. You stay in control — stop, change or skip anytime.</p>
+  </div>
+  <div class="body">
+    <div class="section-title">1 — Colours</div>
+    <div class="palette">
+      <div class="swatch"><div class="color" style="background:#0E4D4A"></div><div class="label">Deep Teal<small>#0E4D4A • primary</small></div></div>
+      <div class="swatch"><div class="color" style="background:#2A7F9E"></div><div class="label">Compass Blue<small>#2A7F9E • calm</small></div></div>
+      <div class="swatch"><div class="color" style="background:#7FB69E"></div><div class="label">Sage<small>#7FB69E • healing</small></div></div>
+      <div class="swatch"><div class="color" style="background:#F6F1E7"></div><div class="label">Warm Sand<small>#F6F1E7 • background</small></div></div>
+      <div class="swatch"><div class="color" style="background:#E8A87C"></div><div class="label">Sunset<small>#E8A87C • Nigerian warmth</small></div></div>
+      <div class="swatch"><div class="color" style="background:#E76F51"></div><div class="label">Coral Help<small>#E76F51 • I Need Help</small></div></div>
+    </div>
+
+    <div class="section-title">2 — Typography</div>
+    <div class="type-card">
+      <p class="h-big">Nunito Bold — Headings</p>
+      <p class="h-mid">How are you feeling today?</p>
+      <p class="p">Inter Regular — Body. Simple words, no medical jargon. General information only — please discuss personal symptoms with your healthcare team.</p>
+      <p class="small">Small / muted — #5B6B76 for helpers and disclaimers.</p>
+    </div>
+
+    <div class="section-title">3 — Styled Buttons</div>
+    <button class="btn btn-primary">🌿 Take me somewhere peaceful</button>
+    <button class="btn btn-calm">🧘 Help me relax</button>
+    <button class="btn btn-warm">🎧 Distract me</button>
+    <button class="btn btn-ghost">🔬 Help me understand</button>
+    <button class="btn btn-help">❤️ I Need Help</button>
+
+    <div class="section-title">4 — Sample Inputs (Check-in)</div>
+    <div class="card">
+      <p class="h-mid" style="margin-top:0">How are you feeling today?</p>
+      <div class="chips">
+        <span class="chip active">Anxious</span><span class="chip">Tired</span><span class="chip">Calm</span>
+        <span class="chip">Hopeful</span><span class="chip">Lonely</span><span class="chip">Overwhelmed</span>
+        <span class="chip">I'm not sure</span>
+      </div>
+      <label class="small" for="name">Preferred name (local only, optional)</label>
+      <input id="name" class="input" placeholder="e.g. Ada" />
+      <label class="small" for="len">Preferred length</label>
+      <select id="len"><option>Short (3 min)</option><option>Medium (5–7 min)</option><option>Longer (10 min)</option></select>
+      <label class="small" for="note">Anything you want to remember? (stays on this phone)</label>
+      <textarea id="note" rows="2" placeholder="e.g. Play coastal sounds during treatment"></textarea>
+      <button class="btn btn-primary" onclick="document.getElementById('done').style.display='block'">Continue →</button>
+      <p id="done" class="small" style="display:none">✓ Saved locally on this phone. No account, no cloud. You can wipe anytime.</p>
+    </div>
+  </div>
+  <div class="footer">CancerCompass • Med Crescent Pharmacy • Complements, does not replace, professional care. All demo data stays on-device.</div>
+</div>
+</body>
+</html>
