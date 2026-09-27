@@ -3,15 +3,16 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>CancerCompass — Single Page App</title>
+<title>CancerCompass — Phases 1+2 Working App</title>
 <style>
   :root{--teal:#0B3D3B;--blue:#1F6B8A;--sand:#F6F1E7;--ink:#101C22;--muted:#33414B;--card:#fff;--line:#D9CBB2;--coral:#C64A2E}
-  *{box-sizing:border-box} body{margin:0;background:#EFE9DB;color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-size:16px;line-height:1.6;display:flex;justify-content:center;padding:16px}
-  .phone{width:420px;max-width:100%;background:var(--sand);border-radius:24px;overflow:hidden;border:1px solid var(--line);box-shadow:0 20px 60px rgba(11,61,59,.25)}
-  .hero{background:linear-gradient(160deg,var(--teal),var(--blue));color:#fff;padding:24px 20px}
-  .hero h1{font-size:26px;margin:8px 0;font-weight:800} .hero p{margin:0;color:#F2F8F6}
-  .brand{font-weight:800} .body{padding:16px}
-  .btn{display:flex;align-items:center;gap:12px;width:100%;border:0;border-radius:18px;padding:0 18px;min-height:58px;font-weight:800;font-size:17px;margin:10px 0;cursor:pointer;box-shadow:0 4px 14px rgba(16,28,34,.15);text-align:left}
+  *{box-sizing:border-box} body{margin:0;background:#EFE9DB;color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-size:16px;line-height:1.6;display:flex;justify-content:center;padding:12px}
+  .phone{width:430px;max-width:100%;background:var(--sand);border-radius:24px;overflow:hidden;border:1px solid var(--line);box-shadow:0 20px 60px rgba(11,61,59,.25);display:flex;flex-direction:column;min-height:90vh}
+  .hero{background:linear-gradient(160deg,var(--teal),var(--blue));color:#fff;padding:22px 18px}
+  .hero h1{font-size:24px;margin:8px 0;font-weight:800} .hero p{margin:0;color:#F2F8F6;font-size:15px}
+  .brand{font-weight:800} .pill{display:inline-block;background:rgba(255,255,255,.2);border-radius:999px;padding:4px 12px;font-size:13px;font-weight:700}
+  .body{padding:14px 14px 90px}
+  .btn{display:flex;align-items:center;gap:12px;width:100%;border:0;border-radius:18px;padding:0 16px;min-height:58px;font-weight:800;font-size:16px;margin:10px 0;cursor:pointer;box-shadow:0 4px 14px rgba(16,28,34,.15);text-align:left;font-family:inherit;color:inherit}
   .btn small{display:block;font-weight:600;font-size:13px;opacity:.85}
   .b-teal{background:var(--teal);color:#fff;border-bottom:4px solid #072927}
   .b-blue{background:var(--blue);color:#fff;border-bottom:4px solid #144A61}
@@ -19,117 +20,180 @@
   .b-ghost{background:#fff;color:var(--teal);border:3px solid var(--teal)}
   .b-help{background:var(--coral);color:#fff;border-bottom:4px solid #7E2E1B}
   .chips{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0}
-  .chip{background:#fff;border:2px solid #B9A98D;border-radius:999px;padding:11px 16px;min-height:44px;font-size:15px;font-weight:700;cursor:pointer}
+  .chip{background:#fff;border:2px solid #B9A98D;border-radius:999px;padding:11px 16px;min-height:44px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit}
   .chip.on{background:var(--teal);color:#fff;border-color:var(--teal)}
   .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0}
-  .hidden{display:none} .muted{color:var(--muted);font-size:14px}
+  .hidden{display:none!important} .muted{color:var(--muted);font-size:14px}
   .rec{background:#EAF4F1;border:2px solid var(--teal);border-radius:14px;padding:12px;margin:10px 0}
-  .world{border-radius:16px;padding:28px 18px;color:#fff;text-align:center;margin:10px 0}
-  .breath{font-size:48px;text-align:center;margin:10px}
-  input,select,textarea{width:100%;border:2px solid #B9A98D;border-radius:12px;padding:12px;font-size:16px;margin:6px 0}
-  .topbar{display:flex;gap:8px;margin-bottom:8px} .topbar button{flex:1}
-  .help-modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:20px}
+  .world{border-radius:16px;padding:26px 16px;color:#fff;text-align:center;margin:10px 0}
+  .world button{margin-top:10px}
+  .nav{position:sticky;bottom:0;background:#fff;border-top:2px solid var(--line);display:flex;z-index:5}
+  .nav button{flex:1;border:0;background:#fff;padding:10px 2px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;color:var(--muted)}
+  .nav button.on{color:var(--teal);border-top:4px solid var(--teal)}
+  .nav span{font-size:20px;display:block}
+  input,select,textarea{width:100%;border:2px solid #B9A98D;border-radius:12px;padding:12px;font-size:16px;margin:6px 0;font-family:inherit}
+  .row{display:flex;gap:8px} .row .btn{flex:1}
+  .help-modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:20px;z-index:50}
   .help-box{background:#fff;border-radius:18px;padding:20px;max-width:360px;width:100%}
+  .breath{font-size:52px;text-align:center;transition:transform 1s}
+  .tag{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--teal)}
 </style>
 </head>
 <body>
 <div class="phone">
   <div class="hero">
-    <div class="brand">🧭 CancerCompass</div>
+    <div class="brand">🧭 CancerCompass <span class="pill" id="modePill">Home</span></div>
     <h1 id="title">How are you feeling today?</h1>
-    <p>I'm here with you. You stay in control — stop or change anytime. General info only, not medical advice.</p>
+    <p>I'm here with you. You decide — stop or change anytime. General info only, not medical advice.</p>
+    <div class="row" style="margin-top:12px">
+      <button class="btn b-ghost" id="treatBtn" style="min-height:48px;font-size:14px;background:#fff">💊 Treatment: OFF</button>
+      <button class="btn b-help" id="helpBtn" style="min-height:48px;font-size:14px">❤️ Help</button>
+    </div>
   </div>
+
   <div class="body">
-    <div class="topbar">
-      <button class="btn b-ghost" id="treatBtn" style="min-height:48px;font-size:15px">💊 I'm in Treatment Now: OFF</button>
-      <button class="btn b-help" id="helpBtn" style="min-height:48px;font-size:15px">❤️ Help</button>
-    </div>
+    <!-- HOME / PHASE 1 -->
+    <section id="tab-home">
+      <div class="card"><span class="tag">Phase 1 • Step 1 — Check in</span>
+        <div class="chips" id="emotions"></div>
+        <div class="muted" id="emoMsg">No wrong answer. Pick one, or I'm not sure.</div>
+      </div>
+      <div class="card" id="needCard"><span class="tag">Phase 1 • Step 2 — What do you need?</span>
+        <div class="rec hidden" id="rec"></div>
+        <button class="btn b-teal" data-go="explore">🌿 <span>Take me somewhere peaceful<br><small>4 worlds • Nigerian coast first</small></span></button>
+        <button class="btn b-blue" data-exp="relax">🧘 <span>Help me relax<br><small>Breathing + grounding</small></span></button>
+        <button class="btn b-warm" data-exp="distract">🎧 <span>Distract me<br><small>Story + counting game</small></span></button>
+        <button class="btn b-ghost" data-go="learn">🔬 <span>Help me understand<br><small>6 simple topics</small></span></button>
+        <button class="btn b-ghost" data-exp="encourage">💙 <span>Encourage me<br><small>Kind words</small></span></button>
+        <button class="btn b-ghost" data-go="support">🤝 <span>Help me connect<br><small>Messages + family</small></span></button>
+      </div>
+      <div class="card hidden" id="expCard"><span class="tag">Experience</span>
+        <h3 id="expTitle" style="margin:6px 0"></h3>
+        <div id="expBody"></div>
+        <button class="btn b-teal" id="finishBtn">Done → check out</button>
+        <button class="btn b-ghost" id="backBtn">← Back to needs</button>
+      </div>
+      <div class="card hidden" id="outCard"><span class="tag">Phase 1 • Check out</span>
+        <b>How do you feel now?</b><div class="chips" id="postEmo"></div>
+        <b>Did this help you?</b><div class="chips" id="feedback"></div>
+        <div class="muted">Concerning symptoms? Contact your nurse, doctor, pharmacist or caregiver promptly.</div>
+        <div class="muted" id="history"></div>
+      </div>
+    </section>
 
-    <!-- STEP 1 -->
-    <div id="step1" class="card">
-      <b>Step 1 — Check in</b>
-      <div class="chips" id="emotions"></div>
-      <div class="muted" id="emoMsg">No wrong answer. Pick one, or I'm not sure.</div>
-    </div>
+    <!-- EXPLORE / PHASE 2 WORLDS -->
+    <section id="tab-explore" class="hidden">
+      <div class="card"><span class="tag">Phase 2 • Explore — 4 worlds</span>
+        <p class="muted">Each world has a wellbeing purpose. Tap Enter, stay as long as you like, switch anytime.</p>
+      </div>
+      <div class="world" style="background:linear-gradient(160deg,#0B3D3B,#1F6B8A)">🌊 Nigerian Coastal Calm<br><small>Waves • breeze • familiar home feeling</small><br><button class="btn b-warm" data-world="coast">Enter coast →</button></div>
+      <div class="world" style="background:linear-gradient(160deg,#2E7D5B,#7FB69E)">🌿 Tropical Garden<br><small>Shade • birds • slow breathing</small><br><button class="btn b-warm" data-world="garden">Enter garden →</button></div>
+      <div class="world" style="background:linear-gradient(160deg,#B5651D,#E8A87C)">🌅 Sunset Beach<br><small>Warm light • letting go</small><br><button class="btn b-warm" data-world="sunset">Enter sunset →</button></div>
+      <div class="world" style="background:linear-gradient(160deg,#3A3A7A,#7FB69E)">✨ Calm Fantasy Lake<br><small>Still water • safe imagination</small><br><button class="btn b-warm" data-world="fantasy">Enter lake →</button></div>
+      <div class="card hidden" id="worldCard"><h3 id="worldTitle"></h3><p id="worldText" class="muted"></p>
+        <div class="row"><button class="btn b-blue" id="worldRelax">Relax here</button><button class="btn b-ghost" id="worldBack">← All worlds</button></div>
+      </div>
+    </section>
 
-    <!-- STEP 2 -->
-    <div id="step2" class="card hidden">
-      <b>Step 2 — What do you need right now?</b>
-      <div class="rec hidden" id="rec"></div>
-      <button class="btn b-teal" data-need="peaceful">🌿 <span>Take me somewhere peaceful<br><small>Nigerian coast, garden, sunset</small></span></button>
-      <button class="btn b-blue" data-need="relax">🧘 <span>Help me relax<br><small>Breathing, grounding, sleep</small></span></button>
-      <button class="btn b-warm" data-need="distract">🎧 <span>Distract me<br><small>Story, music, calming game</small></span></button>
-      <button class="btn b-ghost" data-need="understand">🔬 <span>Help me understand<br><small>Simple cancer info</small></span></button>
-      <button class="btn b-ghost" data-need="encourage">💙 <span>Encourage me<br><small>Kind words</small></span></button>
-      <button class="btn b-ghost" data-need="connect">🤝 <span>Help me connect<br><small>Messages, family</small></span></button>
-    </div>
+    <!-- TREATMENT / PHASE 2 -->
+    <section id="tab-treatment" class="hidden">
+      <div class="card"><span class="tag">Phase 2 • Treatment Mode</span>
+        <h3 style="margin:6px 0">I'm in Treatment Now</h3>
+        <p class="muted">For chemo chair use: big buttons, switch anytime without losing your place.</p>
+        <button class="btn b-teal" data-go="explore">📍 Take Me Somewhere</button>
+        <button class="btn b-blue" data-exp-t="relax">🧘 Help Me Relax</button>
+        <button class="btn b-warm" data-exp-t="distract">🎧 Distract Me</button>
+        <button class="btn b-ghost" data-go="learn">🔬 Help Me Understand</button>
+        <button class="btn b-ghost" data-go="support">💙 Help Me Feel Connected</button>
+      </div>
+      <div class="card"><b>Prepare Me (before session)</b><p class="muted">What to expect • questions to ask • calming • encouragement.</p>
+        <button class="btn b-blue" id="prepBtn">Start Prepare Me →</button><div id="prepBody" class="hidden muted">1) You’ll check in, sit back, team connects drips. 2) It can take hours — bring warmth + this app. 3) Ask: How long today? What side effects to report? Who do I call after? 4) Breathe with me below, then pick a world.</div>
+      </div>
+    </section>
 
-    <!-- STEP 3 -->
-    <div id="step3" class="card hidden">
-      <b id="expTitle">Experience</b>
-      <div id="expBody"></div>
-      <button class="btn b-teal" id="finishBtn">Done → check out</button>
-      <button class="btn b-ghost" id="backBtn">← Choose something else</button>
-    </div>
+    <!-- LEARN -->
+    <section id="tab-learn" class="hidden">
+      <div class="card"><span class="tag">Learn • General info only</span><p class="muted">Simple, pharmacist-informed. Not personal advice — ask your team about you.</p><div class="chips" id="topics"></div><div id="topicBody"></div></div>
+    </section>
 
-    <!-- STEP 4 -->
-    <div id="step4" class="card hidden">
-      <b>How do you feel now?</b>
-      <div class="chips" id="postEmo"></div>
-      <b>Did this help you?</b>
-      <div class="chips" id="feedback"></div>
-      <div class="muted">Concerning symptoms? Please contact your nurse, doctor, pharmacist or caregiver promptly.</div>
-      <button class="btn b-blue" id="againBtn">What would you like next? ↺</button>
-      <div class="muted" id="history"></div>
-    </div>
+    <!-- SUPPORT -->
+    <section id="tab-support" class="hidden">
+      <div class="card"><span class="tag">Support • Connect</span>
+        <p>💙 “You showed up for something hard today.”</p>
+        <p>💙 “Rest is allowed. We’ll handle home.” — Caregiver</p>
+        <label class="muted">Family note (stays on this phone)</label><input id="fam" placeholder="e.g. Call mama after treatment"/>
+        <button class="btn b-ghost" id="saveNote">Save note locally</button>
+        <p class="muted">Caregiver path (Phase 5 preview): How can I support them? — understanding, communication, medicines, self-care. Patient controls sharing.</p>
+      </div>
+    </section>
 
-    <div class="card muted">📱 Single file demo. Saves on this browser only (localStorage). No login, no cloud. <button id="wipe" style="margin-top:8px">Wipe my local data</button></div>
+    <div class="card muted">📱 Phases 1+2 • Single file • Saves on this browser only. <button id="wipe">Wipe local data</button> <span id="resume"></span></div>
   </div>
+
+  <nav class="nav">
+    <button data-tab="home" class="on"><span>🏠</span>Home</button>
+    <button data-tab="explore"><span>🌿</span>Explore</button>
+    <button data-tab="treatment"><span>💊</span>Treatment</button>
+    <button data-tab="learn"><span>📚</span>Learn</button>
+    <button data-tab="support"><span>❤️</span>Support</button>
+  </nav>
 </div>
 
-<div id="helpModal" class="help-modal hidden">
-  <div class="help-box">
-    <h3 style="margin-top:0">I need help</h3>
-    <p class="muted">This app does not diagnose. Please reach a human:</p>
-    <button class="btn b-ghost">👪 Caregiver</button>
-    <button class="btn b-ghost">👩‍⚕️ Nurse / Doctor</button>
-    <button class="btn b-ghost">💊 Pharmacist</button>
-    <button class="btn b-help">🚨 Emergency services</button>
-    <button class="btn b-teal" id="closeHelp">Close</button>
-  </div>
-</div>
+<div id="helpModal" class="help-modal hidden"><div class="help-box">
+  <h3 style="margin-top:0">I need help</h3><p class="muted">No diagnosis here — reach a human:</p>
+  <button class="btn b-ghost" data-help="Caregiver">👪 Caregiver</button>
+  <button class="btn b-ghost" data-help="Nurse">👩‍⚕️ Nurse / Doctor</button>
+  <button class="btn b-ghost" data-help="Pharmacist">💊 Pharmacist</button>
+  <button class="btn b-help" data-help="Emergency">🚨 Emergency services</button>
+  <button class="btn b-teal" id="closeHelp">Close</button><p class="muted" id="helpMsg"></p>
+</div></div>
 
 <script>
 const $=id=>document.getElementById(id);
 const emotions=["Anxious","Afraid","Sad","Tired","Lonely","Uncomfortable","Calm","Hopeful","Confused","Overwhelmed","Happy","I'm not sure"];
 const post=["Comfortable","Tired","Worried","Uncomfortable","Emotional","Relieved","Unsure"];
 const fb=["Yes","A little","Not really","No"];
-let state={emotion:null,need:null,treatment:false,pre:null};
+const topics={"What is cancer?":"Cells growing out of control. Many types, many treatments. Your team explains your own case.","During chemo?":"Medicines travel in blood to fast-growing cells. Sessions take hours. Tiredness/nausea are commonly expected — teams plan for this.","Side effects?":"Common: tiredness, nausea, appetite changes, hair loss. Report: fever, heavy bleeding, severe vomiting/diarrhoea, chest pain, breathing trouble — promptly.","Medication safety?":"Take as labelled, keep list of all medicines, ask pharmacist before herbs/supplements. Never adjust chemo doses alone.","When to seek care?":"Fever ≥38°C, uncontrollable vomiting, confusion, chest pain, trouble breathing, severe pain — seek care same day.","Questions to ask?":"How long today? What to report? Who do I call after? Food/drink? Next visit?"};
+let state={emotion:null,need:null,treatment:localStorage.getItem("cc_treat")==="1"};
 function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
 function load(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}}
-function chips(el,arr,cb){el.innerHTML="";arr.forEach(a=>{const b=document.createElement("button");b.className="chip";b.textContent=a;b.onclick=()=>{[...el.children].forEach(c=>c.classList.remove("on"));b.classList.add("on");cb(a)};el.appendChild(b)})}
-chips($("emotions"),emotions,e=>{state.emotion=e;state.pre=e;$("emoMsg").textContent="Thank you for sharing you're "+e+". I'm here with you.";$("step2").classList.remove("hidden");$("title").textContent="What would help right now?";showRec();save("cc_checkin",{e,at:Date.now()})});
-chips($("postEmo"),post,e=>{save("cc_post",{e,at:Date.now()})});
-chips($("feedback"),fb,f=>{save("cc_fb",{f,pre:state.pre,need:state.need,at:Date.now()});renderHistory();$("title").textContent="Thank you. What next?"});
-function showRec(){const m={Anxious:"relax",Afraid:"encourage",Sad:"encourage",Tired:"relax",Lonely:"connect",Uncomfortable:"peaceful",Calm:"peaceful",Hopeful:"encourage",Confused:"understand",Overwhelmed:"relax",Happy:"connect","I'm not sure":"peaceful"};const r=m[state.emotion]||"peaceful";$("rec").classList.remove("hidden");$("rec").innerHTML="<b> Suggestion for "+state.emotion+":</b> try <b>"+r+"</b> — or choose anything you like. You decide."}
-document.querySelectorAll("[data-need]").forEach(b=>b.onclick=()=>openExp(b.dataset.need));
-function openExp(n){state.need=n;$("step3").classList.remove("hidden");$("step4").classList.add("hidden");$("title").textContent={peaceful:"Take me somewhere",relax:"Help me relax",distract:"Distract me",understand:"Help me understand",encourage:"Encourage me",connect:"Help me connect"}[n];const T=state.treatment?" (Treatment Mode: you can switch anytime)":"";$("expTitle").textContent=$("title").textContent+T;renderExp(n);window.scrollTo(0,0)}
-function renderExp(n){const B=$("expBody");
-if(n==="peaceful"){B.innerHTML=`<div class="world" style="background:linear-gradient(160deg,#0B3D3B,#1F6B8A)">🌊 Nigerian Coastal Calm<br><span class="muted" style="color:#EAF4F1">Waves • soft breeze • 4 min loop</span></div><div class="world" style="background:linear-gradient(160deg,#2E7D5B,#7FB69E)">🌿 Tropical Garden<br><span class="muted" style="color:#fff">Birds • shade • breathe slowly</span></div><p class="muted">Wellbeing purpose: gentle escape, not just scenery. Close eyes or soften gaze if tired.</p>`}
-if(n==="relax"){B.innerHTML=`<div class="breath" id="br">●</div><p style="text-align:center" id="brt">Tap Start — 4-2-4 breathing</p><button class="btn b-blue" id="go">Start 1-min breathing</button>`;let i=null;$("go").onclick=()=>{let t=0;const seq=["Breathe in…","Hold…","Breathe out…"];clearInterval(i);i=setInterval(()=>{$("brt").textContent=seq[t%3];$("br").style.transform=t%3===0?"scale(1.4)":"scale(1)";t++;if(t>8){clearInterval(i);$("brt").textContent="Well done. Notice your shoulders drop."}},2000)}}
-if(n==="distract"){B.innerHTML=`<div class="card"><b>Story: The River Remembers</b><p>A short 2-min calming tale from a riverside village — boats returning at sunset, drums low, food cooking. You are safe here.</p><p class="muted">Music: imagined soft shakers + water. Game: count 5 greens you can see in the garden image above.</p></div>`}
-if(n==="understand"){B.innerHTML=`<div class="card"><b>What happens during chemotherapy? (general info only)</b><p>Chemo medicines travel in the blood to reach fast-growing cells. Sessions can take hours. You may feel tired or nauseous — teams expect this.</p><p><b>When to seek care promptly:</b> fever, heavy bleeding, severe vomiting/diarrhoea, chest pain, trouble breathing.</p><p class="muted">This is general education, not personal advice. Please ask your nurse/doctor/pharmacist about your own symptoms and medicines.</p></div>`}
-if(n==="encourage"){B.innerHTML=`<div class="card" style="font-size:18px"><b>You are doing something hard, and you showed up.</b><p>Rest is allowed. Courage is quiet. One step: this moment.</p><p class="muted">Hopeful and realistic — no promises about outcomes, just company for the road.</p></div>`}
-if(n==="connect"){B.innerHTML=`<div class="card"><b>Messages for you</b><p>💙 “We are with you today.” — Family</p><p>💙 “Rest well. We’ll handle home.” — Caregiver</p><label class="muted">Add your own note (stays on this device)</label><input id="fam" placeholder="e.g. Call mama after treatment"/><button class="btn b-ghost" onclick="alert('Saved on this device (demo)')">Save note locally</button></div>`}}
-$("finishBtn").onclick=()=>{$("step3").classList.add("hidden");$("step4").classList.remove("hidden");$("title").textContent="How are you after that?";renderHistory()};
-$("backBtn").onclick=()=>{$("step3").classList.add("hidden");window.scrollTo(0,0)};
-$("againBtn").onclick=()=>{$("step4").classList.add("hidden");$("step3").classList.add("hidden");$("step2").classList.remove("hidden");$("step1").scrollIntoView()};
-$("treatBtn").onclick=e=>{state.treatment=!state.treatment;e.target.textContent="💊 I'm in Treatment Now: "+(state.treatment?"ON":"OFF")};
+function chips(el,arr,cb){el.innerHTML="";arr.forEach(a=>{const b=document.createElement("button");b.className="chip";b.type="button";b.textContent=a;b.onclick=()=>{[...el.children].forEach(c=>c.classList.remove("on"));b.classList.add("on");cb(a)};el.appendChild(b)})}
+// nav — every button works
+document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{document.querySelectorAll("[data-tab]").forEach(x=>x.classList.remove("on"));b.classList.add("on");["home","explore","treatment","learn","support"].forEach(t=>$("tab-"+t).classList.toggle("hidden",t!==b.dataset.tab));$("modePill").textContent=b.textContent.trim();window.scrollTo(0,0)});
+document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>document.querySelector(`[data-tab="${b.dataset.go}"]`).click());
+// check-in
+chips($("emotions"),emotions,e=>{state.emotion=e;save("cc_checkin",{e,at:Date.now()});$("emoMsg").textContent="Thank you — "+e+". I'm here with you.";const m={Anxious:"relax",Afraid:"encourage",Sad:"encourage",Tired:"relax",Lonely:"connect",Uncomfortable:"explore",Calm:"explore",Hopeful:"encourage",Confused:"learn",Overwhelmed:"relax",Happy:"support","I'm not sure":"explore"};const r=m[e];$("rec").classList.remove("hidden");$("rec").innerHTML="<b>Suggestion for "+e+":</b> try <b>"+r+"</b> — or choose anything. You decide.";$("needCard").scrollIntoView({behavior:"smooth"})});
+chips($("postEmo"),post,e=>save("cc_post",{e,at:Date.now()}));
+chips($("feedback"),fb,f=>{save("cc_fb",{f,need:state.need,at:Date.now()});renderHist();$("title").textContent="Thank you. What next?"});
+chips($("topics"),Object.keys(topics),t=>{$("topicBody").innerHTML="<div class='rec'><b>"+t+"</b><p>"+topics[t]+"</p><p class='muted'>General education only — ask your team about you.</p></div>"});
+// experiences (home + treatment doors)
+function openExp(n,fromTreat){state.need=n;$("expCard").classList.remove("hidden");$("outCard").classList.add("hidden");document.querySelector('[data-tab="home"]').click();$("expTitle").textContent={relax:"Help me relax",distract:"Distract me",encourage:"Encourage me"}[n]+(state.treatment||fromTreat?" • Treatment Mode":"");const B=$("expBody");
+ if(n==="relax")B.innerHTML=`<div class="breath" id="br">●</div><p style="text-align:center" id="brt">Tap Start — slow breathing</p><button class="btn b-blue" id="go">Start 1-min breathing</button>`;
+ if(n==="distract")B.innerHTML=`<div class="card"><b>Story: The River Remembers (2 min)</b><p>Boats return at sunset, drums low, food cooking. You are safe here.</p><p class="muted">Game: silently count 5 green things around you, then 4 slow breaths.</p></div>`;
+ if(n==="encourage")B.innerHTML=`<div class="card" style="font-size:18px"><b>You did something hard and showed up.</b><p>Rest is allowed. One moment at a time.</p><p class="muted">Hopeful, realistic — no outcome promises.</p></div>`;
+ const go=$("go");if(go)go.onclick=()=>{let t=0;const s=["Breathe in…","Hold…","Breathe out…"];const iv=setInterval(()=>{$("brt").textContent=s[t%3];$("br").style.transform=t%3===0?"scale(1.5)":"scale(1)";t++;if(t>8){clearInterval(iv);$("brt").textContent="Well done — shoulders drop."}},2000)};
+ $("expCard").scrollIntoView({behavior:"smooth"})}
+document.querySelectorAll("[data-exp]").forEach(b=>b.onclick=()=>openExp(b.dataset.exp,false));
+document.querySelectorAll("[data-exp-t]").forEach(b=>b.onclick=()=>{if(!state.treatment)toggleTreat();openExp(b.dataset.expT,true)});
+// worlds
+const worlds={coast:["Nigerian Coastal Calm","Waves and breeze — a familiar home feeling. Purpose: gentle escape. Stay 3–5 min, breathe with the water."],garden:["Tropical Garden","Shade, birds, green air. Purpose: grounding. Name 3 greens you see."],sunset:["Sunset Beach","Warm light fading. Purpose: letting go of today’s worry for a few minutes."],fantasy:["Calm Fantasy Lake","Still water, soft light. Purpose: safe imagination when wards feel loud."]};
+document.querySelectorAll("[data-world]").forEach(b=>b.onclick=()=>{const w=worlds[b.dataset.world];$("worldCard").classList.remove("hidden");$("worldTitle").textContent="🌿 "+w[0];$("worldText").textContent=w[1];save("cc_world",{w:b.dataset.world,at:Date.now()});$("worldCard").scrollIntoView({behavior:"smooth"})});
+$("worldBack").onclick=()=>$("worldCard").classList.add("hidden");
+$("worldRelax").onclick=()=>openExp("relax",state.treatment);
+$("finishBtn").onclick=()=>{$("expCard").classList.add("hidden");$("outCard").classList.remove("hidden");$("title").textContent="How are you after that?";renderHist();$("outCard").scrollIntoView({behavior:"smooth"})};
+$("backBtn").onclick=()=>{$("expCard").classList.add("hidden");window.scrollTo(0,0)};
+$("prepBtn").onclick=()=>$("prepBody").classList.toggle("hidden");
+$("saveNote").onclick=()=>{save("cc_note",$("fam").value);alert("Saved on this phone only.")};
+// treatment toggle
+function toggleTreat(){state.treatment=!state.treatment;localStorage.setItem("cc_treat",state.treatment?"1":"0");$("treatBtn").textContent=state.treatment?"💊 Treatment: ON — switch anytime":"💊 Treatment: OFF"}
+$("treatBtn").onclick=toggleTreat;if(state.treatment)$("treatBtn").textContent="💊 Treatment: ON — switch anytime";
+// help — all buttons respond
 $("helpBtn").onclick=()=>$("helpModal").classList.remove("hidden");
 $("closeHelp").onclick=()=>$("helpModal").classList.add("hidden");
-$("wipe").onclick=()=>{localStorage.clear();alert("Local data wiped.");renderHistory()};
-function renderHistory(){const h=[load("cc_checkin"),load("cc_fb")].filter(Boolean);$("history").textContent=h.length?("Local history: "+JSON.stringify(h).slice(0,180)+"…"):"No local history yet."}
-renderHistory();
+document.querySelectorAll("[data-help]").forEach(b=>b.onclick=()=>{$("helpMsg").textContent="Please reach your "+b.dataset.help+" now. If urgent, use emergency services. This app does not diagnose.";save("cc_help",{w:b.dataset.help,at:Date.now()})});
+$("wipe").onclick=()=>{localStorage.clear();renderHist();alert("Local data wiped.")};
+function renderHist(){const h=[load("cc_checkin"),load("cc_fb"),load("cc_world")].filter(Boolean);$("history").textContent=h.length?("Local: "+JSON.stringify(h).slice(0,200)+"…"):"No local history yet.";const w=load("cc_world");if(w)$("resume").textContent="Last world: "+w.w+" — resume in Explore."}
+renderHist();
 </script>
 </body>
 </html>
