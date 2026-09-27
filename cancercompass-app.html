@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>CancerCompass — Single Page App</title>
+<style>
+  :root{--teal:#0B3D3B;--blue:#1F6B8A;--sand:#F6F1E7;--ink:#101C22;--muted:#33414B;--card:#fff;--line:#D9CBB2;--coral:#C64A2E}
+  *{box-sizing:border-box} body{margin:0;background:#EFE9DB;color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-size:16px;line-height:1.6;display:flex;justify-content:center;padding:16px}
+  .phone{width:420px;max-width:100%;background:var(--sand);border-radius:24px;overflow:hidden;border:1px solid var(--line);box-shadow:0 20px 60px rgba(11,61,59,.25)}
+  .hero{background:linear-gradient(160deg,var(--teal),var(--blue));color:#fff;padding:24px 20px}
+  .hero h1{font-size:26px;margin:8px 0;font-weight:800} .hero p{margin:0;color:#F2F8F6}
+  .brand{font-weight:800} .body{padding:16px}
+  .btn{display:flex;align-items:center;gap:12px;width:100%;border:0;border-radius:18px;padding:0 18px;min-height:58px;font-weight:800;font-size:17px;margin:10px 0;cursor:pointer;box-shadow:0 4px 14px rgba(16,28,34,.15);text-align:left}
+  .btn small{display:block;font-weight:600;font-size:13px;opacity:.85}
+  .b-teal{background:var(--teal);color:#fff;border-bottom:4px solid #072927}
+  .b-blue{background:var(--blue);color:#fff;border-bottom:4px solid #144A61}
+  .b-warm{background:#F3C39A;color:#3A2415;border:2px solid #7A4A21}
+  .b-ghost{background:#fff;color:var(--teal);border:3px solid var(--teal)}
+  .b-help{background:var(--coral);color:#fff;border-bottom:4px solid #7E2E1B}
+  .chips{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0}
+  .chip{background:#fff;border:2px solid #B9A98D;border-radius:999px;padding:11px 16px;min-height:44px;font-size:15px;font-weight:700;cursor:pointer}
+  .chip.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0}
+  .hidden{display:none} .muted{color:var(--muted);font-size:14px}
+  .rec{background:#EAF4F1;border:2px solid var(--teal);border-radius:14px;padding:12px;margin:10px 0}
+  .world{border-radius:16px;padding:28px 18px;color:#fff;text-align:center;margin:10px 0}
+  .breath{font-size:48px;text-align:center;margin:10px}
+  input,select,textarea{width:100%;border:2px solid #B9A98D;border-radius:12px;padding:12px;font-size:16px;margin:6px 0}
+  .topbar{display:flex;gap:8px;margin-bottom:8px} .topbar button{flex:1}
+  .help-modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:20px}
+  .help-box{background:#fff;border-radius:18px;padding:20px;max-width:360px;width:100%}
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="hero">
+    <div class="brand">🧭 CancerCompass</div>
+    <h1 id="title">How are you feeling today?</h1>
+    <p>I'm here with you. You stay in control — stop or change anytime. General info only, not medical advice.</p>
+  </div>
+  <div class="body">
+    <div class="topbar">
+      <button class="btn b-ghost" id="treatBtn" style="min-height:48px;font-size:15px">💊 I'm in Treatment Now: OFF</button>
+      <button class="btn b-help" id="helpBtn" style="min-height:48px;font-size:15px">❤️ Help</button>
+    </div>
+
+    <!-- STEP 1 -->
+    <div id="step1" class="card">
+      <b>Step 1 — Check in</b>
+      <div class="chips" id="emotions"></div>
+      <div class="muted" id="emoMsg">No wrong answer. Pick one, or I'm not sure.</div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div id="step2" class="card hidden">
+      <b>Step 2 — What do you need right now?</b>
+      <div class="rec hidden" id="rec"></div>
+      <button class="btn b-teal" data-need="peaceful">🌿 <span>Take me somewhere peaceful<br><small>Nigerian coast, garden, sunset</small></span></button>
+      <button class="btn b-blue" data-need="relax">🧘 <span>Help me relax<br><small>Breathing, grounding, sleep</small></span></button>
+      <button class="btn b-warm" data-need="distract">🎧 <span>Distract me<br><small>Story, music, calming game</small></span></button>
+      <button class="btn b-ghost" data-need="understand">🔬 <span>Help me understand<br><small>Simple cancer info</small></span></button>
+      <button class="btn b-ghost" data-need="encourage">💙 <span>Encourage me<br><small>Kind words</small></span></button>
+      <button class="btn b-ghost" data-need="connect">🤝 <span>Help me connect<br><small>Messages, family</small></span></button>
+    </div>
+
+    <!-- STEP 3 -->
+    <div id="step3" class="card hidden">
+      <b id="expTitle">Experience</b>
+      <div id="expBody"></div>
+      <button class="btn b-teal" id="finishBtn">Done → check out</button>
+      <button class="btn b-ghost" id="backBtn">← Choose something else</button>
+    </div>
+
+    <!-- STEP 4 -->
+    <div id="step4" class="card hidden">
+      <b>How do you feel now?</b>
+      <div class="chips" id="postEmo"></div>
+      <b>Did this help you?</b>
+      <div class="chips" id="feedback"></div>
+      <div class="muted">Concerning symptoms? Please contact your nurse, doctor, pharmacist or caregiver promptly.</div>
+      <button class="btn b-blue" id="againBtn">What would you like next? ↺</button>
+      <div class="muted" id="history"></div>
+    </div>
+
+    <div class="card muted">📱 Single file demo. Saves on this browser only (localStorage). No login, no cloud. <button id="wipe" style="margin-top:8px">Wipe my local data</button></div>
+  </div>
+</div>
+
+<div id="helpModal" class="help-modal hidden">
+  <div class="help-box">
+    <h3 style="margin-top:0">I need help</h3>
+    <p class="muted">This app does not diagnose. Please reach a human:</p>
+    <button class="btn b-ghost">👪 Caregiver</button>
+    <button class="btn b-ghost">👩‍⚕️ Nurse / Doctor</button>
+    <button class="btn b-ghost">💊 Pharmacist</button>
+    <button class="btn b-help">🚨 Emergency services</button>
+    <button class="btn b-teal" id="closeHelp">Close</button>
+  </div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const emotions=["Anxious","Afraid","Sad","Tired","Lonely","Uncomfortable","Calm","Hopeful","Confused","Overwhelmed","Happy","I'm not sure"];
+const post=["Comfortable","Tired","Worried","Uncomfortable","Emotional","Relieved","Unsure"];
+const fb=["Yes","A little","Not really","No"];
+let state={emotion:null,need:null,treatment:false,pre:null};
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+function load(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}}
+function chips(el,arr,cb){el.innerHTML="";arr.forEach(a=>{const b=document.createElement("button");b.className="chip";b.textContent=a;b.onclick=()=>{[...el.children].forEach(c=>c.classList.remove("on"));b.classList.add("on");cb(a)};el.appendChild(b)})}
+chips($("emotions"),emotions,e=>{state.emotion=e;state.pre=e;$("emoMsg").textContent="Thank you for sharing you're "+e+". I'm here with you.";$("step2").classList.remove("hidden");$("title").textContent="What would help right now?";showRec();save("cc_checkin",{e,at:Date.now()})});
+chips($("postEmo"),post,e=>{save("cc_post",{e,at:Date.now()})});
+chips($("feedback"),fb,f=>{save("cc_fb",{f,pre:state.pre,need:state.need,at:Date.now()});renderHistory();$("title").textContent="Thank you. What next?"});
+function showRec(){const m={Anxious:"relax",Afraid:"encourage",Sad:"encourage",Tired:"relax",Lonely:"connect",Uncomfortable:"peaceful",Calm:"peaceful",Hopeful:"encourage",Confused:"understand",Overwhelmed:"relax",Happy:"connect","I'm not sure":"peaceful"};const r=m[state.emotion]||"peaceful";$("rec").classList.remove("hidden");$("rec").innerHTML="<b> Suggestion for "+state.emotion+":</b> try <b>"+r+"</b> — or choose anything you like. You decide."}
+document.querySelectorAll("[data-need]").forEach(b=>b.onclick=()=>openExp(b.dataset.need));
+function openExp(n){state.need=n;$("step3").classList.remove("hidden");$("step4").classList.add("hidden");$("title").textContent={peaceful:"Take me somewhere",relax:"Help me relax",distract:"Distract me",understand:"Help me understand",encourage:"Encourage me",connect:"Help me connect"}[n];const T=state.treatment?" (Treatment Mode: you can switch anytime)":"";$("expTitle").textContent=$("title").textContent+T;renderExp(n);window.scrollTo(0,0)}
+function renderExp(n){const B=$("expBody");
+if(n==="peaceful"){B.innerHTML=`<div class="world" style="background:linear-gradient(160deg,#0B3D3B,#1F6B8A)">🌊 Nigerian Coastal Calm<br><span class="muted" style="color:#EAF4F1">Waves • soft breeze • 4 min loop</span></div><div class="world" style="background:linear-gradient(160deg,#2E7D5B,#7FB69E)">🌿 Tropical Garden<br><span class="muted" style="color:#fff">Birds • shade • breathe slowly</span></div><p class="muted">Wellbeing purpose: gentle escape, not just scenery. Close eyes or soften gaze if tired.</p>`}
+if(n==="relax"){B.innerHTML=`<div class="breath" id="br">●</div><p style="text-align:center" id="brt">Tap Start — 4-2-4 breathing</p><button class="btn b-blue" id="go">Start 1-min breathing</button>`;let i=null;$("go").onclick=()=>{let t=0;const seq=["Breathe in…","Hold…","Breathe out…"];clearInterval(i);i=setInterval(()=>{$("brt").textContent=seq[t%3];$("br").style.transform=t%3===0?"scale(1.4)":"scale(1)";t++;if(t>8){clearInterval(i);$("brt").textContent="Well done. Notice your shoulders drop."}},2000)}}
+if(n==="distract"){B.innerHTML=`<div class="card"><b>Story: The River Remembers</b><p>A short 2-min calming tale from a riverside village — boats returning at sunset, drums low, food cooking. You are safe here.</p><p class="muted">Music: imagined soft shakers + water. Game: count 5 greens you can see in the garden image above.</p></div>`}
+if(n==="understand"){B.innerHTML=`<div class="card"><b>What happens during chemotherapy? (general info only)</b><p>Chemo medicines travel in the blood to reach fast-growing cells. Sessions can take hours. You may feel tired or nauseous — teams expect this.</p><p><b>When to seek care promptly:</b> fever, heavy bleeding, severe vomiting/diarrhoea, chest pain, trouble breathing.</p><p class="muted">This is general education, not personal advice. Please ask your nurse/doctor/pharmacist about your own symptoms and medicines.</p></div>`}
+if(n==="encourage"){B.innerHTML=`<div class="card" style="font-size:18px"><b>You are doing something hard, and you showed up.</b><p>Rest is allowed. Courage is quiet. One step: this moment.</p><p class="muted">Hopeful and realistic — no promises about outcomes, just company for the road.</p></div>`}
+if(n==="connect"){B.innerHTML=`<div class="card"><b>Messages for you</b><p>💙 “We are with you today.” — Family</p><p>💙 “Rest well. We’ll handle home.” — Caregiver</p><label class="muted">Add your own note (stays on this device)</label><input id="fam" placeholder="e.g. Call mama after treatment"/><button class="btn b-ghost" onclick="alert('Saved on this device (demo)')">Save note locally</button></div>`}}
+$("finishBtn").onclick=()=>{$("step3").classList.add("hidden");$("step4").classList.remove("hidden");$("title").textContent="How are you after that?";renderHistory()};
+$("backBtn").onclick=()=>{$("step3").classList.add("hidden");window.scrollTo(0,0)};
+$("againBtn").onclick=()=>{$("step4").classList.add("hidden");$("step3").classList.add("hidden");$("step2").classList.remove("hidden");$("step1").scrollIntoView()};
+$("treatBtn").onclick=e=>{state.treatment=!state.treatment;e.target.textContent="💊 I'm in Treatment Now: "+(state.treatment?"ON":"OFF")};
+$("helpBtn").onclick=()=>$("helpModal").classList.remove("hidden");
+$("closeHelp").onclick=()=>$("helpModal").classList.add("hidden");
+$("wipe").onclick=()=>{localStorage.clear();alert("Local data wiped.");renderHistory()};
+function renderHistory(){const h=[load("cc_checkin"),load("cc_fb")].filter(Boolean);$("history").textContent=h.length?("Local history: "+JSON.stringify(h).slice(0,180)+"…"):"No local history yet."}
+renderHistory();
+</script>
+</body>
+</html>
