@@ -116,9 +116,20 @@
         <button class="btn b-ghost" data-go="learn">🔬 Help Me Understand</button>
         <button class="btn b-ghost" data-go="support">💙 Help Me Feel Connected</button>
       </div>
-      <div class="card"><b>Prepare Me (before session)</b><p class="muted">What to expect • questions to ask • calming • encouragement.</p>
-        <button class="btn b-blue" id="prepBtn">Start Prepare Me →</button><div id="prepBody" class="hidden muted">1) You’ll check in, sit back, team connects drips. 2) It can take hours — bring warmth + this app. 3) Ask: How long today? What side effects to report? Who do I call after? 4) Breathe with me below, then pick a world.</div>
+      <div class="card"><b>Prepare Me — before session (Phase 4)</b><p class="muted">4 steps: expect • ask • calm • encourage. Tick questions to ask your team.</p>
+        <button class="btn b-blue" id="prepBtn">Start Prepare Me →</button>
+        <div id="prepBody" class="hidden">
+          <p><b>1. What to expect:</b> check in, sit back, team connects drip. It can take hours — bring warmth + this app.</p>
+          <p><b>2. Tick to ask:</b></p>
+          <div class="chips" id="prepQ"></div>
+          <p><b>3. Calm (30 sec):</b> breathe in 4, out 4, twice.</p>
+          <p><b>4. Encouragement:</b> uncertainty → familiarity. You’ve prepared; now pick a world in Explore.</p>
+          <button class="btn b-teal" id="prepGo">I’m prepared → pick a world</button>
+        </div>
       </div>
+      <div class="card"><b>After treatment? (Phase 4)</b><p class="muted">Check out after your session.</p><div class="chips" id="afterChips"></div><div class="muted" id="afterMsg"></div></div>
+      <div class="card"><b>Where are you? (Phase 4 • Home mode)</b><div class="chips" id="placeChips"></div><div class="muted">Home = shorter sessions + sleep track suggested. Hospital = treatment doors first.</div></div>
+      <div class="card"><b>My Journey (Phase 4)</b><p class="muted">Non-linear — no failing. Tap your stage; stored on this phone only.</p><div class="chips" id="journey"></div></div>
     </section>
 
     <!-- LEARN -->
@@ -137,7 +148,7 @@
       </div>
     </section>
 
-    <div class="card muted">📱 Phases 1+2 • Single file • Saves on this browser only. <button id="wipe">Wipe local data</button> <span id="resume"></span></div>
+    <div class="card muted">📱 Phases 1–4 • Single file • Saves on this browser only. <button id="wipe">Wipe local data</button> <span id="resume"></span></div>
   </div>
 
   <nav class="nav">
@@ -179,7 +190,7 @@ const $=id=>document.getElementById(id);
 const emotions=["Anxious","Afraid","Sad","Tired","Lonely","Uncomfortable","Calm","Hopeful","Confused","Overwhelmed","Happy","I'm not sure"];
 const post=["Comfortable","Tired","Worried","Uncomfortable","Emotional","Relieved","Unsure"];
 const fb=["Yes","A little","Not really","No"];
-const topics={"What is cancer?":"Cells growing out of control. Many types, many treatments. Your team explains your own case.","During chemo?":"Medicines travel in blood to fast-growing cells. Sessions take hours. Tiredness/nausea are commonly expected — teams plan for this.","Side effects?":"Common: tiredness, nausea, appetite changes, hair loss. Report: fever, heavy bleeding, severe vomiting/diarrhoea, chest pain, breathing trouble — promptly.","Medication safety?":"Take as labelled, keep list of all medicines, ask pharmacist before herbs/supplements. Never adjust chemo doses alone.","When to seek care?":"Fever ≥38°C, uncontrollable vomiting, confusion, chest pain, trouble breathing, severe pain — seek care same day.","Questions to ask?":"How long today? What to report? Who do I call after? Food/drink? Next visit?"};
+const topics={"What is cancer? (2 min • pharmacist-reviewed)":"Cells growing where they shouldn’t. Many types and stages — only your own team can explain yours. General info only.":"ph","During chemo? (2 min • pharmacist-reviewed)":"Medicines travel in the blood to reach fast-growing cells. A session can last hours: check-in, drip, rest, go home. Tiredness and nausea are commonly expected — teams plan for this.":"ph","Side effects? (2 min)":"Common: tiredness, nausea, appetite change, hair loss, mouth sores. Call promptly for: fever ≥38°C, heavy bleeding, severe vomiting/diarrhoea, chest pain, trouble breathing, confusion.":"ph","Medication safety? (2 min • pharmacist-reviewed)":"Take exactly as labelled. Keep one list of ALL medicines + herbs. Ask your pharmacist before adding anything. Never change chemo doses yourself.":"ph","When to seek care? (1 min)":"Same-day care: fever, uncontrollable vomiting, severe pain, bleeding, breathing trouble, sudden swelling, confusion. When unsure — call and ask.":"ph","Questions to ask? (1 min)":"How long is today? What should I report? Who do I call after hours? Food/drink today? What’s next visit? Tick them in Treatment → Prepare Me.":"ph"};
 let state={emotion:null,need:null,treatment:localStorage.getItem("cc_treat")==="1"};
 function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
 function load(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}}
@@ -192,12 +203,12 @@ chips($("emotions"),emotions,e=>{state.emotion=e;save("cc_checkin",{e,at:Date.no
 chips($("postEmo"),post,e=>save("cc_post",{e,at:Date.now()}));
 chips($("feedback"),fb,f=>{save("cc_fb",{f,need:state.need,at:Date.now()});renderHist();$("title").textContent="Thank you. What next?"});
 chips($("topics"),Object.keys(topics),t=>{$("topicBody").innerHTML="<div class='rec'><b>"+t+"</b><p>"+topics[t]+"</p><p class='muted'>General education only — ask your team about you.</p></div>"});
-// experiences (home + treatment doors)
-function openExp(n,fromTreat){state.need=n;$("expCard").classList.remove("hidden");$("outCard").classList.add("hidden");document.querySelector('[data-tab="home"]').click();$("expTitle").textContent={relax:"Help me relax",distract:"Distract me",encourage:"Encourage me"}[n]+(state.treatment||fromTreat?" • Treatment Mode":"");const B=$("expBody");
- if(n==="relax")B.innerHTML=`<div class="breath" id="br">●</div><p style="text-align:center" id="brt">Tap Start — slow breathing</p><button class="btn b-blue" id="go">Start 1-min breathing</button>`;
- if(n==="distract")B.innerHTML=`<div class="card"><b>Story: The River Remembers (2 min)</b><p>Boats return at sunset, drums low, food cooking. You are safe here.</p><p class="muted">Game: silently count 5 green things around you, then 4 slow breaths.</p></div>`;
- if(n==="encourage")B.innerHTML=`<div class="card" style="font-size:18px"><b>You did something hard and showed up.</b><p>Rest is allowed. One moment at a time.</p><p class="muted">Hopeful, realistic — no outcome promises.</p></div>`;
- const go=$("go");if(go)go.onclick=()=>{let t=0;const s=["Breathe in…","Hold…","Breathe out…"];const iv=setInterval(()=>{$("brt").textContent=s[t%3];$("br").style.transform=t%3===0?"scale(1.5)":"scale(1)";t++;if(t>8){clearInterval(iv);$("brt").textContent="Well done — shoulders drop."}},2000)};
+// Phase 3 library (PRD F4+F6): 5 guided tracks, local step timers, no audio files needed
+const TRACKS={breath:{n:"Breathing • 3 min",steps:["Breathe in 4…","Hold 2…","Breathe out 4…","Soften shoulders…"],loop:6},ground:{n:"Grounding • 5 min",steps:["Name 5 things you see…","Name 4 you can touch…","Name 3 you hear…","Name 2 you smell…","Name 1 slow breath…"],loop:5},body:{n:"Body relaxation • 7 min",steps:["Feet soften…","Legs heavy…","Belly loose…","Hands open…","Face unclench…","Whole body rest…"],loop:5},sleep:{n:"Sleep preparation • 8 min",steps:["Dim light, lie back…","Slow breath in…","Long breath out…","Let thoughts pass…","Darker, quieter…"],loop:6},kind:{n:"Encouragement • 2 min",steps:["You showed up today.","Rest is allowed.","One moment at a time.","You are not alone here."],loop:2}};
+function openExp(n,fromTreat){state.need=n;$("expCard").classList.remove("hidden");$("outCard").classList.add("hidden");document.querySelector('[data-tab="home"]').click();$("expTitle").textContent={relax:"Help me relax — choose a track",distract:"Distract me",encourage:"Encourage me"}[n]+(state.treatment||fromTreat?" • Treatment Mode":"");const B=$("expBody");
+ if(n==="relax"){B.innerHTML=`<div class="chips" id="tracks"></div><div class="breath" id="br">●</div><p style="text-align:center" id="brt">Pick a track above, then Start</p><button class="btn b-blue" id="go">Start</button>`;chips($("tracks"),Object.keys(TRACKS),t=>{state.track=t;$("brt").textContent=TRACKS[t].n+" — tap Start";[...$("tracks").children].forEach(c=>c.classList.remove("on"));event.target.classList.add("on")});state.track=state.track||"breath";let iv=null;$("go").onclick=()=>{const T=TRACKS[state.track];let i=0,r=0;clearInterval(iv);iv=setInterval(()=>{$("brt").textContent=T.steps[i%T.steps.length]+" ("+T.n+")";$("br").style.transform=i%2===0?"scale(1.5)":"scale(1)";i++;if(i%T.steps.length===0)r++;if(r>=T.loop){clearInterval(iv);$("brt").textContent="Well done — "+T.n+" complete.";save("cc_relax",{t:state.track,at:Date.now()});renderHist()}},2500)}}
+ if(n==="distract")B.innerHTML=`<div class="card"><b>Story: The River Remembers (2 min)</b><p>Boats return at sunset, drums low, food cooking. You are safe here.</p><p class="muted">Game: silently count 5 green things around you, then 4 slow breaths.</p><button class="btn b-warm" id="storyDone">Story finished →</button></div>`;
+ if(n==="encourage"){const T=TRACKS.kind;B.innerHTML=`<div class="card" style="font-size:18px"><b>You did something hard and showed up.</b><p id="kindLine">Rest is allowed.</p><p class="muted">Hopeful, realistic — no outcome promises.</p><button class="btn b-blue" id="kindNext">Next kind line →</button></div>`;let k=0;const nb=()=>{k++;$("kindLine").textContent=T.steps[k%T.steps.length]};setTimeout(()=>{const b=$("kindNext");if(b)b.onclick=nb},0)}
  $("expCard").scrollIntoView({behavior:"smooth"})}
 document.querySelectorAll("[data-exp]").forEach(b=>b.onclick=()=>openExp(b.dataset.exp,false));
 document.querySelectorAll("[data-exp-t]").forEach(b=>b.onclick=()=>{if(!state.treatment)toggleTreat();openExp(b.dataset.expT,true)});
@@ -236,7 +247,14 @@ $("helpBtn").onclick=()=>$("helpModal").classList.remove("hidden");
 $("closeHelp").onclick=()=>$("helpModal").classList.add("hidden");
 document.querySelectorAll("[data-help]").forEach(b=>b.onclick=()=>{$("helpMsg").textContent="Please reach your "+b.dataset.help+" now. If urgent, use emergency services. This app does not diagnose.";save("cc_help",{w:b.dataset.help,at:Date.now()})});
 $("wipe").onclick=()=>{localStorage.clear();renderHist();alert("Local data wiped.")};
-function renderHist(){const h=[load("cc_checkin"),load("cc_fb"),load("cc_world")].filter(Boolean);$("history").textContent=h.length?("Local: "+JSON.stringify(h).slice(0,200)+"…"):"No local history yet.";const w=load("cc_world");if(w)$("resume").textContent="Last world: "+w.w+" — resume in Explore."}
+// Phase 4 (PRD F7/F8/F9/F12): prepare checklist, post-treatment, home mode, journey — all local
+chips($("prepQ"),["How long today?","What to report?","Who to call after?","Food/drink?","Next visit?"],q=>{const l=load("cc_prepq")||[];l.push(q);save("cc_prepq",l);$("prepBody").scrollIntoView({behavior:"smooth"})});
+$("prepGo").onclick=()=>document.querySelector('[data-tab="explore"]').click();
+const AFTER={Comfortable:"Lovely — a short garden moment or rest.",Tired:"Rest + sleep-prep track suggested.",Worried:"Try encouragement + understanding, then talk to your team.",Uncomfortable:"Pause, breathe, tell your team what hurts.",Emotional:"That’s allowed — encouragement + connect.",Relieved:"Carry this ease — note what helped.",Unsure:"Start with a 3-min coast session."};
+chips($("afterChips"),Object.keys(AFTER),a=>{$("afterMsg").textContent=AFTER[a]+" Concerning symptoms? Contact your team promptly.";save("cc_after",{a,at:Date.now()})});
+chips($("placeChips"),["🏥 Hospital","🏠 Home"],p=>{save("cc_place",{p,at:Date.now()});$("title").textContent=p.includes("Home")?"Welcome home — shorter, gentle sessions.":"How are you feeling today?"});
+chips($("journey"),["🌱 Diagnosis","💙 Preparing","💊 Treatment","🌿 Recovery","🏠 Home","🌻 Follow-up"],j=>save("cc_journey",{j,at:Date.now()}));
+function renderHist(){const h=[load("cc_checkin"),load("cc_fb"),load("cc_world"),load("cc_after"),load("cc_journey"),load("cc_relax")].filter(Boolean);$("history").textContent=h.length?("Local: "+JSON.stringify(h).slice(0,220)+"…"):"No local history yet.";const w=load("cc_world");if(w)$("resume").textContent="Last world: "+(w.w||"—")+" — resume in Explore."}
 renderHist();
 </script>
 </body>
