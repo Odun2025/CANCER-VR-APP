@@ -37,6 +37,15 @@
   .help-box{background:#fff;border-radius:18px;padding:20px;max-width:360px;width:100%}
   .breath{font-size:52px;text-align:center;transition:transform 1s}
   .tag{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--teal)}
+  .sess{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(10,20,20,.55)}
+  .sess-box{width:430px;max-width:100%;border-radius:22px;overflow:hidden;background:var(--sand);border:2px solid #fff}
+  .sess-view{padding:34px 20px;text-align:center;color:#fff;min-height:260px}
+  .sess-view.cardboard{display:flex;gap:8px}.sess-view.cardboard .eye{flex:1;border:2px solid rgba(255,255,255,.6);border-radius:14px;padding:20px 8px}
+  .prog{height:10px;background:rgba(255,255,255,.35);border-radius:99px;overflow:hidden;margin:12px 0}
+  .prog i{display:block;height:100%;width:0;background:#fff;border-radius:99px}
+  .sess-ctrl{display:flex;gap:8px;flex-wrap:wrap;padding:12px 14px;background:var(--sand)}
+  .sess-ctrl .btn{flex:1;min-width:120px;margin:4px 0;min-height:52px;font-size:15px}
+  select.len{width:auto;display:inline-block;margin:6px 0}
 </style>
 </head>
 <body>
@@ -84,12 +93,13 @@
     <!-- EXPLORE / PHASE 2 WORLDS -->
     <section id="tab-explore" class="hidden">
       <div class="card"><span class="tag">Phase 2 • Explore — 4 worlds</span>
-        <p class="muted">Each world has a wellbeing purpose. Tap Enter, stay as long as you like, switch anytime.</p>
+        <p class="muted">Each world has a wellbeing purpose. Tap Enter for a timed session (3 or 5 min), pause anytime, switch worlds mid-session without losing your place.</p>
+        <label class="muted">Session length: <select class="len" id="sessLen"><option value="180">Short • 3 min</option><option value="300" selected>Standard • 5 min</option></select></label>
       </div>
-      <div class="world" style="background:linear-gradient(160deg,#0B3D3B,#1F6B8A)">🌊 Nigerian Coastal Calm<br><small>Waves • breeze • familiar home feeling</small><br><button class="btn b-warm" data-world="coast">Enter coast →</button></div>
-      <div class="world" style="background:linear-gradient(160deg,#2E7D5B,#7FB69E)">🌿 Tropical Garden<br><small>Shade • birds • slow breathing</small><br><button class="btn b-warm" data-world="garden">Enter garden →</button></div>
-      <div class="world" style="background:linear-gradient(160deg,#B5651D,#E8A87C)">🌅 Sunset Beach<br><small>Warm light • letting go</small><br><button class="btn b-warm" data-world="sunset">Enter sunset →</button></div>
-      <div class="world" style="background:linear-gradient(160deg,#3A3A7A,#7FB69E)">✨ Calm Fantasy Lake<br><small>Still water • safe imagination</small><br><button class="btn b-warm" data-world="fantasy">Enter lake →</button></div>
+      <div class="world" style="background:linear-gradient(160deg,#0B3D3B,#1F6B8A)">🌊 Nigerian Coastal Calm<br><small>Purpose: feel at home • Waves • breeze</small><br><button class="btn b-warm" data-world="coast">Enter coast →</button></div>
+      <div class="world" style="background:linear-gradient(160deg,#2E7D5B,#7FB69E)">🌿 Tropical Garden<br><small>Purpose: grounding • Shade • birds</small><br><button class="btn b-warm" data-world="garden">Enter garden →</button></div>
+      <div class="world" style="background:linear-gradient(160deg,#B5651D,#E8A87C)">🌅 Sunset Beach<br><small>Purpose: letting go • Warm light</small><br><button class="btn b-warm" data-world="sunset">Enter sunset →</button></div>
+      <div class="world" style="background:linear-gradient(160deg,#3A3A7A,#7FB69E)">✨ Calm Fantasy Lake<br><small>Purpose: safe imagination • Still water</small><br><button class="btn b-warm" data-world="fantasy">Enter lake →</button></div>
       <div class="card hidden" id="worldCard"><h3 id="worldTitle"></h3><p id="worldText" class="muted"></p>
         <div class="row"><button class="btn b-blue" id="worldRelax">Relax here</button><button class="btn b-ghost" id="worldBack">← All worlds</button></div>
       </div>
@@ -139,6 +149,22 @@
   </nav>
 </div>
 
+<div id="sess" class="sess hidden"><div class="sess-box">
+  <div class="sess-view" id="sessView"><div id="sessInner"><div style="font-size:44px" id="sessEmoji">🌊</div><h2 id="sessName" style="margin:8px 0"></h2><p id="sessPurpose" style="opacity:.95"></p><div class="prog"><i id="sessBar"></i></div><p id="sessTime" style="font-weight:800"></p><p class="muted" id="sessHint" style="color:#EAF4F1">You can pause, switch worlds, or exit anytime.</p></div></div>
+  <div class="sess-ctrl">
+    <button class="btn b-blue" id="sessPause">⏸ Pause</button>
+    <button class="btn b-ghost" id="sessAudio">🔇 Sound: off</button>
+    <button class="btn b-ghost" id="sessCard">🥽 Cardboard</button>
+  </div>
+  <div class="sess-ctrl">
+    <button class="btn b-warm" data-swap="coast">🌊 Coast</button>
+    <button class="btn b-warm" data-swap="garden">🌿 Garden</button>
+    <button class="btn b-warm" data-swap="sunset">🌅 Sunset</button>
+    <button class="btn b-warm" data-swap="fantasy">✨ Lake</button>
+  </div>
+  <div class="sess-ctrl"><button class="btn b-teal" id="sessDone">Done → check out</button><button class="btn b-ghost" id="sessExit">Exit (keep time)</button></div>
+</div></div>
+
 <div id="helpModal" class="help-modal hidden"><div class="help-box">
   <h3 style="margin-top:0">I need help</h3><p class="muted">No diagnosis here — reach a human:</p>
   <button class="btn b-ghost" data-help="Caregiver">👪 Caregiver</button>
@@ -175,11 +201,29 @@ function openExp(n,fromTreat){state.need=n;$("expCard").classList.remove("hidden
  $("expCard").scrollIntoView({behavior:"smooth"})}
 document.querySelectorAll("[data-exp]").forEach(b=>b.onclick=()=>openExp(b.dataset.exp,false));
 document.querySelectorAll("[data-exp-t]").forEach(b=>b.onclick=()=>{if(!state.treatment)toggleTreat();openExp(b.dataset.expT,true)});
-// worlds
-const worlds={coast:["Nigerian Coastal Calm","Waves and breeze — a familiar home feeling. Purpose: gentle escape. Stay 3–5 min, breathe with the water."],garden:["Tropical Garden","Shade, birds, green air. Purpose: grounding. Name 3 greens you see."],sunset:["Sunset Beach","Warm light fading. Purpose: letting go of today’s worry for a few minutes."],fantasy:["Calm Fantasy Lake","Still water, soft light. Purpose: safe imagination when wards feel loud."]};
-document.querySelectorAll("[data-world]").forEach(b=>b.onclick=()=>{const w=worlds[b.dataset.world];$("worldCard").classList.remove("hidden");$("worldTitle").textContent="🌿 "+w[0];$("worldText").textContent=w[1];save("cc_world",{w:b.dataset.world,at:Date.now()});$("worldCard").scrollIntoView({behavior:"smooth"})});
-$("worldBack").onclick=()=>$("worldCard").classList.add("hidden");
-$("worldRelax").onclick=()=>openExp("relax",state.treatment);
+// worlds + Phase 2 SessionManager (PRD Feature 3+5): timed loop, pause/resume, mid-session switch, local audio, auto-pause
+const WORLDS={coast:{e:"🌊",n:"Nigerian Coastal Calm",p:"Purpose: feel at home. Waves and breeze — breathe with the water.",g:"linear-gradient(160deg,#0B3D3B,#1F6B8A)",a:"waves"},garden:{e:"🌿",n:"Tropical Garden",p:"Purpose: grounding. Shade and birds — name 3 greens you see.",g:"linear-gradient(160deg,#2E7D5B,#7FB69E)",a:"birds"},sunset:{e:"🌅",n:"Sunset Beach",p:"Purpose: letting go. Warm light — let today soften for a few minutes.",g:"linear-gradient(160deg,#B5651D,#E8A87C)",a:"soft"},fantasy:{e:"✨",n:"Calm Fantasy Lake",p:"Purpose: safe imagination. Still water when wards feel loud.",g:"linear-gradient(160deg,#3A3A7A,#7FB69E)",a:"soft"}};
+const Sess={key:null,total:300,left:300,timer:null,playing:false,audioOn:false,ctx:null,nodes:[],
+ start(k){this.stopTimer();this.key=k;this.total=parseInt(($("sessLen")||{value:300}).value||300);this.left=this.total;this.playing=true;save("cc_session",{w:k,left:this.left,at:Date.now()});this.paint();$("sess").classList.remove("hidden");this.tick();if(this.audioOn)this.audioStart();},
+ paint(){const w=WORLDS[this.key];$("sessView").style.background=w.g;$("sessEmoji").textContent=w.e;$("sessName").textContent=w.n;$("sessPurpose").textContent=w.p;},
+ tick(){clearInterval(this.timer);this.timer=setInterval(()=>{if(!this.playing)return;this.left--;const done=this.total-this.left;$("sessBar").style.width=(100*done/this.total)+"%";const m=Math.floor(this.left/60),s=("0"+this.left%60).slice(-2);$("sessTime").textContent=m+":"+s+" left • switch worlds anytime";save("cc_session",{w:this.key,left:this.left,at:Date.now()});if(this.left<=0){this.complete()}},1000);$("sessPause").textContent="⏸ Pause";},
+ toggle(){this.playing=!this.playing;$("sessPause").textContent=this.playing?"⏸ Pause":"▶ Resume";if(!this.playing)this.audioStop();else if(this.audioOn)this.audioStart();},
+ swap(k){const elapsed=this.total-this.left;this.key=k;this.paint();save("cc_session",{w:k,left:this.left,elapsed,at:Date.now()});},
+ stopTimer(){clearInterval(this.timer);this.audioStop();},
+ exit(){this.playing=false;clearInterval(this.timer);this.audioStop();save("cc_session",{w:this.key,left:this.left,paused:true,at:Date.now()});$("sess").classList.add("hidden");renderHist();},
+ complete(){this.exit();save("cc_world",{w:this.key,done:true,at:Date.now()});document.querySelector('[data-tab="home"]').click();$("outCard").classList.remove("hidden");$("title").textContent="Well done — how do you feel now?";renderHist();$("outCard").scrollIntoView({behavior:"smooth"})},
+ audioStart(){try{this.audioStop();const C=this.ctx=this.ctx||new (window.AudioContext||window.webkitAudioContext)();const o=C.createOscillator(),g=C.createGain(),l=C.createOscillator(),lg=C.createGain();o.type="sine";o.frequency.value=WORLDS[this.key].a==="birds"?880:220;g.gain.value=0.04;l.frequency.value=0.15;lg.gain.value=0.02;l.connect(lg);lg.connect(g.gain);o.connect(g);g.connect(C.destination);o.start();l.start();this.nodes=[o,l];}catch(e){}},
+ audioStop(){try{this.nodes.forEach(n=>n.stop());}catch(e){}this.nodes=[];}
+};
+document.querySelectorAll("[data-world]").forEach(b=>b.onclick=()=>Sess.start(b.dataset.world));
+document.querySelectorAll("[data-swap]").forEach(b=>b.onclick=()=>Sess.swap(b.dataset.swap));
+$("sessPause").onclick=()=>Sess.toggle();
+$("sessAudio").onclick=e=>{Sess.audioOn=!Sess.audioOn;e.target.textContent=Sess.audioOn?"🔊 Sound: on":"🔇 Sound: off";if(Sess.audioOn&&Sess.playing)Sess.audioStart();else Sess.audioStop()};
+$("sessCard").onclick=()=>{const v=$("sessView");const on=v.classList.toggle("cardboard");if(on){v.innerHTML='<div class="eye">'+$("sessInner").innerHTML+'</div><div class="eye">'+$("sessInner").innerHTML+'</div>'}else{location.reload()}};
+$("sessDone").onclick=()=>Sess.complete();
+$("sessExit").onclick=()=>Sess.exit();
+document.addEventListener("visibilitychange",()=>{if(document.hidden&&Sess.playing){Sess.toggle();$("sessHint").textContent="Paused because the app was hidden — tap Resume when ready."}});
+const _wb=$("worldBack"),_wr=$("worldRelax"),_wc=$("worldCard");if(_wc)_wc.classList.add("hidden");if(_wb)_wb.onclick=()=>_wc.classList.add("hidden");if(_wr)_wr.onclick=()=>openExp("relax",state.treatment);
 $("finishBtn").onclick=()=>{$("expCard").classList.add("hidden");$("outCard").classList.remove("hidden");$("title").textContent="How are you after that?";renderHist();$("outCard").scrollIntoView({behavior:"smooth"})};
 $("backBtn").onclick=()=>{$("expCard").classList.add("hidden");window.scrollTo(0,0)};
 $("prepBtn").onclick=()=>$("prepBody").classList.toggle("hidden");
