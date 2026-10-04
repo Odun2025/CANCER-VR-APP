@@ -5,7 +5,7 @@
 - Keys live in backend `.env` on your computer/server only.
 
 ## What to tell me
-1. **Payment purpose:** donations to CancerCompass? premium content? clinic bills? (PRD has no payments — I labelled it "support" for now.)
+1. **Payment purpose:** donations to OncoEase? premium content? clinic bills? (PRD has no payments — I labelled it "support" for now.)
 2. **Live or test?** Use Flutterwave TEST keys first (`sk_test_...`).
 
 ## Run locally (5 min)

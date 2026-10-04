@@ -1,4 +1,4 @@
-// CancerCompass LOCAL backend stub — keys stay HERE, never in the app or GitHub.
+// OncoEase LOCAL backend stub — keys stay HERE, never in the app or GitHub.
 // Run: npm install express cors dotenv node-fetch@2
 // Then: copy .env.example to .env, fill keys, run: node backend-example.js
 require("dotenv").config();
@@ -13,7 +13,7 @@ const OPENAI_KEY = process.env.OPENAI_API_KEY;
 const PORT = process.env.PORT || 3001;
 
 // --- Safety system prompt: general info only, never diagnosis/doses ---
-const SYSTEM_PROMPT = `You are CancerCompass, a compassionate cancer-support companion for Nigerian patients and caregivers.
+const SYSTEM_PROMPT = `You are OncoEase, a compassionate cancer-support companion for Nigerian patients and caregivers.
 Rules: 1) General information only, never personal medical advice, diagnosis, or dose instructions. 2) Simple plain language, hopeful but realistic, no outcome promises. 3) Always encourage discussing personal symptoms with their nurse/doctor/pharmacist. 4) If red-flag symptoms (fever, heavy bleeding, severe vomiting, chest pain, trouble breathing, confusion) or self-harm, urge prompt human help and emergency services. 5) Respect culture; be kind. 6) Keep replies under 120 words.`;
 
 // --- Flutterwave: create payment link (server-side only) ---
@@ -31,7 +31,7 @@ app.post("/api/pay", async (req, res) => {
         tx_ref: txRef, amount, currency,
         redirect_url: process.env.PAY_REDIRECT_URL || "https://odun2025.github.io/CANCER-VR-APP/cancercompass-app.html",
         customer: { email },
-        customizations: { title: "CancerCompass Support", description: "Purpose: " + purpose },
+        customizations: { title: "OncoEase Support", description: "Purpose: " + purpose },
       }),
     });
     const j = await r.json();
@@ -66,5 +66,5 @@ app.post("/api/chat", async (req, res) => {
   } catch (e) { return res.status(500).json({ error: "Chat failed", reply: "I’m having trouble — please try a relaxation track, and contact your team for anything urgent." }); }
 });
 
-app.get("/", (req, res) => res.send("CancerCompass backend stub running. POST /api/pay and /api/chat"));
-app.listen(PORT, () => console.log("CancerCompass backend on http://localhost:" + PORT));
+app.get("/", (req, res) => res.send("OncoEase backend stub running. POST /api/pay and /api/chat"));
+app.listen(PORT, () => console.log("OncoEase backend on http://localhost:" + PORT));

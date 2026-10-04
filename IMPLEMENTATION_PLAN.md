@@ -1,7 +1,7 @@
-# CancerCompass VR — Implementation Plan
+# OncoEase VR — Implementation Plan
 
-Source: PRD.md — CancerCompass VR Immersive Cancer Support & Wellbeing Experience
-Owner: CancerCompass and Med Crescent Pharmacy
+Source: PRD.md — OncoEase VR Immersive Cancer Support & Wellbeing Experience
+Owner: OncoEase and Med Crescent Pharmacy
 
 > Central question: “What do you need right now?”
 > Positioning: a cancer journey companion that happens to use VR — not just a VR app.

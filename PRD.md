@@ -1,11 +1,11 @@
 **Product Requirements Document (PRD)**
 
-## **CancerCompass VR — Immersive Cancer Support & Wellbeing Experience**
+## **OncoEase VR — Immersive Cancer Support & Wellbeing Experience**
 
 **Product type:** Virtual reality wellbeing and cancer-support application  
 **Primary users:** Cancer patients  
 **Secondary users:** Caregivers and family members  
-**Product owner/brand:** CancerCompass And Med Crescent Pharmacy  
+**Product owner/brand:** OncoEase And Med Crescent Pharmacy  
 **Core purpose:** To help people affected by cancer manage anxiety, treatment-related distress, discomfort, information needs and emotional wellbeing through immersive, supportive experiences.
 
 ---
@@ -14,7 +14,7 @@
 
 Cancer treatment can be physically and emotionally overwhelming. Patients may experience fear before treatment, discomfort during treatment, uncertainty about their medicines and diagnosis, and emotional exhaustion between hospital visits.
 
-**CancerCompass VR** will provide a safe, compassionate digital space where patients can choose experiences according to what they need at that moment.
+**OncoEase VR** will provide a safe, compassionate digital space where patients can choose experiences according to what they need at that moment.
 
 The central philosophy is:
 
@@ -195,7 +195,7 @@ The app should never make the patient feel that they have selected the “wrong�
 
 # **8\. Feature 2: “What Do You Need Right Now?”**
 
-This becomes the **signature feature** of CancerCompass VR.
+This becomes the **signature feature** of OncoEase VR.
 
 Patients can choose:
 
@@ -620,7 +620,7 @@ Both people affected by cancer receive support.
 
 ### **6\. Pharmacist-informed wellbeing**
 
-CancerCompass can bring its pharmaceutical-care perspective into medication education and patient support.
+OncoEase can bring its pharmaceutical-care perspective into medication education and patient support.
 
 ### **7\. Journey-based support**
 
@@ -634,7 +634,7 @@ The experience follows the patient's changing needs from preparation through tre
 
 Ada is about to receive chemotherapy.
 
-She opens CancerCompass VR.
+She opens OncoEase VR.
 
 **Step 1:**  
 “How are you feeling?”
@@ -718,7 +718,7 @@ Where possible, evaluation should distinguish **user satisfaction** from claims 
 
 # **29\. Long-Term Vision**
 
-The long-term vision could expand CancerCompass VR from a relaxation application into a broader **immersive cancer-support ecosystem**.
+The long-term vision could expand OncoEase VR from a relaxation application into a broader **immersive cancer-support ecosystem**.
 
 Potential future areas include:
 
@@ -734,13 +734,13 @@ It could eventually support different cancer populations, treatment types and he
 
 I would position it as:
 
-**CancerCompass VR is an immersive cancer-support companion that helps patients and caregivers navigate the emotional, educational and wellbeing challenges of cancer—from preparation and treatment to recovery and life at home.**
+**OncoEase VR is an immersive cancer-support companion that helps patients and caregivers navigate the emotional, educational and wellbeing challenges of cancer—from preparation and treatment to recovery and life at home.**
 
 And the core promise:
 
 **Escape. Understand. Relax. Connect. Keep Going.**
 
-This is a particularly strong direction for CancerCompass because it extends your existing **patient-centred pharmaceutical-care and public-health positioning** into an innovative digital health experience.
+This is a particularly strong direction for OncoEase because it extends your existing **patient-centred pharmaceutical-care and public-health positioning** into an innovative digital health experience.
 
 ### **My strongest recommendation**
 
