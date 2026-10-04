@@ -5,26 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>CancerCompass — Phases 1+2 Working App</title>
 <style>
-  :root{--teal:#0B3D3B;--blue:#1F6B8A;--sand:#F6F1E7;--ink:#101C22;--muted:#33414B;--card:#fff;--line:#D9CBB2;--coral:#C64A2E}
-  *{box-sizing:border-box} body{margin:0;background:#EFE9DB;color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-size:16px;line-height:1.6;display:flex;justify-content:center;padding:12px}
-  .phone{width:430px;max-width:100%;background:var(--sand);border-radius:24px;overflow:hidden;border:1px solid var(--line);box-shadow:0 20px 60px rgba(11,61,59,.25);display:flex;flex-direction:column;min-height:90vh}
-  .hero{background:linear-gradient(160deg,var(--teal),var(--blue));color:#fff;padding:22px 18px}
+  :root{--teal:#0B7A3E;--blue:#0B7A3E;--sand:#FFFFFF;--ink:#0E2417;--muted:#3C5546;--card:#fff;--line:#CFE6D6;--coral:#C64A2E;--tint:#EAF6EE;--dark:#063F22}
+  *{box-sizing:border-box} body{margin:0;background:#DDEBDF;color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-size:16px;line-height:1.6;display:flex;justify-content:center;padding:12px}
+  .phone{width:430px;max-width:100%;background:#FFFFFF;border-radius:24px;overflow:hidden;border:2px solid var(--line);box-shadow:0 20px 60px rgba(11,122,62,.25);display:flex;flex-direction:column;min-height:90vh}
+  .hero{background:linear-gradient(160deg,#0B7A3E,#063F22);color:#fff;padding:22px 18px}
   .hero h1{font-size:24px;margin:8px 0;font-weight:800} .hero p{margin:0;color:#F2F8F6;font-size:15px}
   .brand{font-weight:800} .pill{display:inline-block;background:rgba(255,255,255,.2);border-radius:999px;padding:4px 12px;font-size:13px;font-weight:700}
   .body{padding:14px 14px 90px}
   .btn{display:flex;align-items:center;gap:12px;width:100%;border:0;border-radius:18px;padding:0 16px;min-height:58px;font-weight:800;font-size:16px;margin:10px 0;cursor:pointer;box-shadow:0 4px 14px rgba(16,28,34,.15);text-align:left;font-family:inherit;color:inherit}
   .btn small{display:block;font-weight:600;font-size:13px;opacity:.85}
-  .b-teal{background:var(--teal);color:#fff;border-bottom:4px solid #072927}
-  .b-blue{background:var(--blue);color:#fff;border-bottom:4px solid #144A61}
-  .b-warm{background:#F3C39A;color:#3A2415;border:2px solid #7A4A21}
-  .b-ghost{background:#fff;color:var(--teal);border:3px solid var(--teal)}
+  .b-teal{background:#0B7A3E;color:#fff;border-bottom:4px solid #063F22}
+  .b-blue{background:#0B7A3E;color:#fff;border-bottom:4px solid #063F22}
+  .b-warm{background:#FFFFFF;color:#063F22;border:3px solid #0B7A3E}
+  .b-ghost{background:#fff;color:#063F22;border:3px solid #0B7A3E}
   .b-help{background:var(--coral);color:#fff;border-bottom:4px solid #7E2E1B}
   .chips{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0}
-  .chip{background:#fff;border:2px solid #B9A98D;border-radius:999px;padding:11px 16px;min-height:44px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit}
-  .chip.on{background:var(--teal);color:#fff;border-color:var(--teal)}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0}
+  .chip{background:#fff;border:2px solid #0B7A3E;border-radius:999px;padding:11px 16px;min-height:44px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;color:#063F22}
+  .chip.on{background:#0B7A3E;color:#fff;border-color:#0B7A3E}
+  .card{background:#fff;border:2px solid var(--line);border-radius:16px;padding:16px;margin:12px 0}
   .hidden{display:none!important} .muted{color:var(--muted);font-size:14px}
-  .rec{background:#EAF4F1;border:2px solid var(--teal);border-radius:14px;padding:12px;margin:10px 0}
+  .rec{background:var(--tint);border:2px solid #0B7A3E;border-radius:14px;padding:12px;margin:10px 0}
   .world{border-radius:16px;padding:26px 16px;color:#fff;text-align:center;margin:10px 0}
   .world button{margin-top:10px}
   .nav{position:sticky;bottom:0;background:#fff;border-top:2px solid var(--line);display:flex;z-index:5}
@@ -96,10 +96,10 @@
         <p class="muted">Each world has a wellbeing purpose. Tap Enter for a timed session (3 or 5 min), pause anytime, switch worlds mid-session without losing your place.</p>
         <label class="muted">Session length: <select class="len" id="sessLen"><option value="180">Short • 3 min</option><option value="300" selected>Standard • 5 min</option></select></label>
       </div>
-      <div class="world" style="background:linear-gradient(160deg,#0B3D3B,#1F6B8A)">🌊 Nigerian Coastal Calm<br><small>Purpose: feel at home • Waves • breeze</small><br><button class="btn b-warm" data-world="coast">Enter coast →</button></div>
-      <div class="world" style="background:linear-gradient(160deg,#2E7D5B,#7FB69E)">🌿 Tropical Garden<br><small>Purpose: grounding • Shade • birds</small><br><button class="btn b-warm" data-world="garden">Enter garden →</button></div>
-      <div class="world" style="background:linear-gradient(160deg,#B5651D,#E8A87C)">🌅 Sunset Beach<br><small>Purpose: letting go • Warm light</small><br><button class="btn b-warm" data-world="sunset">Enter sunset →</button></div>
-      <div class="world" style="background:linear-gradient(160deg,#3A3A7A,#7FB69E)">✨ Calm Fantasy Lake<br><small>Purpose: safe imagination • Still water</small><br><button class="btn b-warm" data-world="fantasy">Enter lake →</button></div>
+      <div class="world" style="background:linear-gradient(160deg,#0B7A3E,#063F22)">🌊 Nigerian Coastal Calm<br><small>Purpose: feel at home • Waves • breeze</small><br><button class="btn b-warm" data-world="coast">Enter coast →</button></div>
+      <div class="world" style="background:linear-gradient(160deg,#14905A,#0B7A3E)">🌿 Tropical Garden<br><small>Purpose: grounding • Shade • birds</small><br><button class="btn b-warm" data-world="garden">Enter garden →</button></div>
+      <div class="world" style="background:linear-gradient(160deg,#2E9E6B,#063F22)">🌅 Sunset Garden Light<br><small>Purpose: letting go • Warm calm light</small><br><button class="btn b-warm" data-world="sunset">Enter light →</button></div>
+      <div class="world" style="background:linear-gradient(160deg,#063F22,#14905A)">✨ Still-Water Grove<br><small>Purpose: safe imagination • Quiet green stillness</small><br><button class="btn b-warm" data-world="fantasy">Enter grove →</button></div>
       <div class="card hidden" id="worldCard"><h3 id="worldTitle"></h3><p id="worldText" class="muted"></p>
         <div class="row"><button class="btn b-blue" id="worldRelax">Relax here</button><button class="btn b-ghost" id="worldBack">← All worlds</button></div>
       </div>
@@ -132,6 +132,21 @@
       <div class="card"><b>My Journey (Phase 4)</b><p class="muted">Non-linear — no failing. Tap your stage; stored on this phone only.</p><div class="chips" id="journey"></div></div>
     </section>
 
+    <!-- CARE: dosages, adherence, milestones, symptoms, updates (all local, reminders only — never dose advice) -->
+    <section id="tab-care" class="hidden">
+      <div class="card"><span class="tag">My Care • reminders only</span>
+        <p class="muted">Take exactly as labelled. This app never changes doses — it only reminds + logs what <b>you</b> confirm. Ask your pharmacist about anything personal.</p>
+        <b>💊 Scheduled dosages</b>
+        <div class="row"><input id="medName" placeholder="Medicine e.g. Ondansetron"/><input id="medTime" type="time" style="max-width:130px"/></div>
+        <button class="btn b-teal" id="medAdd">+ Add reminder (this phone only)</button>
+        <div id="medList"></div>
+      </div>
+      <div class="card"><b>✅ Medication adherence log</b><p class="muted">Tick what you took today. Streak counts days with all ticked.</p><div id="adhList"></div><p class="muted" id="adhMsg"></p></div>
+      <div class="card"><b>🌟 Daily milestones</b><div class="chips" id="miles"></div><p class="muted" id="mileMsg"></p></div>
+      <div class="card"><b>🌡️ Daily symptoms check</b><div class="chips" id="symp"></div><div class="muted" id="sympMsg"></div></div>
+      <div class="card"><b>📢 Medical updates</b><div id="updates"></div></div>
+    </section>
+
     <!-- LEARN -->
     <section id="tab-learn" class="hidden">
       <div class="card"><span class="tag">Learn • General info only</span><p class="muted">Simple, pharmacist-informed. Not personal advice — ask your team about you.</p><div class="chips" id="topics"></div><div id="topicBody"></div></div>
@@ -162,13 +177,14 @@
       </div>
     </section>
 
-    <div class="card muted">📱 Phases 1–4 • Single file • Saves on this browser only. <button id="wipe">Wipe local data</button> <span id="resume"></span></div>
+    <div class="card muted">📱 Green + White brand • My Care added • Saves on this browser only. <button id="wipe">Wipe local data</button> <span id="resume"></span></div>
   </div>
 
   <nav class="nav">
     <button data-tab="home" class="on"><span>🏠</span>Home</button>
     <button data-tab="explore"><span>🌿</span>Explore</button>
-    <button data-tab="treatment"><span>💊</span>Treatment</button>
+    <button data-tab="treatment"><span>💊</span>Treat</button>
+    <button data-tab="care"><span>💚</span>Care</button>
     <button data-tab="learn"><span>📚</span>Learn</button>
     <button data-tab="support"><span>❤️</span>Support</button>
   </nav>
@@ -210,7 +226,7 @@ function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
 function load(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}}
 function chips(el,arr,cb){el.innerHTML="";arr.forEach(a=>{const b=document.createElement("button");b.className="chip";b.type="button";b.textContent=a;b.onclick=()=>{[...el.children].forEach(c=>c.classList.remove("on"));b.classList.add("on");cb(a)};el.appendChild(b)})}
 // nav — every button works
-document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{document.querySelectorAll("[data-tab]").forEach(x=>x.classList.remove("on"));b.classList.add("on");["home","explore","treatment","learn","support"].forEach(t=>$("tab-"+t).classList.toggle("hidden",t!==b.dataset.tab));$("modePill").textContent=b.textContent.trim();window.scrollTo(0,0)});
+document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{document.querySelectorAll("[data-tab]").forEach(x=>x.classList.remove("on"));b.classList.add("on");["home","explore","treatment","care","learn","support"].forEach(t=>$("tab-"+t).classList.toggle("hidden",t!==b.dataset.tab));$("modePill").textContent=b.textContent.trim();window.scrollTo(0,0)});
 document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>document.querySelector(`[data-tab="${b.dataset.go}"]`).click());
 // check-in
 chips($("emotions"),emotions,e=>{state.emotion=e;save("cc_checkin",{e,at:Date.now()});$("emoMsg").textContent="Thank you — "+e+". I'm here with you.";const m={Anxious:"relax",Afraid:"encourage",Sad:"encourage",Tired:"relax",Lonely:"connect",Uncomfortable:"explore",Calm:"explore",Hopeful:"encourage",Confused:"learn",Overwhelmed:"relax",Happy:"support","I'm not sure":"explore"};const r=m[e];$("rec").classList.remove("hidden");$("rec").innerHTML="<b>Suggestion for "+e+":</b> try <b>"+r+"</b> — or choose anything. You decide.";$("needCard").scrollIntoView({behavior:"smooth"})});
@@ -227,7 +243,7 @@ function openExp(n,fromTreat){state.need=n;$("expCard").classList.remove("hidden
 document.querySelectorAll("[data-exp]").forEach(b=>b.onclick=()=>openExp(b.dataset.exp,false));
 document.querySelectorAll("[data-exp-t]").forEach(b=>b.onclick=()=>{if(!state.treatment)toggleTreat();openExp(b.dataset.expT,true)});
 // worlds + Phase 2 SessionManager (PRD Feature 3+5): timed loop, pause/resume, mid-session switch, local audio, auto-pause
-const WORLDS={coast:{e:"🌊",n:"Nigerian Coastal Calm",p:"Purpose: feel at home. Waves and breeze — breathe with the water.",g:"linear-gradient(160deg,#0B3D3B,#1F6B8A)",a:"waves"},garden:{e:"🌿",n:"Tropical Garden",p:"Purpose: grounding. Shade and birds — name 3 greens you see.",g:"linear-gradient(160deg,#2E7D5B,#7FB69E)",a:"birds"},sunset:{e:"🌅",n:"Sunset Beach",p:"Purpose: letting go. Warm light — let today soften for a few minutes.",g:"linear-gradient(160deg,#B5651D,#E8A87C)",a:"soft"},fantasy:{e:"✨",n:"Calm Fantasy Lake",p:"Purpose: safe imagination. Still water when wards feel loud.",g:"linear-gradient(160deg,#3A3A7A,#7FB69E)",a:"soft"}};
+const WORLDS={coast:{e:"🌊",n:"Nigerian Coastal Calm",p:"Purpose: feel at home. Waves and breeze — breathe with the water.",g:"linear-gradient(160deg,#0B7A3E,#063F22)",a:"waves"},garden:{e:"🌿",n:"Tropical Garden",p:"Purpose: grounding. Shade and birds — name 3 greens you see.",g:"linear-gradient(160deg,#14905A,#0B7A3E)",a:"birds"},sunset:{e:"🌅",n:"Sunset Garden Light",p:"Purpose: letting go. Warm calm light — let today soften.",g:"linear-gradient(160deg,#2E9E6B,#063F22)",a:"soft"},fantasy:{e:"✨",n:"Still-Water Grove",p:"Purpose: safe imagination. Quiet green stillness when wards feel loud.",g:"linear-gradient(160deg,#063F22,#14905A)",a:"soft"}};
 const Sess={key:null,total:300,left:300,timer:null,playing:false,audioOn:false,ctx:null,nodes:[],
  start(k){this.stopTimer();this.key=k;this.total=parseInt(($("sessLen")||{value:300}).value||300);this.left=this.total;this.playing=true;save("cc_session",{w:k,left:this.left,at:Date.now()});this.paint();$("sess").classList.remove("hidden");this.tick();if(this.audioOn)this.audioStart();},
  paint(){const w=WORLDS[this.key];$("sessView").style.background=w.g;$("sessEmoji").textContent=w.e;$("sessName").textContent=w.n;$("sessPurpose").textContent=w.p;},
@@ -244,7 +260,7 @@ document.querySelectorAll("[data-world]").forEach(b=>b.onclick=()=>Sess.start(b.
 document.querySelectorAll("[data-swap]").forEach(b=>b.onclick=()=>Sess.swap(b.dataset.swap));
 $("sessPause").onclick=()=>Sess.toggle();
 $("sessAudio").onclick=e=>{Sess.audioOn=!Sess.audioOn;e.target.textContent=Sess.audioOn?"🔊 Sound: on":"🔇 Sound: off";if(Sess.audioOn&&Sess.playing)Sess.audioStart();else Sess.audioStop()};
-$("sessCard").onclick=()=>{const v=$("sessView");const on=v.classList.toggle("cardboard");if(on){v.innerHTML='<div class="eye">'+$("sessInner").innerHTML+'</div><div class="eye">'+$("sessInner").innerHTML+'</div>'}else{location.reload()}};
+let _sessHTML=null;$("sessCard").onclick=()=>{const v=$("sessView");const on=v.classList.toggle("cardboard");if(on){_sessHTML=$("sessInner").innerHTML;v.innerHTML='<div class="eye">'+_sessHTML+'</div><div class="eye">'+_sessHTML+'</div>';$("sessCard").textContent="📱 Single view"}else{v.classList.remove("cardboard");if(_sessHTML)v.innerHTML='<div id="sessInner">'+_sessHTML+'</div>';$("sessCard").textContent="🥽 Cardboard"}};
 $("sessDone").onclick=()=>Sess.complete();
 $("sessExit").onclick=()=>Sess.exit();
 document.addEventListener("visibilitychange",()=>{if(document.hidden&&Sess.playing){Sess.toggle();$("sessHint").textContent="Paused because the app was hidden — tap Resume when ready."}});
@@ -280,7 +296,19 @@ $("chatIn").addEventListener("keydown",e=>{if(e.key==="Enter")$("chatSend").clic
 $("payBtn").onclick=async()=>{const base=(($("backendUrl").value||"").replace(/\/$/,""))||"";const amt=parseInt($("payAmt").value||0),email=$("payEmail").value.trim();if(!amt||amt<100){$("payMsg").textContent="Enter at least ₦100.";return}if(!email||!email.includes("@")){$("payMsg").textContent="Enter an email for the receipt.";return}
  if(!base){$("payMsg").textContent="Demo mode: set Backend URL first (your server creates the Flutterwave link). No keys in this app.";save("cc_pay_intent",{amt,email,at:Date.now()});return}
  try{$("payMsg").textContent="Creating secure link…";const r=await fetch(base+"/api/pay",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({amount:amt,email,currency:"NGN",purpose:"support"})});const j=await r.json();if(j.link){save("cc_pay_intent",{amt,email,at:Date.now()});window.location.href=j.link}else $("payMsg").textContent="Backend error: "+(j.error||"no link")}catch(e){$("payMsg").textContent="Could not reach backend — running offline. Intent saved on this phone."}};
-function renderHist(){const h=[load("cc_checkin"),load("cc_fb"),load("cc_world"),load("cc_after"),load("cc_journey"),load("cc_relax")].filter(Boolean);$("history").textContent=h.length?("Local: "+JSON.stringify(h).slice(0,220)+"…"):"No local history yet.";const w=load("cc_world");if(w)$("resume").textContent="Last world: "+(w.w||"—")+" — resume in Explore."}
+// My Care module — local reminders + logs + checks (never dose advice)
+function meds(){return load("cc_meds")||[]} function setMeds(m){save("cc_meds",m);paintMeds()}
+function paintMeds(){const box=$("medList");if(!box)return;const m=meds(),today=new Date().toDateString(),log=load("cc_adh")||{};box.innerHTML=m.length?"":"<p class='muted'>No reminders yet — add your first above.</p>";m.forEach((x,i)=>{const d=document.createElement("div");d.style.cssText="display:flex;gap:8px;align-items:center;margin:6px 0";const taken=(log[today]||{})[i];d.innerHTML="<input type='checkbox' style='width:26px' "+(taken?"checked":"")+" aria-label='taken'/> <b>"+x.n+"</b> <span class='muted'>"+x.t+"</span>";const cb=d.querySelector("input");cb.onchange=()=>{const L=load("cc_adh")||{};L[today]=L[today]||{};L[today][i]=cb.checked;save("cc_adh",L);paintAdh()};const del=document.createElement("button");del.className="chip";del.textContent="✕";del.onclick=()=>{const a=meds();a.splice(i,1);setMeds(a)};d.appendChild(del);box.appendChild(d)});paintAdh()}
+$("medAdd").onclick=()=>{const n=$("medName").value.trim(),t=$("medTime").value||"--:--";if(!n){alert("Type the medicine name as labelled.");return}const m=meds();m.push({n,t});setMeds(m);$("medName").value="";save("cc_med_add",{n,t,at:Date.now()})};
+function paintAdh(){const m=meds(),L=load("cc_adh")||{},days=Object.keys(L).length;let done=0;const t=new Date().toDateString();Object.values(L[t]||{}).forEach(v=>{if(v)done++});$("adhList").innerHTML="<p class='muted'>Today: "+done+"/"+m.length+" ticked • "+days+" day(s) logged. Streak kept on this phone only.</p>";$("adhMsg").textContent=m.length?"Great — logging helps your team help you. Bring this list to visits.":"Add a dosage above to start logging."}
+chips($("miles"),["🌅 Got up gently","💧 Drank water","🚶 Short walk/rest","📞 Called loved one","📖 Read one Learn topic","😴 Early rest"],x=>{const l=load("cc_miles")||[];l.push({x,at:Date.now()});save("cc_miles",l);$("mileMsg").textContent="Logged: "+x+" ("+l.filter(z=>new Date(z.at).toDateString()===new Date().toDateString()).length+" today). Small wins count."});
+const SYMP={None:0,Nausea:1,Tiredness:1,"Loss of appetite":1,Pain:2,Vomiting:2,Diarrhoea:2,Fever:3,"Chest pain":3,"Trouble breathing":3,Bleeding:3,Confusion:3};
+chips($("symp"),Object.keys(SYMP),s=>{const lvl=SYMP[s],l=load("cc_symp")||[];l.push({s,lvl,at:Date.now()});save("cc_symp",l);$("sympMsg").innerHTML=lvl>=3?"⚠️ <b>Please contact your nurse/doctor promptly or use Help → Emergency.</b> Logged.":"Logged: "+s+". "+(lvl===2?"If severe or worsening, contact your team today.":"Rest + note for your next visit.");if(lvl>=3)$("helpModal").classList.remove("hidden")});
+$("updates").innerHTML=["💊 Med Crescent: keep one updated medicine list — show it at every visit.","🧼 Chemo weeks: hand-washing + clean water matter more.","🥗 Eat small, frequent meals if appetite is low — ask your team.","📞 Save your clinic + pharmacist numbers in your phone today."].map(u=>"<p>• "+u+"</p>").join("")+"<p class='muted'>General info only — pharmacist-reviewed placeholders. Your team personalises.</p>";
+paintMeds();
+// Fix: story finish now completes to checkout (was dead)
+document.addEventListener("click",e=>{if(e.target&&e.target.id==="storyDone"){save("cc_story",{done:true,at:Date.now()});$("expCard").classList.add("hidden");$("outCard").classList.remove("hidden");$("title").textContent="Nice — how do you feel now?";renderHist()}});
+function renderHist(){const h=[load("cc_checkin"),load("cc_fb"),load("cc_world"),load("cc_after"),load("cc_journey"),load("cc_relax"),load("cc_adh"),load("cc_symp")].filter(Boolean);$("history").textContent=h.length?("Local: "+JSON.stringify(h).slice(0,220)+"…"):"No local history yet.";const w=load("cc_world");if(w)$("resume").textContent="Last world: "+(w.w||"—")+" — resume in Explore."}
 renderHist();
 </script>
 </body>
