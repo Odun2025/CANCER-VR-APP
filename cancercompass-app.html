@@ -53,15 +53,10 @@
   <div class="hero">
     <div class="brand">🧭 OncoEase <span class="pill" id="modePill">Home</span></div>
     <h1 id="title">How are you feeling today?</h1>
-    <p>I'm here with you. You decide — stop or change anytime. General info only, not medical advice.</p>
+    <p>General info only, not medical advice.</p>
     <div class="row" style="margin-top:8px">
-      <button class="chip" id="profPatient" style="flex:1">🧍 Patient</button>
-      <button class="chip" id="profCare" style="flex:1">👪 Caregiver</button>
-    </div>
-    <div class="rec hidden" id="favSug" style="background:#fff"></div>
-    <div class="row" style="margin-top:8px">
-      <button class="btn b-ghost" id="treatBtn" style="min-height:48px;font-size:14px;background:#fff">💊 Treatment: OFF</button>
-      <button class="btn b-help" id="helpBtn" style="min-height:48px;font-size:14px">❤️ Help</button>
+      <button type="button" class="btn b-ghost" id="treatBtn" style="min-height:48px;font-size:14px;background:#fff">💊 Treatment: OFF</button>
+      <button type="button" class="btn b-help" id="helpBtn" style="min-height:48px;font-size:14px">❤️ Help</button>
     </div>
   </div>
 
@@ -82,8 +77,9 @@
         <div class="muted" id="emoMsg">No wrong answer. Pick one, or I'm not sure.</div>
         <button class="btn b-teal hidden" id="emoGo">Continue →</button>
       </div>
-      <div class="card" id="needCard"><span class="tag">Phase 1 • Step 2 — What do you need?</span>
+      <div class="card" id="needCard"><span class="tag">Step 2 — What do you need?</span>
         <div class="rec hidden" id="rec"></div>
+        <div class="rec hidden" id="favSug" style="background:#fff"></div>
         <button class="btn b-teal" data-go="explore">🌿 <span>Take me somewhere peaceful<br><small>4 worlds • Nigerian coast first</small></span></button>
         <button class="btn b-blue" data-exp="relax">🧘 <span>Help me relax<br><small>Breathing + grounding</small></span></button>
         <button class="btn b-warm" data-exp="distract">🎧 <span>Distract me<br><small>Story + counting game</small></span></button>
@@ -268,7 +264,7 @@ $("welcomeGo").onclick=()=>{const n=$("userName").value.trim();if(!n){$("welcome
 (function(){const nm=load("cc_name");if(nm&&nm.n){$("userName").value=nm.n;$("welcomeMsg").textContent="Signed in as "+nm.n+" ("+(load("cc_profile")||"patient")+"). Tap Continue to go on."}})();
 // check-in
 chips($("emotions"),emotions,e=>{state.emotion=e;save("cc_checkin",{e,at:Date.now()});$("emoMsg").textContent="Thank you — "+e+". I'm here with you.";const m={Anxious:"relax",Afraid:"encourage",Sad:"encourage",Tired:"relax",Lonely:"connect",Uncomfortable:"explore",Calm:"explore",Hopeful:"encourage",Confused:"learn",Overwhelmed:"relax",Happy:"support","I'm not sure":"explore"};const r=m[e];$("rec").classList.remove("hidden");$("rec").innerHTML="<b>Suggestion for "+e+":</b> try <b>"+r+"</b> — or choose anything. You decide.";$("emoGo").classList.remove("hidden")});
-$("emoGo").onclick=()=>{$("needCard").scrollIntoView({behavior:"smooth"})};>
+$("emoGo").onclick=()=>{$("needCard").scrollIntoView({behavior:"smooth"})};
 chips($("postEmo"),post,e=>save("cc_post",{e,at:Date.now()}));
 chips($("feedback"),fb,f=>{save("cc_fb",{f,need:state.need,at:Date.now()});renderHist();$("title").textContent="Thank you. What next?"});
 chips($("topics"),Object.keys(topics),t=>{$("topicBody").innerHTML="<div class='rec'><b>"+t+"</b><p>"+topics[t]+"</p><p class='muted'>General education only — ask your team about you.</p></div>"});
@@ -349,9 +345,7 @@ paintMeds();
 document.addEventListener("click",e=>{if(e.target&&e.target.id==="storyDone"){save("cc_story",{done:true,at:Date.now()});$("expCard").classList.add("hidden");$("outCard").classList.remove("hidden");$("title").textContent="Nice — how do you feel now?";renderHist()}});
 // Phase 5: profiles, caregiver guides, voice notes, favourites (all local)
 let profile=load("cc_profile")||"patient";
-function paintProfile(){const p=profile==="caregiver";$("profPatient").classList.toggle("on",!p);$("profCare").classList.toggle("on",p);$("caregiverCard").classList.toggle("hidden",!p);$("title").textContent=p?"How can you support them today?":"How are you feeling today?"}
-$("profPatient").onclick=()=>{profile="patient";save("cc_profile",profile);paintProfile()};
-$("profCare").onclick=()=>{profile="caregiver";save("cc_profile",profile);paintProfile();document.querySelector('[data-tab="support"]').click()};
+function paintProfile(){const p=profile==="caregiver";const cg=$("caregiverCard");if(cg)cg.classList.toggle("hidden",!p);const t=$("title");if(t)t.textContent=p?"How can you support them today?":"How are you feeling today?"}
 const GUIDES={"Understanding them":"They may feel anxious, tired, or quiet — not rejection. Presence matters more than perfect words.","Communicating":"Ask ‘what helps today?’ Listen more than fix. Avoid outcome promises.","Supporting treatment":"Help with rides, meals, waiting company. Let them switch experiences anytime.","Emotional wellbeing":"Encourage rest + expression. Your calm helps theirs.","Medicines & visits":"Keep one medicine list, appointment dates, and questions together.","When to seek help":"Fever, severe vomiting, bleeding, chest pain, breathing trouble, confusion — same-day care.","Looking after you":"You matter too. Rest, eat, ask others for relief shifts."};
 chips($("cgGuides"),Object.keys(GUIDES),g=>{$("cgBody").classList.remove("hidden");$("cgBody").innerHTML="<b>"+g+"</b><p>"+GUIDES[g]+"</p>"});
 $("shareFav").checked=!!load("cc_sharefav");$("shareFav").onchange=e=>save("cc_sharefav",e.target.checked);
@@ -372,6 +366,19 @@ let bigText=load("cc_big")==="1";function paintBig(){document.body.style.fontSiz
 $("csvBtn").onclick=()=>{const rows=[["type","detail","at"]];["cc_checkin","cc_post","cc_fb","cc_world","cc_after","cc_journey","cc_relax","cc_meds","cc_adh","cc_symp","cc_miles"].forEach(k=>{const v=load(k);if(v)rows.push([k,JSON.stringify(v).slice(0,300),new Date().toISOString()])});const csv=rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(",")).join("\n");const b=new Blob([csv],{type:"text/csv"}),u=URL.createObjectURL(b),a=document.createElement("a");a.href=u;a.download="oncoease-my-data.csv";a.click();save("cc_export",{at:Date.now()})};
 function renderHist(){const h=[load("cc_checkin"),load("cc_fb"),load("cc_world"),load("cc_after"),load("cc_journey"),load("cc_relax"),load("cc_adh"),load("cc_symp")].filter(Boolean);$("history").textContent=h.length?("Local: "+JSON.stringify(h).slice(0,220)+"…"):"No local history yet.";const w=load("cc_world");if(w)$("resume").textContent="Last world: "+(w.w||"—")+" — resume in Explore."}
 renderHist();
+</script>
+<script>
+// FAILSAFE: critical buttons wired independently — runs even if anything above fails
+(function(){try{
+var g=function(id){return document.getElementById(id)};
+var cy=g("consentYes"),cm=g("consentModal");
+if(cy&&cm)cy.addEventListener("click",function(){try{localStorage.setItem("cc_consent",JSON.stringify({at:Date.now(),v:1}))}catch(e){}cm.classList.add("hidden")});
+var wg=g("welcomeGo");
+if(wg)wg.addEventListener("click",function(){var n=(g("userName")||{value:""}).value.trim();var m=g("welcomeMsg");if(!n){if(m)m.textContent="Please type your name to continue.";return}try{localStorage.setItem("cc_name",JSON.stringify({n:n,at:Date.now()}))}catch(e){}if(m)m.textContent="Welcome, "+n+" — signed in on this phone.";var nc=g("needCard");if(nc)nc.scrollIntoView()});
+var eg=g("emoGo");
+if(eg)eg.addEventListener("click",function(){var nc=g("needCard");if(nc){nc.classList.remove("hidden");nc.scrollIntoView()}});
+document.querySelectorAll("[data-tab]").forEach(function(b){b.addEventListener("click",function(){document.querySelectorAll("[data-tab]").forEach(function(x){x.classList.remove("on")});b.classList.add("on");["home","explore","treatment","care","learn","support"].forEach(function(t){var s=g("tab-"+t);if(s)s.classList.toggle("hidden",t!==b.dataset.tab)});window.scrollTo(0,0)})});
+}catch(e){}})();
 </script>
 </body>
 </html>
