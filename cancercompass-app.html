@@ -144,7 +144,21 @@
         <p>💙 “Rest is allowed. We’ll handle home.” — Caregiver</p>
         <label class="muted">Family note (stays on this phone)</label><input id="fam" placeholder="e.g. Call mama after treatment"/>
         <button class="btn b-ghost" id="saveNote">Save note locally</button>
-        <p class="muted">Caregiver path (Phase 5 preview): How can I support them? — understanding, communication, medicines, self-care. Patient controls sharing.</p>
+      </div>
+      <div class="card"><span class="tag">Chat support (AI • general info only)</span>
+        <p class="muted">Compassionate assistant for comfort + simple explanations. Not a doctor — never diagnosis or dose advice. Red-flag words open Help.</p>
+        <label class="muted">Backend URL (your private server; keys never go in this app)</label>
+        <input id="backendUrl" placeholder="http://localhost:3001"/>
+        <div id="chatBox" style="border:2px solid var(--line);border-radius:12px;padding:10px;min-height:120px;max-height:220px;overflow:auto;background:#FFFEFA"></div>
+        <div class="row"><input id="chatIn" placeholder="Type here… e.g. how do I relax before chemo?" style="flex:3"/><button class="btn b-blue" id="chatSend" style="flex:1;min-width:90px">Send</button></div>
+        <p class="muted">Demo mode: works offline with kind canned replies until you connect your backend.</p>
+      </div>
+      <div class="card"><span class="tag">Support CancerCompass (Flutterwave)</span>
+        <p class="muted">Payments run on <b>your backend only</b> — secret keys are never in this app or GitHub. Enter amount, tap Pay, complete on Flutterwave’s secure page.</p>
+        <label class="muted">Amount (NGN)</label><input id="payAmt" type="number" min="100" value="1000"/>
+        <label class="muted">Email for receipt</label><input id="payEmail" type="email" placeholder="you@email.com"/>
+        <button class="btn b-warm" id="payBtn">💳 Pay securely →</button>
+        <p class="muted" id="payMsg">What is this for? Set in backend: donations / premium / clinic bills. Tell me which and I’ll label it.</p>
       </div>
     </section>
 
@@ -254,6 +268,18 @@ const AFTER={Comfortable:"Lovely — a short garden moment or rest.",Tired:"Rest
 chips($("afterChips"),Object.keys(AFTER),a=>{$("afterMsg").textContent=AFTER[a]+" Concerning symptoms? Contact your team promptly.";save("cc_after",{a,at:Date.now()})});
 chips($("placeChips"),["🏥 Hospital","🏠 Home"],p=>{save("cc_place",{p,at:Date.now()});$("title").textContent=p.includes("Home")?"Welcome home — shorter, gentle sessions.":"How are you feeling today?"});
 chips($("journey"),["🌱 Diagnosis","💙 Preparing","💊 Treatment","🌿 Recovery","🏠 Home","🌻 Follow-up"],j=>save("cc_journey",{j,at:Date.now()}));
+// Chat + Payments (keys NEVER in app — backend proxy only)
+const REDFLAGS=["chest pain","trouble breathing","heavy bleeding","fever","vomit blood","confusion","suicid","kill myself","emergency"];
+function chatAdd(w,t){const d=document.createElement("div");d.style.margin="6px 0";d.innerHTML="<b>"+w+":</b> "+t;$("chatBox").appendChild(d);$("chatBox").scrollTop=9999}
+function localReply(q){q=q.toLowerCase();if(REDFLAGS.some(r=>q.includes(r))){$("helpModal").classList.remove("hidden");return "That sounds important — I’ve opened Help. Please reach a human now (nurse/doctor/emergency). I’m staying here with you."}if(q.includes("relax")||q.includes("anx"))return "Let’s slow down together: breathe in 4, out 4, twice. Then try Explore → Coast 3 min. You’re doing well by pausing.";if(q.includes("chemo")||q.includes("treatment"))return "Generally: sessions take hours; tiredness/nausea are commonly expected. Only your own team can advise you — write down: how long today? what to report? who to call after? (General info only.)";if(q.includes("medicine")||q.includes("drug")||q.includes("dose"))return "I can’t advise doses. Take exactly as labelled, keep one medicine list, and ask your pharmacist promptly. (General info only.)";if(q.includes("pay")||q.includes("flutter"))return "Tap Pay securely above — you’ll finish on Flutterwave’s page. Keys stay on your backend, never here.";return "I hear you. I’m here with you. Try: relax track, a world, or Learn → a 2-min topic. Concerning symptoms? Use Help now. (General info only.)"}
+$("chatSend").onclick=async()=>{const q=$("chatIn").value.trim();if(!q)return;chatAdd("You",q);$("chatIn").value="";const base=($("backendUrl").value||"").replace(/\/$/,"");save("cc_backend",{base,at:Date.now()});
+ if(!base){chatAdd("Compass",localReply(q));return}
+ try{const r=await fetch(base+"/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:q,context:{emotion:state.emotion,stage:(load("cc_journey")||{}).j}})});const j=await r.json();chatAdd("Compass",(j.reply||localReply(q))+"<br><span class='muted'>General info only — ask your team about you.</span>")}catch(e){chatAdd("Compass",localReply(q)+"<br><span class='muted'>(Offline demo — connect backend for live AI.)</span>")}};
+$("chatIn").addEventListener("keydown",e=>{if(e.key==="Enter")$("chatSend").click()});
+(function(){const b=load("cc_backend");if(b&&b.base)$("backendUrl").value=b.base})();
+$("payBtn").onclick=async()=>{const base=(($("backendUrl").value||"").replace(/\/$/,""))||"";const amt=parseInt($("payAmt").value||0),email=$("payEmail").value.trim();if(!amt||amt<100){$("payMsg").textContent="Enter at least ₦100.";return}if(!email||!email.includes("@")){$("payMsg").textContent="Enter an email for the receipt.";return}
+ if(!base){$("payMsg").textContent="Demo mode: set Backend URL first (your server creates the Flutterwave link). No keys in this app.";save("cc_pay_intent",{amt,email,at:Date.now()});return}
+ try{$("payMsg").textContent="Creating secure link…";const r=await fetch(base+"/api/pay",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({amount:amt,email,currency:"NGN",purpose:"support"})});const j=await r.json();if(j.link){save("cc_pay_intent",{amt,email,at:Date.now()});window.location.href=j.link}else $("payMsg").textContent="Backend error: "+(j.error||"no link")}catch(e){$("payMsg").textContent="Could not reach backend — running offline. Intent saved on this phone."}};
 function renderHist(){const h=[load("cc_checkin"),load("cc_fb"),load("cc_world"),load("cc_after"),load("cc_journey"),load("cc_relax")].filter(Boolean);$("history").textContent=h.length?("Local: "+JSON.stringify(h).slice(0,220)+"…"):"No local history yet.";const w=load("cc_world");if(w)$("resume").textContent="Last world: "+(w.w||"—")+" — resume in Explore."}
 renderHist();
 </script>
