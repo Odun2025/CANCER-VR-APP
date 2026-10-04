@@ -1,0 +1,17 @@
+# OncoEase — static frontend (no build step).
+# The Node backend (backend-example.js) is NOT hosted here; run it separately
+# (e.g. Render) if you need live AI chat or server-side payments.
+[build]
+  publish = "."
+  command = ""
+
+# Always serve the app for clean preview links
+[[redirects]]
+  from = "/app"
+  to = "/cancercompass-app.html"
+  status = 200
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=300"
