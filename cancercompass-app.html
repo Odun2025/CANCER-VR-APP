@@ -3,382 +3,398 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>OncoEase — Phases 1+2 Working App</title>
+<title>OncoEase — Your Cancer Support Companion</title>
+<script src="https://checkout.flutterwave.com/v3.js"></script>
 <style>
-  :root{--teal:#0B7A3E;--blue:#0B7A3E;--sand:#FFFFFF;--ink:#0E2417;--muted:#3C5546;--card:#fff;--line:#CFE6D6;--coral:#C64A2E;--tint:#EAF6EE;--dark:#063F22}
+  :root{--green:#0B7A3E;--dark:#063F22;--tint:#EAF6EE;--ink:#0E2417;--muted:#3C5546;--line:#CFE6D6;--coral:#C64A2E;--gold:#8a6d1b}
   *{box-sizing:border-box} body{margin:0;background:#DDEBDF;color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-size:16px;line-height:1.6;display:flex;justify-content:center;padding:12px}
-  .phone{width:430px;max-width:100%;background:#FFFFFF;border-radius:24px;overflow:hidden;border:2px solid var(--line);box-shadow:0 20px 60px rgba(11,122,62,.25);display:flex;flex-direction:column;min-height:90vh}
+  .phone{width:430px;max-width:100%;background:#fff;border-radius:24px;overflow:hidden;border:2px solid var(--line);box-shadow:0 20px 60px rgba(11,122,62,.25);display:flex;flex-direction:column;min-height:92vh}
   .hero{background:linear-gradient(160deg,#0B7A3E,#063F22);color:#fff;padding:22px 18px}
   .hero h1{font-size:24px;margin:8px 0;font-weight:800} .hero p{margin:0;color:#F2F8F6;font-size:15px}
-  .brand{font-weight:800} .pill{display:inline-block;background:rgba(255,255,255,.2);border-radius:999px;padding:4px 12px;font-size:13px;font-weight:700}
-  .body{padding:14px 14px 90px}
-  .btn{display:flex;align-items:center;gap:12px;width:100%;border:0;border-radius:18px;padding:0 16px;min-height:58px;font-weight:800;font-size:16px;margin:10px 0;cursor:pointer;box-shadow:0 4px 14px rgba(16,28,34,.15);text-align:left;font-family:inherit;color:inherit}
+  .brand{font-weight:800;font-size:19px} .pill{display:inline-block;background:rgba(255,255,255,.22);border-radius:999px;padding:4px 12px;font-size:13px;font-weight:700}
+  .body{padding:14px 14px 20px}
+  .btn{display:flex;align-items:center;gap:12px;width:100%;border:0;border-radius:18px;padding:0 16px;min-height:58px;font-weight:800;font-size:16px;margin:10px 0;cursor:pointer;box-shadow:0 4px 14px rgba(16,28,34,.15);text-align:left;font-family:inherit}
   .btn small{display:block;font-weight:600;font-size:13px;opacity:.85}
-  .b-teal{background:#0B7A3E;color:#fff;border-bottom:4px solid #063F22}
-  .b-blue{background:#0B7A3E;color:#fff;border-bottom:4px solid #063F22}
-  .b-warm{background:#FFFFFF;color:#063F22;border:3px solid #0B7A3E}
-  .b-ghost{background:#fff;color:#063F22;border:3px solid #0B7A3E}
+  .b-green{background:var(--green);color:#fff;border-bottom:4px solid var(--dark)}
+  .b-dark{background:var(--dark);color:#fff;border-bottom:4px solid #03230f}
+  .b-white{background:#fff;color:var(--dark);border:3px solid var(--green)}
   .b-help{background:var(--coral);color:#fff;border-bottom:4px solid #7E2E1B}
   .chips{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0}
-  .chip{background:#fff;border:2px solid #0B7A3E;border-radius:999px;padding:11px 16px;min-height:44px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;color:#063F22}
-  .chip.on{background:#0B7A3E;color:#fff;border-color:#0B7A3E}
+  .chip{background:#fff;border:2px solid var(--green);border-radius:999px;padding:11px 16px;min-height:44px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;color:var(--dark)}
+  .chip.on{background:var(--green);color:#fff;border-color:var(--green)}
   .card{background:#fff;border:2px solid var(--line);border-radius:16px;padding:16px;margin:12px 0}
   .hidden{display:none!important} .muted{color:var(--muted);font-size:14px}
-  .rec{background:var(--tint);border:2px solid #0B7A3E;border-radius:14px;padding:12px;margin:10px 0}
+  .rec{background:var(--tint);border:2px solid var(--green);border-radius:14px;padding:12px;margin:10px 0}
+  .tag{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--green)}
   .world{border-radius:16px;padding:26px 16px;color:#fff;text-align:center;margin:10px 0}
-  .world button{margin-top:10px}
   .nav{position:sticky;bottom:0;background:#fff;border-top:2px solid var(--line);display:flex;z-index:5}
-  .nav button{flex:1;border:0;background:#fff;padding:10px 2px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;color:var(--muted)}
-  .nav button.on{color:var(--teal);border-top:4px solid var(--teal)}
+  .nav button{flex:1;border:0;background:#fff;padding:10px 2px;font-size:11px;font-weight:800;cursor:pointer;font-family:inherit;color:var(--muted)}
+  .nav button.on{color:var(--green);border-top:4px solid var(--green)}
   .nav span{font-size:20px;display:block}
-  input,select,textarea{width:100%;border:2px solid #B9A98D;border-radius:12px;padding:12px;font-size:16px;margin:6px 0;font-family:inherit}
-  .row{display:flex;gap:8px} .row .btn{flex:1}
-  .help-modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:20px;z-index:50}
-  .help-box{background:#fff;border-radius:18px;padding:20px;max-width:360px;width:100%}
+  input,select,textarea{width:100%;border:2px solid var(--green);border-radius:12px;padding:12px;font-size:16px;margin:6px 0;font-family:inherit;color:var(--ink);background:#fff}
+  .row{display:flex;gap:8px} .row .btn,.row .chip{flex:1}
+  .modal{position:fixed;inset:0;background:rgba(6,30,18,.6);display:flex;align-items:center;justify-content:center;padding:20px;z-index:50}
+  .mbox{background:#fff;border-radius:18px;padding:22px;max-width:380px;width:100%;max-height:90vh;overflow:auto}
   .breath{font-size:52px;text-align:center;transition:transform 1s}
-  .tag{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--teal)}
-  .sess{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(10,20,20,.55)}
-  .sess-box{width:430px;max-width:100%;border-radius:22px;overflow:hidden;background:var(--sand);border:2px solid #fff}
-  .sess-view{padding:34px 20px;text-align:center;color:#fff;min-height:260px}
-  .sess-view.cardboard{display:flex;gap:8px}.sess-view.cardboard .eye{flex:1;border:2px solid rgba(255,255,255,.6);border-radius:14px;padding:20px 8px}
+  .sess{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(6,30,18,.6)}
+  .sess-box{width:430px;max-width:100%;border-radius:22px;overflow:hidden;background:#fff;border:2px solid #fff}
+  .sess-view{padding:30px 20px;text-align:center;color:#fff;min-height:250px}
+  .sess-view.cardboard{display:flex;gap:8px}.sess-view.cardboard .eye{flex:1;border:2px solid rgba(255,255,255,.6);border-radius:14px;padding:16px 6px;font-size:14px}
   .prog{height:10px;background:rgba(255,255,255,.35);border-radius:99px;overflow:hidden;margin:12px 0}
   .prog i{display:block;height:100%;width:0;background:#fff;border-radius:99px}
-  .sess-ctrl{display:flex;gap:8px;flex-wrap:wrap;padding:12px 14px;background:var(--sand)}
-  .sess-ctrl .btn{flex:1;min-width:120px;margin:4px 0;min-height:52px;font-size:15px}
-  select.len{width:auto;display:inline-block;margin:6px 0}
+  .sess-ctrl{display:flex;gap:8px;flex-wrap:wrap;padding:10px 12px;background:#fff}
+  .sess-ctrl .btn{flex:1;min-width:110px;margin:4px 0;min-height:52px;font-size:14px}
+  .foot{padding:12px 16px 18px;font-size:12px;color:var(--muted);text-align:center}
+  .foot button{background:none;border:0;color:var(--green);font-weight:700;cursor:pointer;font-size:12px;text-decoration:underline}
+  #chatBox{border:2px solid var(--line);border-radius:12px;padding:10px;min-height:120px;max-height:230px;overflow:auto;background:#FCFEFD}
 </style>
 </head>
 <body>
 <div class="phone">
   <div class="hero">
-    <div class="brand">🧭 OncoEase <span class="pill" id="modePill">Home</span></div>
+    <div class="brand">💚 OncoEase <span class="pill" id="modePill">Home</span></div>
     <h1 id="title">How are you feeling today?</h1>
-    <p>General info only, not medical advice.</p>
-    <div class="row" style="margin-top:8px">
-      <button type="button" class="btn b-ghost" id="treatBtn" style="min-height:48px;font-size:14px;background:#fff">💊 Treatment: OFF</button>
-      <button type="button" class="btn b-help" id="helpBtn" style="min-height:48px;font-size:14px">❤️ Help</button>
+    <p>General information only — never a replacement for your care team.</p>
+    <div class="row" style="margin-top:12px">
+      <button type="button" class="btn b-white" data-act="treatment-toggle" id="treatBtn" style="min-height:48px;font-size:14px">💊 Treatment: OFF</button>
+      <button type="button" class="btn b-help" data-act="help-open" style="min-height:48px;font-size:14px">❤️ Help</button>
     </div>
   </div>
 
   <div class="body">
-    <!-- HOME / PHASE 1 -->
     <section id="tab-home">
-      <div class="card" id="welcomeCard"><span class="tag">Welcome • Sign in on this phone (no password)</span>
-        <h3 style="margin:6px 0">Welcome to OncoEase 💚</h3>
-        <p class="muted">No account needed — your name stays on this phone only. This is your sign-in.</p>
-        <label class="muted">Your name</label><input id="userName" placeholder="e.g. Ada"/>
-        <label class="muted">I am a…</label>
-        <div class="row"><button class="chip on" id="wPatient" style="flex:1">🧍 Patient</button><button class="chip" id="wCare" style="flex:1">👪 Caregiver</button></div>
-        <button class="btn b-teal" id="welcomeGo">Continue →</button>
-        <p class="muted" id="welcomeMsg"></p>
-      </div>
-      <div class="card"><span class="tag">Step 1 — Check in</span>
+      <div class="card"><span class="tag">Check in</span>
         <div class="chips" id="emotions"></div>
-        <div class="muted" id="emoMsg">No wrong answer. Pick one, or I'm not sure.</div>
-        <button class="btn b-teal hidden" id="emoGo">Continue →</button>
+        <div class="muted" id="emoMsg">There is no wrong answer here.</div>
+        <button type="button" class="btn b-green hidden" data-act="emo-continue">Continue →</button>
       </div>
-      <div class="card" id="needCard"><span class="tag">Step 2 — What do you need?</span>
+      <div class="card" id="needCard"><span class="tag">What do you need right now?</span>
         <div class="rec hidden" id="rec"></div>
         <div class="rec hidden" id="favSug" style="background:#fff"></div>
-        <button class="btn b-teal" data-go="explore">🌿 <span>Take me somewhere peaceful<br><small>4 worlds • Nigerian coast first</small></span></button>
-        <button class="btn b-blue" data-exp="relax">🧘 <span>Help me relax<br><small>Breathing + grounding</small></span></button>
-        <button class="btn b-warm" data-exp="distract">🎧 <span>Distract me<br><small>Story + counting game</small></span></button>
-        <button class="btn b-ghost" data-go="learn">🔬 <span>Help me understand<br><small>6 simple topics</small></span></button>
-        <button class="btn b-ghost" data-exp="encourage">💙 <span>Encourage me<br><small>Kind words</small></span></button>
-        <button class="btn b-ghost" data-go="support">🤝 <span>Help me connect<br><small>Messages + family</small></span></button>
+        <button type="button" class="btn b-green" data-act="goto" data-to="explore">🌿 <span>Take me somewhere peaceful<br><small>Nigerian coast, gardens, calm light</small></span></button>
+        <button type="button" class="btn b-green" data-act="experience" data-n="relax">🧘 <span>Help me relax<br><small>Guided breathing and calming</small></span></button>
+        <button type="button" class="btn b-green" data-act="experience" data-n="distract">🎧 <span>Distract me<br><small>Stories and gentle games</small></span></button>
+        <button type="button" class="btn b-white" data-act="goto" data-to="learn">🔬 <span>Help me understand<br><small>Simple cancer information</small></span></button>
+        <button type="button" class="btn b-white" data-act="experience" data-n="encourage">💙 <span>Encourage me<br><small>Kind, honest words</small></span></button>
+        <button type="button" class="btn b-white" data-act="goto" data-to="support">🤝 <span>Help me connect<br><small>Messages and loved ones</small></span></button>
       </div>
-      <div class="card hidden" id="expCard"><span class="tag">Experience</span>
-        <h3 id="expTitle" style="margin:6px 0"></h3>
-        <div id="expBody"></div>
-        <button class="btn b-teal" id="finishBtn">Done → check out</button>
-        <button class="btn b-ghost" id="backBtn">← Back to needs</button>
+      <div class="card hidden" id="expCard"><span class="tag">Your experience</span>
+        <h3 id="expTitle" style="margin:6px 0"></h3><div id="expBody"></div>
+        <button type="button" class="btn b-green" data-act="exp-done">Done →</button>
+        <button type="button" class="btn b-white" data-act="exp-back">← Back</button>
       </div>
-      <div class="card hidden" id="outCard"><span class="tag">Phase 1 • Check out</span>
+      <div class="card hidden" id="outCard"><span class="tag">Check out</span>
         <b>How do you feel now?</b><div class="chips" id="postEmo"></div>
         <b>Did this help you?</b><div class="chips" id="feedback"></div>
-        <div class="muted">Concerning symptoms? Contact your nurse, doctor, pharmacist or caregiver promptly.</div>
-        <div class="muted" id="history"></div>
+        <div class="muted">If anything worries you, please contact your nurse, doctor or pharmacist promptly.</div>
       </div>
     </section>
 
-    <!-- EXPLORE / PHASE 2 WORLDS -->
     <section id="tab-explore" class="hidden">
-      <div class="card"><span class="tag">Phase 2 • Explore — 4 worlds</span>
-        <p class="muted">Each world has a wellbeing purpose. Tap Enter for a timed session (3 or 5 min), pause anytime, switch worlds mid-session without losing your place.</p>
-        <label class="muted">Session length: <select class="len" id="sessLen"><option value="180">Short • 3 min</option><option value="300" selected>Standard • 5 min</option></select></label>
+      <div class="card"><span class="tag">Peaceful places</span>
+        <p class="muted">Each place is designed to help you rest. Choose a session length, enter, and stay as long as you like.</p>
+        <label class="muted">Session length: <select id="sessLen" style="width:auto;display:inline-block"><option value="180">Short • 3 min</option><option value="300" selected>Standard • 5 min</option></select></label>
       </div>
-      <div class="world" style="background:linear-gradient(160deg,#0B7A3E,#063F22)">🌊 Nigerian Coastal Calm<br><small>Purpose: feel at home • Waves • breeze</small><br><button class="btn b-warm" data-world="coast">Enter coast →</button></div>
-      <div class="world" style="background:linear-gradient(160deg,#14905A,#0B7A3E)">🌿 Tropical Garden<br><small>Purpose: grounding • Shade • birds</small><br><button class="btn b-warm" data-world="garden">Enter garden →</button></div>
-      <div class="world" style="background:linear-gradient(160deg,#2E9E6B,#063F22)">🌅 Sunset Garden Light<br><small>Purpose: letting go • Warm calm light</small><br><button class="btn b-warm" data-world="sunset">Enter light →</button></div>
-      <div class="world" style="background:linear-gradient(160deg,#063F22,#14905A)">✨ Still-Water Grove<br><small>Purpose: safe imagination • Quiet green stillness</small><br><button class="btn b-warm" data-world="fantasy">Enter grove →</button></div>
-      <div class="card hidden" id="worldCard"><h3 id="worldTitle"></h3><p id="worldText" class="muted"></p>
-        <div class="row"><button class="btn b-blue" id="worldRelax">Relax here</button><button class="btn b-ghost" id="worldBack">← All worlds</button></div>
-      </div>
+      <div class="world" style="background:linear-gradient(160deg,#0B7A3E,#063F22)">🌊 Nigerian Coastal Calm<br><small>Waves and breeze — a familiar, restful feeling</small><br><button type="button" class="btn b-white" data-act="world" data-w="coast">Enter →</button></div>
+      <div class="world" style="background:linear-gradient(160deg,#14905A,#0B7A3E)">🌿 Tropical Garden<br><small>Shade and birdsong — slow down here</small><br><button type="button" class="btn b-white" data-act="world" data-w="garden">Enter →</button></div>
+      <div class="world" style="background:linear-gradient(160deg,#2E9E6B,#063F22)">🌅 Evening Garden Light<br><small>Warm calm light — let today soften</small><br><button type="button" class="btn b-white" data-act="world" data-w="sunset">Enter →</button></div>
+      <div class="world" style="background:linear-gradient(160deg,#063F22,#14905A)">✨ Still-Water Grove<br><small>Quiet green stillness — a safe, gentle place</small><br><button type="button" class="btn b-white" data-act="world" data-w="fantasy">Enter →</button></div>
     </section>
 
-    <!-- TREATMENT / PHASE 2 -->
     <section id="tab-treatment" class="hidden">
-      <div class="card"><span class="tag">Phase 2 • Treatment Mode</span>
-        <h3 style="margin:6px 0">I'm in Treatment Now</h3>
-        <p class="muted">For chemo chair use: big buttons, switch anytime without losing your place.</p>
-        <button class="btn b-teal" data-go="explore">📍 Take Me Somewhere</button>
-        <button class="btn b-blue" data-exp-t="relax">🧘 Help Me Relax</button>
-        <button class="btn b-warm" data-exp-t="distract">🎧 Distract Me</button>
-        <button class="btn b-ghost" data-go="learn">🔬 Help Me Understand</button>
-        <button class="btn b-ghost" data-go="support">💙 Help Me Feel Connected</button>
+      <div class="card"><span class="tag">Treatment support</span>
+        <h3 style="margin:6px 0">I'm in treatment now</h3>
+        <p class="muted">Large, simple buttons made for treatment sessions. Move between them freely.</p>
+        <button type="button" class="btn b-green" data-act="goto" data-to="explore">📍 Take me somewhere calm</button>
+        <button type="button" class="btn b-green" data-act="experience-t" data-n="relax">🧘 Help me relax</button>
+        <button type="button" class="btn b-green" data-act="experience-t" data-n="distract">🎧 Distract me</button>
+        <button type="button" class="btn b-white" data-act="goto" data-to="learn">🔬 Help me understand</button>
+        <button type="button" class="btn b-white" data-act="goto" data-to="support">💙 Help me feel connected</button>
       </div>
-      <div class="card"><b>Prepare Me — before session (Phase 4)</b><p class="muted">4 steps: expect • ask • calm • encourage. Tick questions to ask your team.</p>
-        <button class="btn b-blue" id="prepBtn">Start Prepare Me →</button>
+      <div class="card"><b>Prepare me for my session</b><p class="muted">What to expect, questions to ask, a moment to settle.</p>
+        <button type="button" class="btn b-green" data-act="prep-toggle">Begin preparation →</button>
         <div id="prepBody" class="hidden">
-          <p><b>1. What to expect:</b> check in, sit back, team connects drip. It can take hours — bring warmth + this app.</p>
-          <p><b>2. Tick to ask:</b></p>
-          <div class="chips" id="prepQ"></div>
-          <p><b>3. Calm (30 sec):</b> breathe in 4, out 4, twice.</p>
-          <p><b>4. Encouragement:</b> uncertainty → familiarity. You’ve prepared; now pick a world in Explore.</p>
-          <button class="btn b-teal" id="prepGo">I’m prepared → pick a world</button>
+          <p><b>1. What to expect:</b> you will check in, settle back, and your team will connect your treatment. Sessions can last hours — bring warmth and this app.</p>
+          <p><b>2. Questions to ask your team:</b></p><div class="chips" id="prepQ"></div>
+          <p><b>3. Settle (30 seconds):</b> breathe in for 4, out for 4, twice.</p>
+          <button type="button" class="btn b-green" data-act="goto" data-to="explore">I'm ready — take me somewhere calm →</button>
         </div>
       </div>
-      <div class="card"><b>After treatment? (Phase 4)</b><p class="muted">Check out after your session.</p><div class="chips" id="afterChips"></div><div class="muted" id="afterMsg"></div></div>
-      <div class="card"><b>Where are you? (Phase 4 • Home mode)</b><div class="chips" id="placeChips"></div><div class="muted">Home = shorter sessions + sleep track suggested. Hospital = treatment doors first.</div></div>
-      <div class="card"><b>My Journey (Phase 4)</b><p class="muted">Non-linear — no failing. Tap your stage; stored on this phone only.</p><div class="chips" id="journey"></div></div>
+      <div class="card"><b>After my session</b><div class="chips" id="afterChips"></div><div class="muted" id="afterMsg"></div></div>
     </section>
 
-    <!-- CARE: dosages, adherence, milestones, symptoms, updates (all local, reminders only — never dose advice) -->
     <section id="tab-care" class="hidden">
-      <div class="card"><span class="tag">My Care • reminders only</span>
-        <p class="muted">Take exactly as labelled. This app never changes doses — it only reminds + logs what <b>you</b> confirm. Ask your pharmacist about anything personal.</p>
-        <b>💊 Scheduled dosages</b>
-        <div class="row"><input id="medName" placeholder="Medicine e.g. Ondansetron"/><input id="medTime" type="time" style="max-width:130px"/></div>
-        <button class="btn b-teal" id="medAdd">+ Add reminder (this phone only)</button>
+      <div class="card"><span class="tag">My medicines</span>
+        <p class="muted">Take exactly as labelled by your team. OncoEase only reminds and records — it never changes doses.</p>
+        <div class="row"><input id="medName" placeholder="Medicine name, as labelled"/><input id="medTime" type="time" style="max-width:130px"/></div>
+        <button type="button" class="btn b-green" data-act="med-add">+ Add reminder</button>
         <div id="medList"></div>
       </div>
-      <div class="card"><b>✅ Medication adherence log</b><p class="muted">Tick what you took today. Streak counts days with all ticked.</p><div id="adhList"></div><p class="muted" id="adhMsg"></p></div>
-      <div class="card"><b>🌟 Daily milestones</b><div class="chips" id="miles"></div><p class="muted" id="mileMsg"></p></div>
-      <div class="card"><b>🌡️ Daily symptoms check</b><div class="chips" id="symp"></div><div class="muted" id="sympMsg"></div></div>
-      <div class="card"><b>📢 Medical updates</b><div id="updates"></div></div>
+      <div class="card"><b>Today's record</b><div id="adhList"></div><p class="muted" id="adhMsg"></p></div>
+      <div class="card"><b>Daily milestones</b><p class="muted">Small wins count.</p><div class="chips" id="miles"></div><p class="muted" id="mileMsg"></p></div>
+      <div class="card"><b>Daily symptoms check</b><div class="chips" id="symp"></div><div class="muted" id="sympMsg"></div></div>
+      <div class="card"><b>My journey</b><p class="muted">Every journey is different — tap where you are today.</p><div class="chips" id="journey"></div></div>
+      <div class="card"><b>Care updates</b><div id="updates"></div></div>
     </section>
 
-    <!-- LEARN -->
     <section id="tab-learn" class="hidden">
-      <div class="card"><span class="tag">Learn • General info only</span><p class="muted">Simple, pharmacist-informed. Not personal advice — ask your team about you.</p><div class="chips" id="topics"></div><div id="topicBody"></div></div>
+      <div class="card"><span class="tag">Understanding cancer</span><p class="muted">Simple, pharmacist-reviewed information. General guidance only — your team advises on your own case.</p><div class="chips" id="topics"></div><div id="topicBody"></div></div>
     </section>
 
-    <!-- SUPPORT -->
     <section id="tab-support" class="hidden">
-      <div class="card hidden" id="caregiverCard"><span class="tag">Caregiver path • separate space</span>
-        <p><b>How can I support them?</b> Patient controls sharing — toggle below to allow viewing their favourites only (never check-ins) on this phone.</p>
+      <div class="card hidden" id="caregiverCard"><span class="tag">For caregivers</span>
+        <p><b>How can I support them?</b> Practical guidance for the people standing beside patients.</p>
         <div class="chips" id="cgGuides"></div><div id="cgBody" class="rec hidden"></div>
-        <label class="muted"><input type="checkbox" id="shareFav" style="width:22px"/> Share my favourites with caregiver on this phone</label>
       </div>
-      <div class="card"><span class="tag">Support • Connect</span>
-        <p>💙 “You showed up for something hard today.”</p>
-        <p>💙 “Rest is allowed. We’ll handle home.” — Caregiver</p>
-        <label class="muted">Family note (stays on this phone)</label><input id="fam" placeholder="e.g. Call mama after treatment"/>
-        <button class="btn b-ghost" id="saveNote">Save note locally</button>
-        <label class="muted">Voice note (recorded on this phone only)</label>
-        <div class="row"><button class="btn b-blue" id="recBtn">● Record</button><button class="btn b-ghost" id="recStop">■ Stop</button></div>
+      <div class="card"><span class="tag">Messages of support</span>
+        <p>💚 “You showed up for something hard today — that matters.”</p>
+        <p>💚 “Rest is allowed. We will handle things at home.”</p>
+        <label class="muted">Save a family note on this phone</label><input id="fam" placeholder="e.g. Call mama after treatment"/>
+        <button type="button" class="btn b-white" data-act="note-save">Save note</button>
+        <label class="muted">Or record a voice message on this phone</label>
+        <div class="row"><button type="button" class="btn b-green" data-act="rec-start" id="recBtn">● Record</button><button type="button" class="btn b-white" data-act="rec-stop">■ Stop</button></div>
         <div id="voiceList"></div>
       </div>
-      <div class="card"><span class="tag">Chat support (AI • general info only)</span>
-        <p class="muted">Compassionate assistant for comfort + simple explanations. Not a doctor — never diagnosis or dose advice. Red-flag words open Help.</p>
-        <label class="muted">Backend URL (your private server; keys never go in this app)</label>
-        <input id="backendUrl" placeholder="http://localhost:3001"/>
-        <div id="chatBox" style="border:2px solid var(--line);border-radius:12px;padding:10px;min-height:120px;max-height:220px;overflow:auto;background:#FFFEFA"></div>
-        <div class="row"><input id="chatIn" placeholder="Type here… e.g. how do I relax before chemo?" style="flex:3"/><button class="btn b-blue" id="chatSend" style="flex:1;min-width:90px">Send</button></div>
-        <p class="muted">Demo mode: works offline with kind canned replies until you connect your backend.</p>
+      <div class="card"><span class="tag">Talk to OncoEase assistant</span>
+        <p class="muted">A caring assistant for comfort and simple explanations. General information only — never medical advice about you.</p>
+        <div id="chatBox"></div>
+        <div class="chips" id="chatQuick"></div>
+        <div class="row"><input id="chatIn" placeholder="Type here…" style="flex:3"/><button type="button" class="btn b-green" data-act="chat-send" style="flex:1;min-width:90px">Send</button></div>
       </div>
-      <div class="card"><span class="tag">Support OncoEase (Flutterwave)</span>
-        <p class="muted">Payments run on <b>your backend only</b> — secret keys are never in this app or GitHub. Enter amount, tap Pay, complete on Flutterwave’s secure page.</p>
+      <div class="card"><span class="tag">Support OncoEase</span>
+        <p class="muted">Your contribution keeps OncoEase caring for patients and families. Pay securely with card, bank or mobile money.</p>
         <label class="muted">Amount (NGN)</label><input id="payAmt" type="number" min="100" value="1000"/>
         <label class="muted">Email for receipt</label><input id="payEmail" type="email" placeholder="you@email.com"/>
-        <button class="btn b-warm" id="payBtn">💳 Pay securely →</button>
-        <p class="muted" id="payMsg">What is this for? Set in backend: donations / premium / clinic bills. Tell me which and I’ll label it.</p>
+        <button type="button" class="btn b-green" data-act="pay">💳 Pay securely →</button>
+        <p class="muted" id="payMsg"></p>
       </div>
     </section>
-
-    <div class="card muted">📱 Green + White • Phases 1–6 • Saves on this browser only.
-      <div class="row"><button class="chip" id="comfortBtn">🌙 Reduce motion: off</button><button class="chip" id="textBtn">🔠 Large text: off</button></div>
-      <div class="row"><button class="btn b-ghost" id="csvBtn">⬇ Export my data (CSV)</button><button class="btn b-ghost" id="wipe">Wipe local data</button></div>
-      <span id="resume"></span> <span id="consentState"></span></div>
   </div>
 
   <nav class="nav">
-    <button data-tab="home" class="on"><span>🏠</span>Home</button>
-    <button data-tab="explore"><span>🌿</span>Explore</button>
-    <button data-tab="treatment"><span>💊</span>Treat</button>
-    <button data-tab="care"><span>💚</span>Care</button>
-    <button data-tab="learn"><span>📚</span>Learn</button>
-    <button data-tab="support"><span>❤️</span>Support</button>
+    <button type="button" data-act="tab" data-to="home" class="on"><span>🏠</span>Home</button>
+    <button type="button" data-act="tab" data-to="explore"><span>🌿</span>Explore</button>
+    <button type="button" data-act="tab" data-to="treatment"><span>💊</span>Treat</button>
+    <button type="button" data-act="tab" data-to="care"><span>💚</span>Care</button>
+    <button type="button" data-act="tab" data-to="learn"><span>📚</span>Learn</button>
+    <button type="button" data-act="tab" data-to="support"><span>❤️</span>Support</button>
   </nav>
+  <div class="foot">OncoEase • Med Crescent Pharmacy • v2.0<br><span id="acctLine"></span><br><button type="button" data-act="export">Download my records</button> • <button type="button" data-act="logout">Log out</button></div>
 </div>
 
 <div id="sess" class="sess hidden"><div class="sess-box">
-  <div class="sess-view" id="sessView"><div id="sessInner"><div style="font-size:44px" id="sessEmoji">🌊</div><h2 id="sessName" style="margin:8px 0"></h2><p id="sessPurpose" style="opacity:.95"></p><div class="prog"><i id="sessBar"></i></div><p id="sessTime" style="font-weight:800"></p><p class="muted" id="sessHint" style="color:#EAF4F1">You can pause, switch worlds, or exit anytime.</p></div></div>
+  <div class="sess-view" id="sessView"><div id="sessInner"><div style="font-size:44px" id="sessEmoji">🌊</div><h2 id="sessName" style="margin:8px 0"></h2><p id="sessPurpose" style="opacity:.95"></p><div class="prog"><i id="sessBar"></i></div><p id="sessTime" style="font-weight:800"></p><p id="sessHint" style="opacity:.9">Pause, switch places, or rest anytime — you are in control.</p></div></div>
   <div class="sess-ctrl">
-    <button class="btn b-blue" id="sessPause">⏸ Pause</button>
-    <button class="btn b-ghost" id="sessAudio">🔇 Sound: off</button>
-    <button class="btn b-ghost" id="sessCard">🥽 Cardboard</button>
+    <button type="button" class="btn b-green" data-act="sess-pause" id="sessPause">⏸ Pause</button>
+    <button type="button" class="btn b-white" data-act="sess-audio" id="sessAudio">🔇 Sound off</button>
+    <button type="button" class="btn b-white" data-act="sess-card" id="sessCard">🥽 Wide view</button>
   </div>
   <div class="sess-ctrl">
-    <button class="btn b-warm" data-swap="coast">🌊 Coast</button>
-    <button class="btn b-warm" data-swap="garden">🌿 Garden</button>
-    <button class="btn b-warm" data-swap="sunset">🌅 Sunset</button>
-    <button class="btn b-warm" data-swap="fantasy">✨ Lake</button>
+    <button type="button" class="btn b-white" data-act="sess-swap" data-w="coast">🌊 Coast</button>
+    <button type="button" class="btn b-white" data-act="sess-swap" data-w="garden">🌿 Garden</button>
+    <button type="button" class="btn b-white" data-act="sess-swap" data-w="sunset">🌅 Light</button>
+    <button type="button" class="btn b-white" data-act="sess-swap" data-w="fantasy">✨ Grove</button>
   </div>
-  <div class="sess-ctrl"><button class="btn b-teal" id="sessDone">Done → check out</button><button class="btn b-ghost" id="sessExit">Exit (keep time)</button></div>
+  <div class="sess-ctrl"><button type="button" class="btn b-green" data-act="sess-done">Done →</button><button type="button" class="btn b-white" data-act="sess-exit">Rest for now</button></div>
 </div></div>
 
-<div id="consentModal" class="help-modal"><div class="help-box">
-  <h3 style="margin-top:0">Welcome to OncoEase 💚</h3>
-  <p class="muted">A companion, not a doctor. General info only. Your data stays on this phone. You can wipe it anytime. Concerning symptoms? Always contact your care team promptly.</p>
-  <button class="btn b-teal" id="consentYes">I understand → continue</button>
+<div id="authModal" class="modal"><div class="mbox">
+  <h2 style="margin-top:0">💚 Welcome to OncoEase</h2>
+  <p class="muted">Your companion through treatment and recovery. Sign in to begin — your account lives on this phone.</p>
+  <div class="row"><button type="button" class="chip on" id="aPatient" style="flex:1">🧍 I'm a patient</button><button type="button" class="chip" id="aCare" style="flex:1">👪 I'm a caregiver</button></div>
+  <label class="muted">Username</label><input id="aUser" placeholder="Choose a username" autocomplete="username"/>
+  <label class="muted">Password</label><input id="aPass" type="password" placeholder="Choose a password" autocomplete="new-password"/>
+  <label class="muted"><input type="checkbox" id="aConsent" style="width:22px"/> I understand OncoEase gives general information only and never replaces my care team.</label>
+  <button type="button" class="btn b-green" data-act="auth-login">Log in →</button>
+  <button type="button" class="btn b-white" data-act="auth-signup">Create my account</button>
+  <p class="muted" id="authMsg"></p>
 </div></div>
 
-<div id="helpModal" class="help-modal hidden"><div class="help-box">
-  <h3 style="margin-top:0">I need help</h3><p class="muted">No diagnosis here — reach a human:</p>
-  <button class="btn b-ghost" data-help="Caregiver">👪 Caregiver</button>
-  <button class="btn b-ghost" data-help="Nurse">👩‍⚕️ Nurse / Doctor</button>
-  <button class="btn b-ghost" data-help="Pharmacist">💊 Pharmacist</button>
-  <button class="btn b-help" data-help="Emergency">🚨 Emergency services</button>
-  <button class="btn b-teal" id="closeHelp">Close</button><p class="muted" id="helpMsg"></p>
+<div id="helpModal" class="modal hidden"><div class="mbox">
+  <h3 style="margin-top:0">You deserve support right now</h3><p class="muted">OncoEase cannot diagnose — please reach a person you trust:</p>
+  <button type="button" class="btn b-white" data-act="help-pick" data-w="Caregiver">👪 My caregiver</button>
+  <button type="button" class="btn b-white" data-act="help-pick" data-w="Nurse">👩‍⚕️ Nurse / Doctor</button>
+  <button type="button" class="btn b-white" data-act="help-pick" data-w="Pharmacist">💊 Pharmacist</button>
+  <button type="button" class="btn b-help" data-act="help-pick" data-w="Emergency">🚨 Emergency services</button>
+  <button type="button" class="btn b-green" data-act="help-close">Close</button><p class="muted" id="helpMsg"></p>
 </div></div>
 
 <script>
-const $=id=>document.getElementById(id);
-const emotions=["Anxious","Afraid","Sad","Tired","Lonely","Uncomfortable","Calm","Hopeful","Confused","Overwhelmed","Happy","I'm not sure"];
-const post=["Comfortable","Tired","Worried","Uncomfortable","Emotional","Relieved","Unsure"];
-const fb=["Yes","A little","Not really","No"];
-const topics={"What is cancer? (2 min • pharmacist-reviewed)":"Cells growing where they shouldn’t. Many types and stages — only your own team can explain yours. General info only.":"ph","During chemo? (2 min • pharmacist-reviewed)":"Medicines travel in the blood to reach fast-growing cells. A session can last hours: check-in, drip, rest, go home. Tiredness and nausea are commonly expected — teams plan for this.":"ph","Side effects? (2 min)":"Common: tiredness, nausea, appetite change, hair loss, mouth sores. Call promptly for: fever ≥38°C, heavy bleeding, severe vomiting/diarrhoea, chest pain, trouble breathing, confusion.":"ph","Medication safety? (2 min • pharmacist-reviewed)":"Take exactly as labelled. Keep one list of ALL medicines + herbs. Ask your pharmacist before adding anything. Never change chemo doses yourself.":"ph","When to seek care? (1 min)":"Same-day care: fever, uncontrollable vomiting, severe pain, bleeding, breathing trouble, sudden swelling, confusion. When unsure — call and ask.":"ph","Questions to ask? (1 min)":"How long is today? What should I report? Who do I call after hours? Food/drink today? What’s next visit? Tick them in Treatment → Prepare Me.":"ph"};
-let state={emotion:null,need:null,treatment:localStorage.getItem("cc_treat")==="1"};
+"use strict";
+var FLW_PUBLIC_KEY = "FLWPUBK_TEST-ced4492e4a0bc225058f982f64a59363-X";
+function $(id){return document.getElementById(id)}
 function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
-function load(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}}
-function chips(el,arr,cb){el.innerHTML="";arr.forEach(a=>{const b=document.createElement("button");b.className="chip";b.type="button";b.textContent=a;b.onclick=()=>{[...el.children].forEach(c=>c.classList.remove("on"));b.classList.add("on");cb(a,b)};el.appendChild(b)})}
-// nav — every button works
-document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{document.querySelectorAll("[data-tab]").forEach(x=>x.classList.remove("on"));b.classList.add("on");["home","explore","treatment","care","learn","support"].forEach(t=>$("tab-"+t).classList.toggle("hidden",t!==b.dataset.tab));$("modePill").textContent=b.textContent.trim();window.scrollTo(0,0)});
-document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>document.querySelector(`[data-tab="${b.dataset.go}"]`).click());
-// Welcome = sign-in (local profile, no password — by design for offline hospital use)
-let welcomeRole="patient";
-$("wPatient").onclick=()=>{welcomeRole="patient";$("wPatient").classList.add("on");$("wCare").classList.remove("on")};
-$("wCare").onclick=()=>{welcomeRole="caregiver";$("wCare").classList.add("on");$("wPatient").classList.remove("on")};
-$("welcomeGo").onclick=()=>{const n=$("userName").value.trim();if(!n){$("welcomeMsg").textContent="Please type your name to continue.";return}profile=welcomeRole;save("cc_profile",profile);save("cc_name",{n,at:Date.now()});paintProfile();$("welcomeMsg").textContent="Welcome, "+n+" — signed in on this phone as "+profile+".";$("needCard").scrollIntoView({behavior:"smooth"})};
-(function(){const nm=load("cc_name");if(nm&&nm.n){$("userName").value=nm.n;$("welcomeMsg").textContent="Signed in as "+nm.n+" ("+(load("cc_profile")||"patient")+"). Tap Continue to go on."}})();
-// check-in
-chips($("emotions"),emotions,e=>{state.emotion=e;save("cc_checkin",{e,at:Date.now()});$("emoMsg").textContent="Thank you — "+e+". I'm here with you.";const m={Anxious:"relax",Afraid:"encourage",Sad:"encourage",Tired:"relax",Lonely:"connect",Uncomfortable:"explore",Calm:"explore",Hopeful:"encourage",Confused:"learn",Overwhelmed:"relax",Happy:"support","I'm not sure":"explore"};const r=m[e];$("rec").classList.remove("hidden");$("rec").innerHTML="<b>Suggestion for "+e+":</b> try <b>"+r+"</b> — or choose anything. You decide.";$("emoGo").classList.remove("hidden")});
-$("emoGo").onclick=()=>{$("needCard").scrollIntoView({behavior:"smooth"})};
-chips($("postEmo"),post,e=>save("cc_post",{e,at:Date.now()}));
-chips($("feedback"),fb,f=>{save("cc_fb",{f,need:state.need,at:Date.now()});renderHist();$("title").textContent="Thank you. What next?"});
-chips($("topics"),Object.keys(topics),t=>{$("topicBody").innerHTML="<div class='rec'><b>"+t+"</b><p>"+topics[t]+"</p><p class='muted'>General education only — ask your team about you.</p></div>"});
-// Phase 3 library (PRD F4+F6): 5 guided tracks, local step timers, no audio files needed
-const TRACKS={breath:{n:"Breathing • 3 min",steps:["Breathe in 4…","Hold 2…","Breathe out 4…","Soften shoulders…"],loop:6},ground:{n:"Grounding • 5 min",steps:["Name 5 things you see…","Name 4 you can touch…","Name 3 you hear…","Name 2 you smell…","Name 1 slow breath…"],loop:5},body:{n:"Body relaxation • 7 min",steps:["Feet soften…","Legs heavy…","Belly loose…","Hands open…","Face unclench…","Whole body rest…"],loop:5},sleep:{n:"Sleep preparation • 8 min",steps:["Dim light, lie back…","Slow breath in…","Long breath out…","Let thoughts pass…","Darker, quieter…"],loop:6},kind:{n:"Encouragement • 2 min",steps:["You showed up today.","Rest is allowed.","One moment at a time.","You are not alone here."],loop:2}};
-function openExp(n,fromTreat){state.need=n;$("expCard").classList.remove("hidden");$("outCard").classList.add("hidden");document.querySelector('[data-tab="home"]').click();$("expTitle").textContent={relax:"Help me relax — choose a track",distract:"Distract me",encourage:"Encourage me"}[n]+(state.treatment||fromTreat?" • Treatment Mode":"");const B=$("expBody");
- if(n==="relax"){B.innerHTML=`<div class="chips" id="tracks"></div><div class="breath" id="br">●</div><p style="text-align:center" id="brt">Pick a track above, then Start</p><button class="btn b-blue" id="go">Start</button>`;chips($("tracks"),Object.keys(TRACKS),(t,btn)=>{state.track=t;$("brt").textContent=TRACKS[t].n+" — tap Start";[...$("tracks").children].forEach(c=>c.classList.remove("on"));if(btn)btn.classList.add("on")});state.track=state.track||"breath";let iv=null;$("go").onclick=()=>{const T=TRACKS[state.track];let i=0,r=0;clearInterval(iv);iv=setInterval(()=>{$("brt").textContent=T.steps[i%T.steps.length]+" ("+T.n+")";$("br").style.transform=i%2===0?"scale(1.5)":"scale(1)";i++;if(i%T.steps.length===0)r++;if(r>=T.loop){clearInterval(iv);$("brt").textContent="Well done — "+T.n+" complete.";save("cc_relax",{t:state.track,at:Date.now()});renderHist()}},2500)}}
- if(n==="distract")B.innerHTML=`<div class="card"><b>Story: The River Remembers (2 min)</b><p>Boats return at sunset, drums low, food cooking. You are safe here.</p><p class="muted">Game: silently count 5 green things around you, then 4 slow breaths.</p><button class="btn b-warm" id="storyDone">Story finished →</button></div>`;
- if(n==="encourage"){const T=TRACKS.kind;B.innerHTML=`<div class="card" style="font-size:18px"><b>You did something hard and showed up.</b><p id="kindLine">Rest is allowed.</p><p class="muted">Hopeful, realistic — no outcome promises.</p><button class="btn b-blue" id="kindNext">Next kind line →</button></div>`;let k=0;const nb=()=>{k++;$("kindLine").textContent=T.steps[k%T.steps.length]};setTimeout(()=>{const b=$("kindNext");if(b)b.onclick=nb},0)}
- $("expCard").scrollIntoView({behavior:"smooth"})}
-document.querySelectorAll("[data-exp]").forEach(b=>b.onclick=()=>openExp(b.dataset.exp,false));
-document.querySelectorAll("[data-exp-t]").forEach(b=>b.onclick=()=>{if(!state.treatment)toggleTreat();openExp(b.dataset.expT,true)});
-// worlds + Phase 2 SessionManager (PRD Feature 3+5): timed loop, pause/resume, mid-session switch, local audio, auto-pause
-const WORLDS={coast:{e:"🌊",n:"Nigerian Coastal Calm",p:"Purpose: feel at home. Waves and breeze — breathe with the water.",g:"linear-gradient(160deg,#0B7A3E,#063F22)",a:"waves"},garden:{e:"🌿",n:"Tropical Garden",p:"Purpose: grounding. Shade and birds — name 3 greens you see.",g:"linear-gradient(160deg,#14905A,#0B7A3E)",a:"birds"},sunset:{e:"🌅",n:"Sunset Garden Light",p:"Purpose: letting go. Warm calm light — let today soften.",g:"linear-gradient(160deg,#2E9E6B,#063F22)",a:"soft"},fantasy:{e:"✨",n:"Still-Water Grove",p:"Purpose: safe imagination. Quiet green stillness when wards feel loud.",g:"linear-gradient(160deg,#063F22,#14905A)",a:"soft"}};
-const Sess={key:null,total:300,left:300,timer:null,playing:false,audioOn:false,ctx:null,nodes:[],
- start(k){this.stopTimer();this.key=k;this.total=parseInt(($("sessLen")||{value:300}).value||300);this.left=this.total;this.playing=true;save("cc_session",{w:k,left:this.left,at:Date.now()});this.paint();$("sess").classList.remove("hidden");this.tick();if(this.audioOn)this.audioStart();},
- paint(){const w=WORLDS[this.key];$("sessView").style.background=w.g;$("sessEmoji").textContent=w.e;$("sessName").textContent=w.n;$("sessPurpose").textContent=w.p;},
- tick(){clearInterval(this.timer);this.timer=setInterval(()=>{if(!this.playing)return;this.left--;const done=this.total-this.left;$("sessBar").style.width=(100*done/this.total)+"%";const m=Math.floor(this.left/60),s=("0"+this.left%60).slice(-2);$("sessTime").textContent=m+":"+s+" left • switch worlds anytime";save("cc_session",{w:this.key,left:this.left,at:Date.now()});if(this.left<=0){this.complete()}},1000);$("sessPause").textContent="⏸ Pause";},
- toggle(){this.playing=!this.playing;$("sessPause").textContent=this.playing?"⏸ Pause":"▶ Resume";if(!this.playing)this.audioStop();else if(this.audioOn)this.audioStart();},
- swap(k){const elapsed=this.total-this.left;this.key=k;this.paint();save("cc_session",{w:k,left:this.left,elapsed,at:Date.now()});},
- stopTimer(){clearInterval(this.timer);this.audioStop();},
- exit(){this.playing=false;clearInterval(this.timer);this.audioStop();save("cc_session",{w:this.key,left:this.left,paused:true,at:Date.now()});$("sess").classList.add("hidden");renderHist();},
- complete(){this.exit();save("cc_world",{w:this.key,done:true,at:Date.now()});document.querySelector('[data-tab="home"]').click();$("outCard").classList.remove("hidden");$("title").textContent="Well done — how do you feel now?";renderHist();$("outCard").scrollIntoView({behavior:"smooth"})},
- audioStart(){try{this.audioStop();const C=this.ctx=this.ctx||new (window.AudioContext||window.webkitAudioContext)();const o=C.createOscillator(),g=C.createGain(),l=C.createOscillator(),lg=C.createGain();o.type="sine";o.frequency.value=WORLDS[this.key].a==="birds"?880:220;g.gain.value=0.04;l.frequency.value=0.15;lg.gain.value=0.02;l.connect(lg);lg.connect(g.gain);o.connect(g);g.connect(C.destination);o.start();l.start();this.nodes=[o,l];}catch(e){}},
- audioStop(){try{this.nodes.forEach(n=>n.stop());}catch(e){}this.nodes=[];}
-};
-document.querySelectorAll("[data-world]").forEach(b=>b.onclick=()=>Sess.start(b.dataset.world));
-document.querySelectorAll("[data-swap]").forEach(b=>b.onclick=()=>Sess.swap(b.dataset.swap));
-$("sessPause").onclick=()=>Sess.toggle();
-$("sessAudio").onclick=e=>{Sess.audioOn=!Sess.audioOn;e.target.textContent=Sess.audioOn?"🔊 Sound: on":"🔇 Sound: off";if(Sess.audioOn&&Sess.playing)Sess.audioStart();else Sess.audioStop()};
-let _sessHTML=null;$("sessCard").onclick=()=>{const v=$("sessView");const on=v.classList.toggle("cardboard");if(on){_sessHTML=$("sessInner").innerHTML;v.innerHTML='<div class="eye">'+_sessHTML+'</div><div class="eye">'+_sessHTML+'</div>';$("sessCard").textContent="📱 Single view"}else{v.classList.remove("cardboard");if(_sessHTML)v.innerHTML='<div id="sessInner">'+_sessHTML+'</div>';$("sessCard").textContent="🥽 Cardboard"}};
-$("sessDone").onclick=()=>Sess.complete();
-$("sessExit").onclick=()=>Sess.exit();
-document.addEventListener("visibilitychange",()=>{if(document.hidden&&Sess.playing){Sess.toggle();$("sessHint").textContent="Paused because the app was hidden — tap Resume when ready."}});
-const _wb=$("worldBack"),_wr=$("worldRelax"),_wc=$("worldCard");if(_wc)_wc.classList.add("hidden");if(_wb)_wb.onclick=()=>_wc.classList.add("hidden");if(_wr)_wr.onclick=()=>openExp("relax",state.treatment);
-$("finishBtn").onclick=()=>{$("expCard").classList.add("hidden");$("outCard").classList.remove("hidden");$("title").textContent="How are you after that?";renderHist();$("outCard").scrollIntoView({behavior:"smooth"})};
-$("backBtn").onclick=()=>{$("expCard").classList.add("hidden");window.scrollTo(0,0)};
-$("prepBtn").onclick=()=>$("prepBody").classList.toggle("hidden");
-$("saveNote").onclick=()=>{save("cc_note",$("fam").value);alert("Saved on this phone only.")};
-// treatment toggle
-function toggleTreat(){state.treatment=!state.treatment;localStorage.setItem("cc_treat",state.treatment?"1":"0");$("treatBtn").textContent=state.treatment?"💊 Treatment: ON — switch anytime":"💊 Treatment: OFF"}
-$("treatBtn").onclick=toggleTreat;if(state.treatment)$("treatBtn").textContent="💊 Treatment: ON — switch anytime";
-// help — all buttons respond
-$("helpBtn").onclick=()=>$("helpModal").classList.remove("hidden");
-$("closeHelp").onclick=()=>$("helpModal").classList.add("hidden");
-document.querySelectorAll("[data-help]").forEach(b=>b.onclick=()=>{$("helpMsg").textContent="Please reach your "+b.dataset.help+" now. If urgent, use emergency services. This app does not diagnose.";save("cc_help",{w:b.dataset.help,at:Date.now()})});
-$("wipe").onclick=()=>{localStorage.clear();renderHist();alert("Local data wiped.")};
-// Phase 4 (PRD F7/F8/F9/F12): prepare checklist, post-treatment, home mode, journey — all local
-chips($("prepQ"),["How long today?","What to report?","Who to call after?","Food/drink?","Next visit?"],q=>{const l=load("cc_prepq")||[];l.push(q);save("cc_prepq",l);$("prepBody").scrollIntoView({behavior:"smooth"})});
-$("prepGo").onclick=()=>document.querySelector('[data-tab="explore"]').click();
-const AFTER={Comfortable:"Lovely — a short garden moment or rest.",Tired:"Rest + sleep-prep track suggested.",Worried:"Try encouragement + understanding, then talk to your team.",Uncomfortable:"Pause, breathe, tell your team what hurts.",Emotional:"That’s allowed — encouragement + connect.",Relieved:"Carry this ease — note what helped.",Unsure:"Start with a 3-min coast session."};
-chips($("afterChips"),Object.keys(AFTER),a=>{$("afterMsg").textContent=AFTER[a]+" Concerning symptoms? Contact your team promptly.";save("cc_after",{a,at:Date.now()})});
-chips($("placeChips"),["🏥 Hospital","🏠 Home"],p=>{save("cc_place",{p,at:Date.now()});$("title").textContent=p.includes("Home")?"Welcome home — shorter, gentle sessions.":"How are you feeling today?"});
-chips($("journey"),["🌱 Diagnosis","💙 Preparing","💊 Treatment","🌿 Recovery","🏠 Home","🌻 Follow-up"],j=>save("cc_journey",{j,at:Date.now()}));
-// Chat + Payments (keys NEVER in app — backend proxy only)
-const REDFLAGS=["chest pain","trouble breathing","heavy bleeding","fever","vomit blood","confusion","suicid","kill myself","emergency"];
-function chatAdd(w,t){const d=document.createElement("div");d.style.margin="6px 0";d.innerHTML="<b>"+w+":</b> "+t;$("chatBox").appendChild(d);$("chatBox").scrollTop=9999}
-function localReply(q){q=q.toLowerCase();if(REDFLAGS.some(r=>q.includes(r))){$("helpModal").classList.remove("hidden");return "That sounds important — I’ve opened Help. Please reach a human now (nurse/doctor/emergency). I’m staying here with you."}if(q.includes("relax")||q.includes("anx"))return "Let’s slow down together: breathe in 4, out 4, twice. Then try Explore → Coast 3 min. You’re doing well by pausing.";if(q.includes("chemo")||q.includes("treatment"))return "Generally: sessions take hours; tiredness/nausea are commonly expected. Only your own team can advise you — write down: how long today? what to report? who to call after? (General info only.)";if(q.includes("medicine")||q.includes("drug")||q.includes("dose"))return "I can’t advise doses. Take exactly as labelled, keep one medicine list, and ask your pharmacist promptly. (General info only.)";if(q.includes("pay")||q.includes("flutter"))return "Tap Pay securely above — you’ll finish on Flutterwave’s page. Keys stay on your backend, never here.";return "I hear you. I’m here with you. Try: relax track, a world, or Learn → a 2-min topic. Concerning symptoms? Use Help now. (General info only.)"}
-$("chatSend").onclick=async()=>{const q=$("chatIn").value.trim();if(!q)return;chatAdd("You",q);$("chatIn").value="";const base=($("backendUrl").value||"").replace(/\/$/,"");save("cc_backend",{base,at:Date.now()});
- if(!base){chatAdd("Compass",localReply(q));return}
- try{const r=await fetch(base+"/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:q,context:{emotion:state.emotion,stage:(load("cc_journey")||{}).j}})});const j=await r.json();chatAdd("Compass",(j.reply||localReply(q))+"<br><span class='muted'>General info only — ask your team about you.</span>")}catch(e){chatAdd("Compass",localReply(q)+"<br><span class='muted'>(Offline demo — connect backend for live AI.)</span>")}};
-$("chatIn").addEventListener("keydown",e=>{if(e.key==="Enter")$("chatSend").click()});
-(function(){const b=load("cc_backend");if(b&&b.base)$("backendUrl").value=b.base})();
-$("payBtn").onclick=async()=>{const base=(($("backendUrl").value||"").replace(/\/$/,""))||"";const amt=parseInt($("payAmt").value||0),email=$("payEmail").value.trim();if(!amt||amt<100){$("payMsg").textContent="Enter at least ₦100.";return}if(!email||!email.includes("@")){$("payMsg").textContent="Enter an email for the receipt.";return}
- if(!base){$("payMsg").textContent="Demo mode: set Backend URL first (your server creates the Flutterwave link). No keys in this app.";save("cc_pay_intent",{amt,email,at:Date.now()});return}
- try{$("payMsg").textContent="Creating secure link…";const r=await fetch(base+"/api/pay",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({amount:amt,email,currency:"NGN",purpose:"support"})});const j=await r.json();if(j.link){save("cc_pay_intent",{amt,email,at:Date.now()});window.location.href=j.link}else $("payMsg").textContent="Backend error: "+(j.error||"no link")}catch(e){$("payMsg").textContent="Could not reach backend — running offline. Intent saved on this phone."}};
-// My Care module — local reminders + logs + checks (never dose advice)
-function meds(){return load("cc_meds")||[]} function setMeds(m){save("cc_meds",m);paintMeds()}
-function paintMeds(){const box=$("medList");if(!box)return;const m=meds(),today=new Date().toDateString(),log=load("cc_adh")||{};box.innerHTML=m.length?"":"<p class='muted'>No reminders yet — add your first above.</p>";m.forEach((x,i)=>{const d=document.createElement("div");d.style.cssText="display:flex;gap:8px;align-items:center;margin:6px 0";const taken=(log[today]||{})[i];d.innerHTML="<input type='checkbox' style='width:26px' "+(taken?"checked":"")+" aria-label='taken'/> <b>"+x.n+"</b> <span class='muted'>"+x.t+"</span>";const cb=d.querySelector("input");cb.onchange=()=>{const L=load("cc_adh")||{};L[today]=L[today]||{};L[today][i]=cb.checked;save("cc_adh",L);paintAdh()};const del=document.createElement("button");del.className="chip";del.textContent="✕";del.onclick=()=>{const a=meds();a.splice(i,1);setMeds(a)};d.appendChild(del);box.appendChild(d)});paintAdh()}
-$("medAdd").onclick=()=>{const n=$("medName").value.trim(),t=$("medTime").value||"--:--";if(!n){alert("Type the medicine name as labelled.");return}const m=meds();m.push({n,t});setMeds(m);$("medName").value="";save("cc_med_add",{n,t,at:Date.now()})};
-function paintAdh(){const m=meds(),L=load("cc_adh")||{},days=Object.keys(L).length;let done=0;const t=new Date().toDateString();Object.values(L[t]||{}).forEach(v=>{if(v)done++});$("adhList").innerHTML="<p class='muted'>Today: "+done+"/"+m.length+" ticked • "+days+" day(s) logged. Streak kept on this phone only.</p>";$("adhMsg").textContent=m.length?"Great — logging helps your team help you. Bring this list to visits.":"Add a dosage above to start logging."}
-chips($("miles"),["🌅 Got up gently","💧 Drank water","🚶 Short walk/rest","📞 Called loved one","📖 Read one Learn topic","😴 Early rest"],x=>{const l=load("cc_miles")||[];l.push({x,at:Date.now()});save("cc_miles",l);$("mileMsg").textContent="Logged: "+x+" ("+l.filter(z=>new Date(z.at).toDateString()===new Date().toDateString()).length+" today). Small wins count."});
-const SYMP={None:0,Nausea:1,Tiredness:1,"Loss of appetite":1,Pain:2,Vomiting:2,Diarrhoea:2,Fever:3,"Chest pain":3,"Trouble breathing":3,Bleeding:3,Confusion:3};
-chips($("symp"),Object.keys(SYMP),s=>{const lvl=SYMP[s],l=load("cc_symp")||[];l.push({s,lvl,at:Date.now()});save("cc_symp",l);$("sympMsg").innerHTML=lvl>=3?"⚠️ <b>Please contact your nurse/doctor promptly or use Help → Emergency.</b> Logged.":"Logged: "+s+". "+(lvl===2?"If severe or worsening, contact your team today.":"Rest + note for your next visit.");if(lvl>=3)$("helpModal").classList.remove("hidden")});
-$("updates").innerHTML=["💊 Med Crescent: keep one updated medicine list — show it at every visit.","🧼 Chemo weeks: hand-washing + clean water matter more.","🥗 Eat small, frequent meals if appetite is low — ask your team.","📞 Save your clinic + pharmacist numbers in your phone today."].map(u=>"<p>• "+u+"</p>").join("")+"<p class='muted'>General info only — pharmacist-reviewed placeholders. Your team personalises.</p>";
-paintMeds();
-// Fix: story finish now completes to checkout (was dead)
-document.addEventListener("click",e=>{if(e.target&&e.target.id==="storyDone"){save("cc_story",{done:true,at:Date.now()});$("expCard").classList.add("hidden");$("outCard").classList.remove("hidden");$("title").textContent="Nice — how do you feel now?";renderHist()}});
-// Phase 5: profiles, caregiver guides, voice notes, favourites (all local)
-let profile=load("cc_profile")||"patient";
-function paintProfile(){const p=profile==="caregiver";const cg=$("caregiverCard");if(cg)cg.classList.toggle("hidden",!p);const t=$("title");if(t)t.textContent=p?"How can you support them today?":"How are you feeling today?"}
-const GUIDES={"Understanding them":"They may feel anxious, tired, or quiet — not rejection. Presence matters more than perfect words.","Communicating":"Ask ‘what helps today?’ Listen more than fix. Avoid outcome promises.","Supporting treatment":"Help with rides, meals, waiting company. Let them switch experiences anytime.","Emotional wellbeing":"Encourage rest + expression. Your calm helps theirs.","Medicines & visits":"Keep one medicine list, appointment dates, and questions together.","When to seek help":"Fever, severe vomiting, bleeding, chest pain, breathing trouble, confusion — same-day care.","Looking after you":"You matter too. Rest, eat, ask others for relief shifts."};
-chips($("cgGuides"),Object.keys(GUIDES),g=>{$("cgBody").classList.remove("hidden");$("cgBody").innerHTML="<b>"+g+"</b><p>"+GUIDES[g]+"</p>"});
-$("shareFav").checked=!!load("cc_sharefav");$("shareFav").onchange=e=>save("cc_sharefav",e.target.checked);
-// voice notes on-device (MediaRecorder; playback this session, names saved locally)
-let MR=null,chunks=[];$("recBtn").onclick=async()=>{try{const s=await navigator.mediaDevices.getUserMedia({audio:true});MR=new MediaRecorder(s);chunks=[];MR.ondataavailable=e=>chunks.push(e.data);MR.onstop=()=>{const b=new Blob(chunks,{type:"audio/webm"}),u=URL.createObjectURL(b),a=document.createElement("audio");a.controls=true;a.src=u;$("voiceList").appendChild(a);const l=load("cc_voices")||[];l.push({at:Date.now()});save("cc_voices",l)};MR.start();$("recBtn").textContent="● Recording…"}catch(e){alert("Microphone blocked — use text notes instead.")}};$("recStop").onclick=()=>{if(MR&&MR.state!=="inactive"){MR.stop();$("recBtn").textContent="● Record"}};
-// favourites + suggestion
-function fav(){return load("cc_fav")||{}} function setFav(f){save("cc_fav",f);sug()}
-document.addEventListener("click",e=>{const w=e.target.closest("[data-world]");if(w){const f=fav();f.world=w.dataset.world;setFav(f)}const s=e.target.closest("[data-swap]");if(s){const f=fav();f.world=s.dataset.swap;setFav(f)}});
-function sug(){const f=fav(),el=$("favSug");const worlds={coast:"Nigerian coast",garden:"garden",sunset:"sunset light",fantasy:"grove"};if(f.world){el.classList.remove("hidden");el.innerHTML="💚 You usually choose <b>"+(worlds[f.world]||f.world)+"</b>. <button class='chip' id='favGo'>Revisit →</button>";const g=$("favGo");if(g)g.onclick=()=>Sess.start(f.world)}else el.classList.add("hidden")}
-sug();paintProfile();
-// Phase 6: consent, comfort, export (local only)
-if(load("cc_consent"))$("consentModal").classList.add("hidden");
-$("consentYes").onclick=()=>{save("cc_consent",{at:Date.now(),v:1});$("consentModal").classList.add("hidden");paintConsent()};
-function paintConsent(){$("consentState").textContent=load("cc_consent")?" • Consent: given on this phone":""}
-paintConsent();
-let reduceMotion=load("cc_rm")==="1";function paintRM(){document.querySelectorAll(".breath").forEach(b=>b.style.transition=reduceMotion?"none":"transform 1s");$("comfortBtn").textContent=reduceMotion?"🌙 Reduce motion: on":"🌙 Reduce motion: off"};$("comfortBtn").onclick=()=>{reduceMotion=!reduceMotion;save("cc_rm",reduceMotion?"1":"0");paintRM()};paintRM();
-let bigText=load("cc_big")==="1";function paintBig(){document.body.style.fontSize=bigText?"18px":"16px";$("textBtn").textContent=bigText?"🔠 Large text: on":"🔠 Large text: off"};$("textBtn").onclick=()=>{bigText=!bigText;save("cc_big",bigText?"1":"0");paintBig()};paintBig();
-$("csvBtn").onclick=()=>{const rows=[["type","detail","at"]];["cc_checkin","cc_post","cc_fb","cc_world","cc_after","cc_journey","cc_relax","cc_meds","cc_adh","cc_symp","cc_miles"].forEach(k=>{const v=load(k);if(v)rows.push([k,JSON.stringify(v).slice(0,300),new Date().toISOString()])});const csv=rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(",")).join("\n");const b=new Blob([csv],{type:"text/csv"}),u=URL.createObjectURL(b),a=document.createElement("a");a.href=u;a.download="oncoease-my-data.csv";a.click();save("cc_export",{at:Date.now()})};
-function renderHist(){const h=[load("cc_checkin"),load("cc_fb"),load("cc_world"),load("cc_after"),load("cc_journey"),load("cc_relax"),load("cc_adh"),load("cc_symp")].filter(Boolean);$("history").textContent=h.length?("Local: "+JSON.stringify(h).slice(0,220)+"…"):"No local history yet.";const w=load("cc_world");if(w)$("resume").textContent="Last world: "+(w.w||"—")+" — resume in Explore."}
-renderHist();
-</script>
-<script>
-// FAILSAFE: critical buttons wired independently — runs even if anything above fails
-(function(){try{
-var g=function(id){return document.getElementById(id)};
-var cy=g("consentYes"),cm=g("consentModal");
-if(cy&&cm)cy.addEventListener("click",function(){try{localStorage.setItem("cc_consent",JSON.stringify({at:Date.now(),v:1}))}catch(e){}cm.classList.add("hidden")});
-var wg=g("welcomeGo");
-if(wg)wg.addEventListener("click",function(){var n=(g("userName")||{value:""}).value.trim();var m=g("welcomeMsg");if(!n){if(m)m.textContent="Please type your name to continue.";return}try{localStorage.setItem("cc_name",JSON.stringify({n:n,at:Date.now()}))}catch(e){}if(m)m.textContent="Welcome, "+n+" — signed in on this phone.";var nc=g("needCard");if(nc)nc.scrollIntoView()});
-var eg=g("emoGo");
-if(eg)eg.addEventListener("click",function(){var nc=g("needCard");if(nc){nc.classList.remove("hidden");nc.scrollIntoView()}});
-document.querySelectorAll("[data-tab]").forEach(function(b){b.addEventListener("click",function(){document.querySelectorAll("[data-tab]").forEach(function(x){x.classList.remove("on")});b.classList.add("on");["home","explore","treatment","care","learn","support"].forEach(function(t){var s=g("tab-"+t);if(s)s.classList.toggle("hidden",t!==b.dataset.tab)});window.scrollTo(0,0)})});
-}catch(e){}})();
+function load(k){try{var v=localStorage.getItem(k);return v?JSON.parse(v):null}catch(e){return null}}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+function hashPw(pw,salt){function fb(s){var h1=0xdeadbeef,h2=0x41c6ce57;for(var i=0;i<s.length;i++){var ch=s.charCodeAt(i);h1=Math.imul(h1^ch,2654435761);h2=Math.imul(h2^ch,1597334677)}h1=Math.imul(h1^(h1>>>16),2246822507)^Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507)^Math.imul(h1^(h1>>>13),3266489909);return(4294967296*(2097151&h2)+(h1>>>0)).toString(16)}
+  if(window.crypto&&crypto.subtle){return crypto.subtle.digest("SHA-256",new TextEncoder().encode(salt+"::"+pw)).then(function(b){return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,"0")}).join("")})}return Promise.resolve("fb-"+fb(salt+"::"+pw))}
+function users(){return load("oe_users")||{}} function setUsers(u){save("oe_users",u)}
+var profile="patient",sessionUser=load("oe_session")||null,state={emotion:null,need:null,treatment:load("oe_treat")==="1",track:"breath"};
+var EMO=["Anxious","Afraid","Sad","Tired","Lonely","Uncomfortable","Calm","Hopeful","Confused","Overwhelmed","Happy","I'm not sure"];
+var POST=["Comfortable","Tired","Worried","Uncomfortable","Emotional","Relieved","Unsure"];
+var FB=["Yes","A little","Not really","No"];
+var REC={Anxious:"relax",Afraid:"encourage",Sad:"encourage",Tired:"relax",Lonely:"connect",Uncomfortable:"explore",Calm:"explore",Hopeful:"encourage",Confused:"learn",Overwhelmed:"relax",Happy:"support","I'm not sure":"explore"};
+var TOPICS=[["What is cancer?",2,"Cells growing where they shouldn't. There are many types and stages — only your own care team can explain yours."],["What happens during chemotherapy?",2,"Treatment medicines travel in the blood. A session can last hours: check in, settle, drip, rest, go home. Tiredness and nausea are commonly expected — teams plan for this."],["Common side effects",2,"Tiredness, nausea, appetite change, hair loss and mouth sores are common. Call your team promptly for: fever, heavy bleeding, severe vomiting or diarrhoea, chest pain, trouble breathing, or confusion."],["Medication safety",2,"Take every medicine exactly as labelled. Keep one list of ALL medicines and herbs, and ask your pharmacist before adding anything. Never change treatment doses yourself."],["When to seek care",1,"Same-day care: fever of 38°C or more, uncontrollable vomiting, severe pain, bleeding, breathing trouble, sudden swelling, or confusion. When unsure — call and ask."],["Questions to ask your team",1,"How long is today? What should I report? Who do I call afterwards? What food and drink today? When is the next visit?"]];
+var TRACKS={breath:{n:"Calm breathing • 3 min",steps:["Breathe in for 4…","Hold for 2…","Breathe out for 4…","Soften your shoulders…"],loop:6},ground:{n:"Grounding • 5 min",steps:["Name 5 things you see…","Name 4 you can touch…","Name 3 you hear…","Name 2 you smell…","Take 1 slow breath…"],loop:5},body:{n:"Body rest • 7 min",steps:["Let your feet soften…","Let your legs feel heavy…","Loosen your belly…","Open your hands…","Unclench your face…","Let your whole body rest…"],loop:5},sleep:{n:"Sleep preparation • 8 min",steps:["Dim the light, lie back…","Slow breath in…","Long breath out…","Let thoughts drift past…","Darker… quieter…"],loop:6},kind:{n:"Encouragement • 2 min",steps:["You showed up today.","Rest is allowed.","One moment at a time.","You are not alone here."],loop:2}};
+var WORLDS={coast:{e:"🌊",n:"Nigerian Coastal Calm",p:"Waves and breeze — a familiar, restful feeling.",g:"linear-gradient(160deg,#0B7A3E,#063F22)"},garden:{e:"🌿",n:"Tropical Garden",p:"Shade and birdsong — slow down and breathe.",g:"linear-gradient(160deg,#14905A,#0B7A3E)"},sunset:{e:"🌅",n:"Evening Garden Light",p:"Warm calm light — let today soften for a while.",g:"linear-gradient(160deg,#2E9E6B,#063F22)"},fantasy:{e:"✨",n:"Still-Water Grove",p:"Quiet green stillness — a safe, gentle place.",g:"linear-gradient(160deg,#063F22,#14905A)"}};
+var GUIDES={"Understanding them":"They may feel anxious, tired or quiet — this is not rejection. Simply being there matters more than perfect words.","Communicating with care":"Ask ‘what would help today?’ Listen more than you fix. Avoid promising outcomes.","Supporting treatment":"Help with transport, meals and waiting together. Let them switch activities whenever they wish.","Emotional wellbeing":"Encourage rest and honest feelings. Your own calm steadies theirs.","Medicines and visits":"Keep one shared medicine list, the appointment dates and questions for the team together.","When to seek help":"Fever, severe vomiting, bleeding, chest pain, breathing trouble or confusion need same-day care.","Looking after yourself":"You matter too. Rest, eat, and ask others to share the load."};
+var MILES=["🌅 Started the day gently","💧 Drank water","🚶 Rested or took a short walk","📞 Connected with a loved one","📖 Learned one new thing","😴 Rested early"];
+var SYMP=[["No symptoms",0],["Nausea",1],["Tiredness",1],["Loss of appetite",1],["Pain",2],["Vomiting",2],["Diarrhoea",2],["Fever (38°C+)",3],["Chest pain",3],["Trouble breathing",3],["Bleeding",3],["Confusion",3]];
+var UPDATES=["Keep one updated medicine list — show it at every visit.","During treatment weeks, hand-washing and clean water matter even more.","Small, frequent meals help when appetite is low — ask your team.","Save your clinic and pharmacist numbers in your phone today."];
+var REDFLAGS=["chest pain","trouble breathing","heavy bleeding","fever","vomit blood","confusion","suicid","kill myself","emergency"];
+function paintChips(el,items){if(!el)return;el.innerHTML="";items.forEach(function(it){var b=document.createElement("button");b.type="button";b.className="chip"+(it.on?" on":"");b.textContent=it.t;b.setAttribute("data-chip",it.g);b.setAttribute("data-v",it.v);el.appendChild(b)})}
+function chipsSimple(el,arr,group){paintChips(el,arr.map(function(a){return{t:a,g:group,v:a}}))}
+function refreshAll(){
+  chipsSimple($("emotions"),EMO,"emo");chipsSimple($("postEmo"),POST,"post");chipsSimple($("feedback"),FB,"fb");
+  paintChips($("topics"),TOPICS.map(function(t){return{t:t[0],g:"topic",v:t[0]}}));
+  chipsSimple($("miles"),MILES,"mile");paintChips($("symp"),SYMP.map(function(s){return{t:s[0],g:"symp",v:s[0]}}));
+  chipsSimple($("journey"),["🌱 Diagnosis","💙 Preparing","💊 Treatment","🌿 Recovery","🏠 Home","🌻 Follow-up"],"journey");
+  chipsSimple($("afterChips"),["Comfortable","Tired","Worried","Uncomfortable","Emotional","Relieved","Unsure"],"after");
+  chipsSimple($("prepQ"),["How long today?","What to report?","Who to call after?","Food and drink?","Next visit?"],"prepQ");
+  paintChips($("cgGuides"),Object.keys(GUIDES).map(function(g){return{t:g,g:"cg",v:g}}));
+  chipsSimple($("chatQuick"),["How do I relax?","What is chemo?","Medicine safety"],"cq");
+  paintMeds();paintAdh();paintJourneyLine();paintAcct();sugFav();
+  if(state.treatment)$("treatBtn").textContent="💊 Treatment: ON";
+}
+function paintAcct(){var n=sessionUser?sessionUser.name:"";var r=sessionUser?sessionUser.role:"";$("acctLine").textContent=n?("Signed in as "+n+" ("+r+") on this phone"):"";
+  var cg=$("caregiverCard");if(cg)cg.classList.toggle("hidden",!(sessionUser&&sessionUser.role==="caregiver"))}
+function sugFav(){var f=load("oe_fav")||{},el=$("favSug");if(!el)return;var names={coast:"Nigerian coast",garden:"garden",sunset:"evening light",fantasy:"grove"};
+  if(f.world){el.classList.remove("hidden");el.innerHTML="";var s=document.createElement("span");s.innerHTML="💚 You usually choose <b>"+esc(names[f.world]||f.world)+"</b>. ";var b=document.createElement("button");b.type="button";b.className="chip";b.textContent="Revisit →";b.setAttribute("data-act","world");b.setAttribute("data-w",f.world);el.appendChild(s);el.appendChild(b)}else el.classList.add("hidden")}
+function showTab(t){["home","explore","treatment","care","learn","support"].forEach(function(x){var s=$("tab-"+x);if(s)s.classList.toggle("hidden",x!==t)});document.querySelectorAll("[data-act='tab']").forEach(function(b){b.classList.toggle("on",b.getAttribute("data-to")===t)});var names={home:"Home",explore:"Explore",treatment:"Treatment",care:"My Care",learn:"Learn",support:"Support"};$("modePill").textContent=names[t]||t;window.scrollTo(0,0)}
+function openExp(n,fromTreat){state.need=n;$("expCard").classList.remove("hidden");$("outCard").classList.add("hidden");showTab("home");
+  var titles={relax:"A moment to relax",distract:"A gentle distraction",encourage:"Words for you"};$("expTitle").textContent=(titles[n]||"Your experience")+((state.treatment||fromTreat)?" • during treatment":"");
+  var B=$("expBody");
+  if(n==="relax"){B.innerHTML="";var c=document.createElement("div");c.className="chips";c.id="tracks";B.appendChild(c);
+    paintChips(c,Object.keys(TRACKS).map(function(k){return{t:TRACKS[k].n,g:"track",v:k}}));
+    var br=document.createElement("div");br.className="breath";br.id="br";br.textContent="●";B.appendChild(br);
+    var p=document.createElement("p");p.style.textAlign="center";p.id="brt";p.textContent="Choose a track above, then press Start.";B.appendChild(p);
+    var go=document.createElement("button");go.type="button";go.className="btn b-green";go.textContent="Start";go.setAttribute("data-act","track-start");B.appendChild(go)}
+  if(n==="distract"){B.innerHTML="<div class='card'><b>The River Remembers</b><p>Boats glide home at sunset. Cooking fires glow along the bank, drums low in the distance. You are safe here — nowhere else to be.</p><p class='muted'>A quiet game: silently count five green things around you, then take four slow breaths.</p></div>";
+    var d=document.createElement("button");d.type="button";d.className="btn b-green";d.textContent="Finished →";d.setAttribute("data-act","exp-done");B.appendChild(d)}
+  if(n==="encourage"){B.innerHTML="<div class='card' style='font-size:18px'><b>You did something hard today — and you showed up.</b><p id='kindLine'>Rest is allowed.</p><p class='muted'>Honest hope: no promises, just company for the road.</p></div>";
+    var k2=document.createElement("button");k2.type="button";k2.className="btn b-green";k2.textContent="Another kind line →";k2.setAttribute("data-act","kind-next");B.appendChild(k2)}
+  $("expCard").scrollIntoView()}
+var kindIdx=0;
+var Sess={key:null,total:300,left:300,timer:null,playing:false,audioOn:false,ctx:null,nodes:[],card:false,
+  start:function(k){this.stop();this.key=k;var L=$("sessLen");this.total=L?parseInt(L.value||"300"):300;this.left=this.total;this.playing=true;this.card=false;save("oe_session",{w:k,at:Date.now()});this.paint();$("sess").classList.remove("hidden");this.tick();if(this.audioOn)this.audio(1)},
+  paint:function(){var w=WORLDS[this.key];if(!w)return;var v=$("sessView");v.classList.remove("cardboard");v.style.background=w.g;v.innerHTML='<div id="sessInner"><div style="font-size:44px">'+w.e+'</div><h2 style="margin:8px 0">'+esc(w.n)+'</h2><p style="opacity:.95">'+esc(w.p)+'</p><div class="prog"><i id="sessBar"></i></div><p id="sessTime" style="font-weight:800"></p><p style="opacity:.9">Pause, switch places, or rest anytime — you are in control.</p></div>'},
+  tick:function(){var self=this;clearInterval(this.timer);this.timer=setInterval(function(){if(!self.playing)return;self.left--;var done=self.total-self.left,bar=$("sessBar");if(bar)bar.style.width=(100*done/self.total)+"%";var m=Math.floor(self.left/60),s=("0"+self.left%60).slice(-2),t=$("sessTime");if(t)t.textContent=m+":"+s+" remaining";save("oe_session",{w:self.key,left:self.left,at:Date.now()});if(self.left<=0)self.done()},1000);$("sessPause").textContent="⏸ Pause"},
+  toggle:function(){this.playing=!this.playing;$("sessPause").textContent=this.playing?"⏸ Pause":"▶ Resume";if(!this.playing)this.audio(0);else if(this.audioOn)this.audio(1)},
+  swap:function(k){this.key=k;this.paint();var done=this.total-this.left,bar=$("sessBar");if(bar)bar.style.width=(100*done/this.total)+"%";save("oe_fav",{world:k});sugFav()},
+  stop:function(){clearInterval(this.timer);this.audio(0)},
+  exit:function(){this.playing=false;clearInterval(this.timer);this.audio(0);save("oe_session",{w:this.key,left:this.left,paused:true,at:Date.now()});$("sess").classList.add("hidden")},
+  done:function(){this.exit();save("oe_world_done",{w:this.key,at:Date.now()});showTab("home");$("outCard").classList.remove("hidden");$("title").textContent="Well done — how do you feel now?";$("outCard").scrollIntoView()},
+  audio:function(on){var self=this;if(!on){try{this.nodes.forEach(function(n){try{n.stop()}catch(e){}})}catch(e){}this.nodes=[];return}
+    try{var C=this.ctx||new (window.AudioContext||window.webkitAudioContext)();this.ctx=C;var o=C.createOscillator(),g=C.createGain(),l=C.createOscillator(),lg=C.createGain();o.type="sine";o.frequency.value=196;g.gain.value=0.035;l.frequency.value=0.12;lg.gain.value=0.018;l.connect(lg);lg.connect(g.gain);o.connect(g);g.connect(C.destination);o.start();l.start();this.nodes=[o,l]}catch(e){}}};
+function localReply(q){q=q.toLowerCase();
+  if(REDFLAGS.some(function(r){return q.indexOf(r)>=0})){$("helpModal").classList.remove("hidden");return "That sounds important — I've opened support options above. Please reach a person you trust right now. I'm staying here with you."}
+  if(q.indexOf("relax")>=0||q.indexOf("anx")>=0||q.indexOf("scared")>=0||q.indexOf("worried")>=0)return "Let's slow down together: breathe in for 4, out for 4, twice. Then visit Explore → Nigerian coast for 3 minutes. You are doing well by pausing.";
+  if(q.indexOf("chemo")>=0||q.indexOf("treatment")>=0)return "In general, sessions take hours: check in, settle back, drip, rest, then home. Tiredness and nausea are commonly expected. Only your own team can advise you — it helps to ask: how long today, what should I report, who do I call after?";
+  if(q.indexOf("medicine")>=0||q.indexOf("drug")>=0||q.indexOf("dose")>=0||q.indexOf("tablet")>=0)return "I can't advise on doses — please take medicines exactly as labelled and ask your pharmacist promptly about anything personal.";
+  if(q.indexOf("pay")>=0)return "Tap Pay securely below — you will complete payment on Flutterwave's protected page.";
+  if(q.indexOf("hello")>=0||q.indexOf("hi")>=0)return "Hello — I'm glad you're here. Tell me what's on your mind, or choose a button above.";
+  return "I hear you. I'm here with you. You could try a relaxation track, a peaceful place, or a short Learn topic. If anything worries you physically, please use Help now."}
+function chatAdd(w,t){var d=document.createElement("div");d.style.margin="6px 0";d.innerHTML="<b>"+w+":</b> "+t;var box=$("chatBox");box.appendChild(d);box.scrollTop=99999}
+function meds(){return load("oe_meds")||[]} function setMeds(m){save("oe_meds",m);paintMeds()}
+function paintMeds(){var box=$("medList");if(!box)return;var m=meds(),today=new Date().toDateString(),L=load("oe_adh")||{};box.innerHTML="";if(!m.length)box.innerHTML="<p class='muted'>No reminders yet — add your first above.</p>";
+  m.forEach(function(x,i){var row=document.createElement("div");row.style.cssText="display:flex;gap:8px;align-items:center;margin:6px 0";var taken=(L[today]||{})[i];
+    row.innerHTML="<input type='checkbox' data-medtick='"+i+"' style='width:26px;min-width:26px'"+(taken?" checked":"")+" aria-label='taken'/> <b>"+esc(x.n)+"</b> <span class='muted'>"+esc(x.t)+"</span> ";
+    var del=document.createElement("button");del.type="button";del.className="chip";del.textContent="✕";del.setAttribute("data-act","med-del");del.setAttribute("data-i",i);row.appendChild(del);box.appendChild(row)});paintAdh()}
+function paintAdh(){var m=meds(),L=load("oe_adh")||{},t=new Date().toDateString(),done=0;var td=L[t]||{};Object.keys(td).forEach(function(k){if(td[k])done++});
+  $("adhList").innerHTML="<p class='muted'>Today: "+done+" of "+m.length+" recorded • "+Object.keys(L).length+" day(s) on record.</p>";
+  $("adhMsg").textContent=m.length?"Wonderful — keeping this record helps your team care for you. Bring it to visits.":"Add a reminder above to begin your record."}
+function paintJourneyLine(){}
+var MR=null,mChunks=[];
+/* ---------- ONE delegated handler for every button ---------- */
+document.addEventListener("click",function(e){
+  var t=e.target.closest("[data-act],[data-chip]");if(!t)return;
+  if(t.hasAttribute("data-chip")){var g=t.getAttribute("data-chip"),v=t.getAttribute("data-v");
+    var sibs=t.parentElement.querySelectorAll("[data-chip='"+g+"']");for(var i=0;i<sibs.length;i++)sibs[i].classList.remove("on");t.classList.add("on");
+    chipPick(g,v,t);return}
+  var act=t.getAttribute("data-act"),to=t.getAttribute("data-to");
+  if(act==="tab"||act==="goto"){showTab(to);if(state.treatment&&to==="explore"){}return}
+  if(act==="treatment-toggle"){state.treatment=!state.treatment;save("oe_treat",state.treatment?"1":"0");t.textContent=state.treatment?"💊 Treatment: ON":"💊 Treatment: OFF";return}
+  if(act==="help-open"){$("helpModal").classList.remove("hidden");return}
+  if(act==="help-close"){$("helpModal").classList.add("hidden");return}
+  if(act==="help-pick"){var w=t.getAttribute("data-w");$("helpMsg").textContent="Please reach your "+w+" now. If it feels urgent, use emergency services. OncoEase cannot diagnose.";save("oe_help",{w:w,at:Date.now()});return}
+  if(act==="emo-continue"){$("needCard").scrollIntoView();return}
+  if(act==="experience"){openExp(t.getAttribute("data-n"),false);return}
+  if(act==="experience-t"){if(!state.treatment){state.treatment=true;save("oe_treat","1");$("treatBtn").textContent="💊 Treatment: ON"}openExp(t.getAttribute("data-n"),true);return}
+  if(act==="exp-done"){$("expCard").classList.add("hidden");$("outCard").classList.remove("hidden");$("title").textContent="How are you after that?";$("outCard").scrollIntoView();return}
+  if(act==="exp-back"){$("expCard").classList.add("hidden");window.scrollTo(0,0);return}
+  if(act==="track-start"){trackStart();return}
+  if(act==="kind-next"){kindIdx++;var T=TRACKS.kind;$("kindLine").textContent=T.steps[kindIdx%T.steps.length];return}
+  if(act==="world"){Sess.start(t.getAttribute("data-w"));var f=load("oe_fav")||{};f.world=t.getAttribute("data-w");save("oe_fav",f);sugFav();return}
+  if(act==="sess-pause"){Sess.toggle();return}
+  if(act==="sess-audio"){Sess.audioOn=!Sess.audioOn;t.textContent=Sess.audioOn?"🔊 Sound on":"🔇 Sound off";if(Sess.audioOn&&Sess.playing)Sess.audio(1);else Sess.audio(0);return}
+  if(act==="sess-card"){var v=$("sessView"),inner=$("sessInner");if(!v.classList.contains("cardboard")){var h=inner?inner.innerHTML:"";v.classList.add("cardboard");v.innerHTML='<div class="eye">'+h+'</div><div class="eye">'+h+'</div>';t.textContent="📱 Single view"}else{Sess.paint();t.textContent="🥽 Wide view"}return}
+  if(act==="sess-swap"){Sess.swap(t.getAttribute("data-w"));return}
+  if(act==="sess-done"){Sess.done();return}
+  if(act==="sess-exit"){Sess.exit();return}
+  if(act==="prep-toggle"){$("prepBody").classList.toggle("hidden");return}
+  if(act==="med-add"){var n=$("medName").value.trim(),tm=$("medTime").value||"--:--";if(!n){alert("Please type the medicine name exactly as labelled.");return}var m=meds();m.push({n:n,t:tm});setMeds(m);$("medName").value="";return}
+  if(act==="med-del"){var a=meds();a.splice(parseInt(t.getAttribute("data-i")),1);setMeds(a);return}
+  if(act==="note-save"){var fn=$("fam").value;save("oe_note",{n:fn,at:Date.now()});alert("Saved on this phone.");return}
+  if(act==="rec-start"){recStart();return}
+  if(act==="rec-stop"){recStop();return}
+  if(act==="chat-send"){chatSend();return}
+  if(act==="pay"){payNow();return}
+  if(act==="export"){exportCSV();return}
+  if(act==="logout"){save("oe_session",null);sessionUser=null;$("authModal").classList.remove("hidden");paintAcct();return}
+  if(act==="auth-login"){authDo(false);return}
+  if(act==="auth-signup"){authDo(true);return}
+});
+document.addEventListener("change",function(e){var t=e.target;if(t&&t.hasAttribute("data-medtick")){var i=t.getAttribute("data-medtick"),L=load("oe_adh")||{},today=new Date().toDateString();L[today]=L[today]||{};L[today][i]=t.checked;save("oe_adh",L);paintAdh()}});
+document.addEventListener("visibilitychange",function(){if(document.hidden&&Sess.playing){Sess.toggle()}});
+function chipPick(g,v,btn){
+  if(g==="emo"){state.emotion=v;save("oe_checkin",{e:v,at:Date.now()});$("emoMsg").textContent="Thank you — "+v+". I'm here with you.";var r=REC[v]||"explore";var R=$("rec");R.classList.remove("hidden");R.innerHTML="<b>A gentle suggestion:</b> try <b>"+r+"</b> — or choose anything you like. You decide.";var eg=document.querySelector("[data-act='emo-continue']");if(eg)eg.classList.remove("hidden");return}
+  if(g==="post"){save("oe_post",{e:v,at:Date.now()});return}
+  if(g==="fb"){save("oe_fb",{f:v,need:state.need,at:Date.now()});$("title").textContent="Thank you — what would you like next?";return}
+  if(g==="topic"){var T=null;for(var i=0;i<TOPICS.length;i++)if(TOPICS[i][0]===v)T=TOPICS[i];$("topicBody").innerHTML="<div class='rec'><b>"+esc(v)+"</b><p>"+esc(T?T[2]:"")+"</p><p class='muted'>About "+(T?T[1]:2)+" min • pharmacist-reviewed • general guidance only.</p></div>";return}
+  if(g==="track"){state.track=v;var names={};Object.keys(TRACKS).forEach(function(k){names[k]=1});$("brt").textContent=TRACKS[v].n+" — press Start.";return}
+  if(g==="mile"){var l=load("oe_miles")||[];l.push({x:v,at:Date.now()});save("oe_miles",l);var today=new Date().toDateString(),n=0;l.forEach(function(z){if(new Date(z.at).toDateString()===today)n++});$("mileMsg").textContent="Logged: "+v+" ("+n+" today). Small wins count.";return}
+  if(g==="symp"){var lvl=0;for(var j=0;j<SYMP.length;j++)if(SYMP[j][0]===v)lvl=SYMP[j][1];var L2=load("oe_symp")||[];L2.push({s:v,lvl:lvl,at:Date.now()});save("oe_symp",L2);
+    $("sympMsg").innerHTML=lvl>=3?"⚠️ <b>Please contact your nurse or doctor promptly — or use Help above.</b> This has been recorded.":"Recorded: "+esc(v)+"."+(lvl===2?" If it becomes severe, please contact your team today.":"");
+    if(lvl>=3)$("helpModal").classList.remove("hidden");return}
+  if(g==="journey"){save("oe_journey",{j:v,at:Date.now()});return}
+  if(g==="after"){var M={Comfortable:"Lovely — a short peaceful moment or gentle rest.",Tired:"Rest now — the sleep preparation track may help.",Worried:"Try encouragement and understanding — then speak with your team.",Uncomfortable:"Pause and breathe — please tell your team what hurts.",Emotional:"That is completely allowed — encouragement and connection may help.",Relieved:"Carry this ease with you — note what helped.",Unsure:"Begin with a short 3-minute coastal visit."};$("afterMsg").textContent=M[v]+" If anything worries you, contact your team promptly.";save("oe_after",{a:v,at:Date.now()});return}
+  if(g==="prepQ"){var q=load("oe_prepq")||[];q.push(v);save("oe_prepq",q);btn.textContent="✓ "+v;return}
+  if(g==="cg"){var G=GUIDES[v];$("cgBody").classList.remove("hidden");$("cgBody").innerHTML="<b>"+esc(v)+"</b><p>"+esc(G)+"</p>";return}
+  if(g==="cq"){$("chatIn").value=v==="How do I relax?"?"How do I relax before treatment?":(v==="What is chemo?"?"What happens during chemotherapy?":"Is my medicine safe?");chatSend();return}
+}
+var trackTimer=null;
+function trackStart(){var T=TRACKS[state.track||"breath"];var i=0,r=0;clearInterval(trackTimer);trackTimer=setInterval(function(){var br=$("br"),bt=$("brt");if(!br||!bt){clearInterval(trackTimer);return}bt.textContent=T.steps[i%T.steps.length]+" ("+T.n+")";br.style.transform=i%2===0?"scale(1.5)":"scale(1)";i++;if(i%T.steps.length===0)r++;if(r>=T.loop){clearInterval(trackTimer);bt.textContent="Well done — "+T.n+" complete.";save("oe_relax",{t:state.track,at:Date.now()})}},2500)}
+function recStart(){var b=$("recBtn");if(!navigator.mediaDevices||!window.MediaRecorder){alert("Voice recording isn't available here — please use a written note.");return}
+  navigator.mediaDevices.getUserMedia({audio:true}).then(function(s){MR=new MediaRecorder(s);mChunks=[];MR.ondataavailable=function(ev){mChunks.push(ev.data)};MR.onstop=function(){var blob=new Blob(mChunks,{type:"audio/webm"}),u=URL.createObjectURL(blob),a=document.createElement("audio");a.controls=true;a.src=u;$("voiceList").appendChild(a);var l=load("oe_voices")||[];l.push({at:Date.now()});save("oe_voices",l)};MR.start();if(b)b.textContent="● Recording…"}).catch(function(){alert("Microphone is blocked — please use a written note instead.")})}
+function recStop(){if(MR&&MR.state!=="inactive"){MR.stop();var b=$("recBtn");if(b)b.textContent="● Record"}}
+function chatSend(){var inp=$("chatIn"),q=inp.value.trim();if(!q)return;chatAdd("You",esc(q));inp.value="";chatAdd("OncoEase",localReply(q)+"<br><span class='muted'>General information only — your care team advises on your own case.</span>")}
+function payNow(){var amt=parseInt(($("payAmt").value||"0")),email=$("payEmail").value.trim(),msg=$("payMsg");
+  if(!amt||amt<100){msg.textContent="Please enter at least ₦100.";return}if(!email||email.indexOf("@")<0){msg.textContent="Please enter your email for the receipt.";return}
+  if(typeof FlutterwaveCheckout!=="function"){msg.textContent="Payment service is still loading — please check your connection and try again.";return}
+  msg.textContent="Opening secure payment…";
+  FlutterwaveCheckout({public_key:FLW_PUBLIC_KEY,tx_ref:"OE-"+Date.now(),amount:amt,currency:"NGN",payment_options:"card,banktransfer,ussd,mobilemoney",customer:{email:email},customizations:{title:"OncoEase Support",description:"Supporting patients and families"},callback:function(){msg.textContent="Thank you so much — your receipt will arrive by email.";save("oe_pay",{amt:amt,at:Date.now()})},onclose:function(){}})}
+function exportCSV(){var rows=[["type","detail","date"]];["oe_checkin","oe_post","oe_fb","oe_world_done","oe_after","oe_journey","oe_relax","oe_meds","oe_adh","oe_symp","oe_miles"].forEach(function(k){var v=load(k);if(v)rows.push([k,JSON.stringify(v).slice(0,300),new Date().toISOString()])});
+  var csv=rows.map(function(r){return r.map(function(c){return '"'+String(c).replace(/"/g,'""')+'"'}).join(",")}).join("\n");var b=new Blob([csv],{type:"text/csv"}),u=URL.createObjectURL(b),a=document.createElement("a");a.href=u;a.download="oncoease-my-records.csv";a.click();save("oe_export",{at:Date.now()})}
+var _arole="patient";
+$("aPatient").onclick=function(){_arole="patient";$("aPatient").classList.add("on");$("aCare").classList.remove("on")};
+$("aCare").onclick=function(){_arole="caregiver";$("aCare").classList.add("on");$("aPatient").classList.remove("on")};
+function authDo(isSignup){var u=$("aUser").value.trim().toLowerCase(),p=$("aPass").value,msg=$("authMsg");
+  if(!u||!p){msg.textContent="Please enter both a username and a password.";return}
+  if(!$("aConsent").checked){msg.textContent="Please tick the understanding box to continue.";return}
+  var U=users();
+  hashPw(p,u).then(function(h){
+    if(isSignup){if(U[u]){msg.textContent="That username is taken on this phone — try another, or log in.";return}
+      U[u]={h:h,role:_arole,at:Date.now()};setUsers(U);sessionUser={name:u,role:_arole};save("oe_session",sessionUser);save("cc_profile",_arole);profile=_arole;$("authModal").classList.add("hidden");paintAcct();showTab("home")}
+    else{if(!U[u]){msg.textContent="No account with that username on this phone — please create one.";return}
+      if(U[u].h!==h){msg.textContent="Wrong password — please try again.";return}
+      sessionUser={name:u,role:U[u].role};save("oe_session",sessionUser);save("cc_profile",U[u].role);profile=U[u].role;$("authModal").classList.add("hidden");paintAcct();showTab("home")}}
+  )}
+$("chatIn").addEventListener("keydown",function(e){if(e.key==="Enter")chatSend()});
+document.addEventListener("visibilitychange",function(){if(document.hidden&&Sess.playing)Sess.toggle()});
+/* init */
+(function(){paintChips($("updates"),[]);$("updates").innerHTML=UPDATES.map(function(u){return "<p>• "+esc(u)+"</p>"}).join("")+"<p class='muted'>Pharmacist-reviewed • general guidance only.</p>";
+  refreshAll();
+  if(sessionUser){$("authModal").classList.add("hidden")}paintAcct();showTab("home")})();
 </script>
 </body>
 </html>
