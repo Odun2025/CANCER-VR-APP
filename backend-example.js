@@ -29,7 +29,7 @@ app.post("/api/pay", async (req, res) => {
       headers: { Authorization: "Bearer " + FLW_SECRET, "Content-Type": "application/json" },
       body: JSON.stringify({
         tx_ref: txRef, amount, currency,
-        redirect_url: process.env.PAY_REDIRECT_URL || "https://odun2025.github.io/CANCER-VR-APP/cancercompass-app.html",
+        redirect_url: process.env.PAY_REDIRECT_URL || "https://odun2025.github.io/ONCOEASE-APP/cancercompass-app.html",
         customer: { email },
         customizations: { title: "OncoEase Support", description: "Purpose: " + purpose },
       }),
