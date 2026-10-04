@@ -54,7 +54,12 @@
     <div class="brand">🧭 OncoEase <span class="pill" id="modePill">Home</span></div>
     <h1 id="title">How are you feeling today?</h1>
     <p>I'm here with you. You decide — stop or change anytime. General info only, not medical advice.</p>
-    <div class="row" style="margin-top:12px">
+    <div class="row" style="margin-top:8px">
+      <button class="chip" id="profPatient" style="flex:1">🧍 Patient</button>
+      <button class="chip" id="profCare" style="flex:1">👪 Caregiver</button>
+    </div>
+    <div class="rec hidden" id="favSug" style="background:#fff"></div>
+    <div class="row" style="margin-top:8px">
       <button class="btn b-ghost" id="treatBtn" style="min-height:48px;font-size:14px;background:#fff">💊 Treatment: OFF</button>
       <button class="btn b-help" id="helpBtn" style="min-height:48px;font-size:14px">❤️ Help</button>
     </div>
@@ -154,11 +159,19 @@
 
     <!-- SUPPORT -->
     <section id="tab-support" class="hidden">
+      <div class="card hidden" id="caregiverCard"><span class="tag">Caregiver path • separate space</span>
+        <p><b>How can I support them?</b> Patient controls sharing — toggle below to allow viewing their favourites only (never check-ins) on this phone.</p>
+        <div class="chips" id="cgGuides"></div><div id="cgBody" class="rec hidden"></div>
+        <label class="muted"><input type="checkbox" id="shareFav" style="width:22px"/> Share my favourites with caregiver on this phone</label>
+      </div>
       <div class="card"><span class="tag">Support • Connect</span>
         <p>💙 “You showed up for something hard today.”</p>
         <p>💙 “Rest is allowed. We’ll handle home.” — Caregiver</p>
         <label class="muted">Family note (stays on this phone)</label><input id="fam" placeholder="e.g. Call mama after treatment"/>
         <button class="btn b-ghost" id="saveNote">Save note locally</button>
+        <label class="muted">Voice note (recorded on this phone only)</label>
+        <div class="row"><button class="btn b-blue" id="recBtn">● Record</button><button class="btn b-ghost" id="recStop">■ Stop</button></div>
+        <div id="voiceList"></div>
       </div>
       <div class="card"><span class="tag">Chat support (AI • general info only)</span>
         <p class="muted">Compassionate assistant for comfort + simple explanations. Not a doctor — never diagnosis or dose advice. Red-flag words open Help.</p>
@@ -177,7 +190,10 @@
       </div>
     </section>
 
-    <div class="card muted">📱 Green + White brand • My Care added • Saves on this browser only. <button id="wipe">Wipe local data</button> <span id="resume"></span></div>
+    <div class="card muted">📱 Green + White • Phases 1–6 • Saves on this browser only.
+      <div class="row"><button class="chip" id="comfortBtn">🌙 Reduce motion: off</button><button class="chip" id="textBtn">🔠 Large text: off</button></div>
+      <div class="row"><button class="btn b-ghost" id="csvBtn">⬇ Export my data (CSV)</button><button class="btn b-ghost" id="wipe">Wipe local data</button></div>
+      <span id="resume"></span> <span id="consentState"></span></div>
   </div>
 
   <nav class="nav">
@@ -204,6 +220,12 @@
     <button class="btn b-warm" data-swap="fantasy">✨ Lake</button>
   </div>
   <div class="sess-ctrl"><button class="btn b-teal" id="sessDone">Done → check out</button><button class="btn b-ghost" id="sessExit">Exit (keep time)</button></div>
+</div></div>
+
+<div id="consentModal" class="help-modal"><div class="help-box">
+  <h3 style="margin-top:0">Welcome to OncoEase 💚</h3>
+  <p class="muted">A companion, not a doctor. General info only. Your data stays on this phone. You can wipe it anytime. Concerning symptoms? Always contact your care team promptly.</p>
+  <button class="btn b-teal" id="consentYes">I understand → continue</button>
 </div></div>
 
 <div id="helpModal" class="help-modal hidden"><div class="help-box">
@@ -308,6 +330,29 @@ $("updates").innerHTML=["💊 Med Crescent: keep one updated medicine list — s
 paintMeds();
 // Fix: story finish now completes to checkout (was dead)
 document.addEventListener("click",e=>{if(e.target&&e.target.id==="storyDone"){save("cc_story",{done:true,at:Date.now()});$("expCard").classList.add("hidden");$("outCard").classList.remove("hidden");$("title").textContent="Nice — how do you feel now?";renderHist()}});
+// Phase 5: profiles, caregiver guides, voice notes, favourites (all local)
+let profile=load("cc_profile")||"patient";
+function paintProfile(){const p=profile==="caregiver";$("profPatient").classList.toggle("on",!p);$("profCare").classList.toggle("on",p);$("caregiverCard").classList.toggle("hidden",!p);$("title").textContent=p?"How can you support them today?":"How are you feeling today?"}
+$("profPatient").onclick=()=>{profile="patient";save("cc_profile",profile);paintProfile()};
+$("profCare").onclick=()=>{profile="caregiver";save("cc_profile",profile);paintProfile();document.querySelector('[data-tab="support"]').click()};
+const GUIDES={"Understanding them":"They may feel anxious, tired, or quiet — not rejection. Presence matters more than perfect words.","Communicating":"Ask ‘what helps today?’ Listen more than fix. Avoid outcome promises.","Supporting treatment":"Help with rides, meals, waiting company. Let them switch experiences anytime.","Emotional wellbeing":"Encourage rest + expression. Your calm helps theirs.","Medicines & visits":"Keep one medicine list, appointment dates, and questions together.","When to seek help":"Fever, severe vomiting, bleeding, chest pain, breathing trouble, confusion — same-day care.","Looking after you":"You matter too. Rest, eat, ask others for relief shifts."};
+chips($("cgGuides"),Object.keys(GUIDES),g=>{$("cgBody").classList.remove("hidden");$("cgBody").innerHTML="<b>"+g+"</b><p>"+GUIDES[g]+"</p>"});
+$("shareFav").checked=!!load("cc_sharefav");$("shareFav").onchange=e=>save("cc_sharefav",e.target.checked);
+// voice notes on-device (MediaRecorder; playback this session, names saved locally)
+let MR=null,chunks=[];$("recBtn").onclick=async()=>{try{const s=await navigator.mediaDevices.getUserMedia({audio:true});MR=new MediaRecorder(s);chunks=[];MR.ondataavailable=e=>chunks.push(e.data);MR.onstop=()=>{const b=new Blob(chunks,{type:"audio/webm"}),u=URL.createObjectURL(b),a=document.createElement("audio");a.controls=true;a.src=u;$("voiceList").appendChild(a);const l=load("cc_voices")||[];l.push({at:Date.now()});save("cc_voices",l)};MR.start();$("recBtn").textContent="● Recording…"}catch(e){alert("Microphone blocked — use text notes instead.")}};$("recStop").onclick=()=>{if(MR&&MR.state!=="inactive"){MR.stop();$("recBtn").textContent="● Record"}};
+// favourites + suggestion
+function fav(){return load("cc_fav")||{}} function setFav(f){save("cc_fav",f);sug()}
+document.addEventListener("click",e=>{const w=e.target.closest("[data-world]");if(w){const f=fav();f.world=w.dataset.world;setFav(f)}const s=e.target.closest("[data-swap]");if(s){const f=fav();f.world=s.dataset.swap;setFav(f)}});
+function sug(){const f=fav(),el=$("favSug");const worlds={coast:"Nigerian coast",garden:"garden",sunset:"sunset light",fantasy:"grove"};if(f.world){el.classList.remove("hidden");el.innerHTML="💚 You usually choose <b>"+(worlds[f.world]||f.world)+"</b>. <button class='chip' id='favGo'>Revisit →</button>";const g=$("favGo");if(g)g.onclick=()=>Sess.start(f.world)}else el.classList.add("hidden")}
+sug();paintProfile();
+// Phase 6: consent, comfort, export (local only)
+if(load("cc_consent"))$("consentModal").classList.add("hidden");
+$("consentYes").onclick=()=>{save("cc_consent",{at:Date.now(),v:1});$("consentModal").classList.add("hidden");paintConsent()};
+function paintConsent(){$("consentState").textContent=load("cc_consent")?" • Consent: given on this phone":""}
+paintConsent();
+let reduceMotion=load("cc_rm")==="1";function paintRM(){document.querySelectorAll(".breath").forEach(b=>b.style.transition=reduceMotion?"none":"transform 1s");$("comfortBtn").textContent=reduceMotion?"🌙 Reduce motion: on":"🌙 Reduce motion: off"};$("comfortBtn").onclick=()=>{reduceMotion=!reduceMotion;save("cc_rm",reduceMotion?"1":"0");paintRM()};paintRM();
+let bigText=load("cc_big")==="1";function paintBig(){document.body.style.fontSize=bigText?"18px":"16px";$("textBtn").textContent=bigText?"🔠 Large text: on":"🔠 Large text: off"};$("textBtn").onclick=()=>{bigText=!bigText;save("cc_big",bigText?"1":"0");paintBig()};paintBig();
+$("csvBtn").onclick=()=>{const rows=[["type","detail","at"]];["cc_checkin","cc_post","cc_fb","cc_world","cc_after","cc_journey","cc_relax","cc_meds","cc_adh","cc_symp","cc_miles"].forEach(k=>{const v=load(k);if(v)rows.push([k,JSON.stringify(v).slice(0,300),new Date().toISOString()])});const csv=rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(",")).join("\n");const b=new Blob([csv],{type:"text/csv"}),u=URL.createObjectURL(b),a=document.createElement("a");a.href=u;a.download="oncoease-my-data.csv";a.click();save("cc_export",{at:Date.now()})};
 function renderHist(){const h=[load("cc_checkin"),load("cc_fb"),load("cc_world"),load("cc_after"),load("cc_journey"),load("cc_relax"),load("cc_adh"),load("cc_symp")].filter(Boolean);$("history").textContent=h.length?("Local: "+JSON.stringify(h).slice(0,220)+"…"):"No local history yet.";const w=load("cc_world");if(w)$("resume").textContent="Last world: "+(w.w||"—")+" — resume in Explore."}
 renderHist();
 </script>
