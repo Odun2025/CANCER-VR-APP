@@ -68,9 +68,19 @@
   <div class="body">
     <!-- HOME / PHASE 1 -->
     <section id="tab-home">
-      <div class="card"><span class="tag">Phase 1 • Step 1 — Check in</span>
+      <div class="card" id="welcomeCard"><span class="tag">Welcome • Sign in on this phone (no password)</span>
+        <h3 style="margin:6px 0">Welcome to OncoEase 💚</h3>
+        <p class="muted">No account needed — your name stays on this phone only. This is your sign-in.</p>
+        <label class="muted">Your name</label><input id="userName" placeholder="e.g. Ada"/>
+        <label class="muted">I am a…</label>
+        <div class="row"><button class="chip on" id="wPatient" style="flex:1">🧍 Patient</button><button class="chip" id="wCare" style="flex:1">👪 Caregiver</button></div>
+        <button class="btn b-teal" id="welcomeGo">Continue →</button>
+        <p class="muted" id="welcomeMsg"></p>
+      </div>
+      <div class="card"><span class="tag">Step 1 — Check in</span>
         <div class="chips" id="emotions"></div>
         <div class="muted" id="emoMsg">No wrong answer. Pick one, or I'm not sure.</div>
+        <button class="btn b-teal hidden" id="emoGo">Continue →</button>
       </div>
       <div class="card" id="needCard"><span class="tag">Phase 1 • Step 2 — What do you need?</span>
         <div class="rec hidden" id="rec"></div>
@@ -246,19 +256,26 @@ const topics={"What is cancer? (2 min • pharmacist-reviewed)":"Cells growing w
 let state={emotion:null,need:null,treatment:localStorage.getItem("cc_treat")==="1"};
 function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
 function load(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}}
-function chips(el,arr,cb){el.innerHTML="";arr.forEach(a=>{const b=document.createElement("button");b.className="chip";b.type="button";b.textContent=a;b.onclick=()=>{[...el.children].forEach(c=>c.classList.remove("on"));b.classList.add("on");cb(a)};el.appendChild(b)})}
+function chips(el,arr,cb){el.innerHTML="";arr.forEach(a=>{const b=document.createElement("button");b.className="chip";b.type="button";b.textContent=a;b.onclick=()=>{[...el.children].forEach(c=>c.classList.remove("on"));b.classList.add("on");cb(a,b)};el.appendChild(b)})}
 // nav — every button works
 document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{document.querySelectorAll("[data-tab]").forEach(x=>x.classList.remove("on"));b.classList.add("on");["home","explore","treatment","care","learn","support"].forEach(t=>$("tab-"+t).classList.toggle("hidden",t!==b.dataset.tab));$("modePill").textContent=b.textContent.trim();window.scrollTo(0,0)});
 document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>document.querySelector(`[data-tab="${b.dataset.go}"]`).click());
+// Welcome = sign-in (local profile, no password — by design for offline hospital use)
+let welcomeRole="patient";
+$("wPatient").onclick=()=>{welcomeRole="patient";$("wPatient").classList.add("on");$("wCare").classList.remove("on")};
+$("wCare").onclick=()=>{welcomeRole="caregiver";$("wCare").classList.add("on");$("wPatient").classList.remove("on")};
+$("welcomeGo").onclick=()=>{const n=$("userName").value.trim();if(!n){$("welcomeMsg").textContent="Please type your name to continue.";return}profile=welcomeRole;save("cc_profile",profile);save("cc_name",{n,at:Date.now()});paintProfile();$("welcomeMsg").textContent="Welcome, "+n+" — signed in on this phone as "+profile+".";$("needCard").scrollIntoView({behavior:"smooth"})};
+(function(){const nm=load("cc_name");if(nm&&nm.n){$("userName").value=nm.n;$("welcomeMsg").textContent="Signed in as "+nm.n+" ("+(load("cc_profile")||"patient")+"). Tap Continue to go on."}})();
 // check-in
-chips($("emotions"),emotions,e=>{state.emotion=e;save("cc_checkin",{e,at:Date.now()});$("emoMsg").textContent="Thank you — "+e+". I'm here with you.";const m={Anxious:"relax",Afraid:"encourage",Sad:"encourage",Tired:"relax",Lonely:"connect",Uncomfortable:"explore",Calm:"explore",Hopeful:"encourage",Confused:"learn",Overwhelmed:"relax",Happy:"support","I'm not sure":"explore"};const r=m[e];$("rec").classList.remove("hidden");$("rec").innerHTML="<b>Suggestion for "+e+":</b> try <b>"+r+"</b> — or choose anything. You decide.";$("needCard").scrollIntoView({behavior:"smooth"})});
+chips($("emotions"),emotions,e=>{state.emotion=e;save("cc_checkin",{e,at:Date.now()});$("emoMsg").textContent="Thank you — "+e+". I'm here with you.";const m={Anxious:"relax",Afraid:"encourage",Sad:"encourage",Tired:"relax",Lonely:"connect",Uncomfortable:"explore",Calm:"explore",Hopeful:"encourage",Confused:"learn",Overwhelmed:"relax",Happy:"support","I'm not sure":"explore"};const r=m[e];$("rec").classList.remove("hidden");$("rec").innerHTML="<b>Suggestion for "+e+":</b> try <b>"+r+"</b> — or choose anything. You decide.";$("emoGo").classList.remove("hidden")});
+$("emoGo").onclick=()=>{$("needCard").scrollIntoView({behavior:"smooth"})};>
 chips($("postEmo"),post,e=>save("cc_post",{e,at:Date.now()}));
 chips($("feedback"),fb,f=>{save("cc_fb",{f,need:state.need,at:Date.now()});renderHist();$("title").textContent="Thank you. What next?"});
 chips($("topics"),Object.keys(topics),t=>{$("topicBody").innerHTML="<div class='rec'><b>"+t+"</b><p>"+topics[t]+"</p><p class='muted'>General education only — ask your team about you.</p></div>"});
 // Phase 3 library (PRD F4+F6): 5 guided tracks, local step timers, no audio files needed
 const TRACKS={breath:{n:"Breathing • 3 min",steps:["Breathe in 4…","Hold 2…","Breathe out 4…","Soften shoulders…"],loop:6},ground:{n:"Grounding • 5 min",steps:["Name 5 things you see…","Name 4 you can touch…","Name 3 you hear…","Name 2 you smell…","Name 1 slow breath…"],loop:5},body:{n:"Body relaxation • 7 min",steps:["Feet soften…","Legs heavy…","Belly loose…","Hands open…","Face unclench…","Whole body rest…"],loop:5},sleep:{n:"Sleep preparation • 8 min",steps:["Dim light, lie back…","Slow breath in…","Long breath out…","Let thoughts pass…","Darker, quieter…"],loop:6},kind:{n:"Encouragement • 2 min",steps:["You showed up today.","Rest is allowed.","One moment at a time.","You are not alone here."],loop:2}};
 function openExp(n,fromTreat){state.need=n;$("expCard").classList.remove("hidden");$("outCard").classList.add("hidden");document.querySelector('[data-tab="home"]').click();$("expTitle").textContent={relax:"Help me relax — choose a track",distract:"Distract me",encourage:"Encourage me"}[n]+(state.treatment||fromTreat?" • Treatment Mode":"");const B=$("expBody");
- if(n==="relax"){B.innerHTML=`<div class="chips" id="tracks"></div><div class="breath" id="br">●</div><p style="text-align:center" id="brt">Pick a track above, then Start</p><button class="btn b-blue" id="go">Start</button>`;chips($("tracks"),Object.keys(TRACKS),t=>{state.track=t;$("brt").textContent=TRACKS[t].n+" — tap Start";[...$("tracks").children].forEach(c=>c.classList.remove("on"));event.target.classList.add("on")});state.track=state.track||"breath";let iv=null;$("go").onclick=()=>{const T=TRACKS[state.track];let i=0,r=0;clearInterval(iv);iv=setInterval(()=>{$("brt").textContent=T.steps[i%T.steps.length]+" ("+T.n+")";$("br").style.transform=i%2===0?"scale(1.5)":"scale(1)";i++;if(i%T.steps.length===0)r++;if(r>=T.loop){clearInterval(iv);$("brt").textContent="Well done — "+T.n+" complete.";save("cc_relax",{t:state.track,at:Date.now()});renderHist()}},2500)}}
+ if(n==="relax"){B.innerHTML=`<div class="chips" id="tracks"></div><div class="breath" id="br">●</div><p style="text-align:center" id="brt">Pick a track above, then Start</p><button class="btn b-blue" id="go">Start</button>`;chips($("tracks"),Object.keys(TRACKS),(t,btn)=>{state.track=t;$("brt").textContent=TRACKS[t].n+" — tap Start";[...$("tracks").children].forEach(c=>c.classList.remove("on"));if(btn)btn.classList.add("on")});state.track=state.track||"breath";let iv=null;$("go").onclick=()=>{const T=TRACKS[state.track];let i=0,r=0;clearInterval(iv);iv=setInterval(()=>{$("brt").textContent=T.steps[i%T.steps.length]+" ("+T.n+")";$("br").style.transform=i%2===0?"scale(1.5)":"scale(1)";i++;if(i%T.steps.length===0)r++;if(r>=T.loop){clearInterval(iv);$("brt").textContent="Well done — "+T.n+" complete.";save("cc_relax",{t:state.track,at:Date.now()});renderHist()}},2500)}}
  if(n==="distract")B.innerHTML=`<div class="card"><b>Story: The River Remembers (2 min)</b><p>Boats return at sunset, drums low, food cooking. You are safe here.</p><p class="muted">Game: silently count 5 green things around you, then 4 slow breaths.</p><button class="btn b-warm" id="storyDone">Story finished →</button></div>`;
  if(n==="encourage"){const T=TRACKS.kind;B.innerHTML=`<div class="card" style="font-size:18px"><b>You did something hard and showed up.</b><p id="kindLine">Rest is allowed.</p><p class="muted">Hopeful, realistic — no outcome promises.</p><button class="btn b-blue" id="kindNext">Next kind line →</button></div>`;let k=0;const nb=()=>{k++;$("kindLine").textContent=T.steps[k%T.steps.length]};setTimeout(()=>{const b=$("kindNext");if(b)b.onclick=nb},0)}
  $("expCard").scrollIntoView({behavior:"smooth"})}
